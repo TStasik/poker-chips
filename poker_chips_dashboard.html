@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Poker Chips 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+
+  #app { width: 100vw; height: 100vh; display: flex; flex-direction: column; color: #fff; }
+
+  /* TOP BAR */
+  .top-bar {
+    background: #008a50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 36px; height: 72px; flex-shrink: 0;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 16px; }
+  .chip-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 5px solid rgba(255,255,255,0.6);
+    background: #006e40;
+    display: grid; place-items: center;
+  }
+  .chip-icon::after {
+    content: ''; width: 16px; height: 16px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.5);
+  }
+  .top-title { font-size: 26px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; }
+  .top-week { font-size: 13px; color: rgba(255,255,255,0.65); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 8px; padding-left: 16px; border-left: 1px solid rgba(255,255,255,0.3); }
+  .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .top-date { font-size: 15px; color: rgba(255,255,255,0.9); font-weight: 500; }
+  .top-time { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 0.05em; }
+
+  /* BODY */
+  .body { flex: 1; display: grid; grid-template-columns: 320px 1fr; min-height: 0; }
+
+  /* LEFT: LEADERBOARD */
+  .left-col { background: #0f0f0f; border-right: 1px solid #1c1c1c; display: flex; flex-direction: column; }
+  .col-header {
+    background: #006e40; padding: 10px 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(255,255,255,0.85);
+    flex-shrink: 0;
+  }
+  .leaderboard { flex: 1; overflow: hidden; padding: 8px 0; }
+  .lb-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 9px 20px; border-bottom: 1px solid #191919;
+    transition: background 0.3s;
+  }
+  .lb-row.podium { background: rgba(0,138,80,0.07); }
+  .medal {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; flex-shrink: 0;
+  }
+  .m1 { background: #FAC775; color: #412402; }
+  .m2 { background: #C8C8C8; color: #1a1a1a; }
+  .m3 { background: #C87941; color: #1a1a1a; }
+  .mx { background: #1e1e1e; color: #666; }
+  .lb-name { flex: 1; font-size: 15px; font-weight: 500; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lb-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .lb-chips { font-size: 22px; font-weight: 800; color: #00c46a; line-height: 1; }
+  .lb-bar-wrap { width: 64px; height: 3px; background: #222; border-radius: 2px; }
+  .lb-bar { height: 100%; background: #008a50; border-radius: 2px; }
+
+  /* RIGHT: VIEWS */
+  .right-col { display: flex; flex-direction: column; min-height: 0; }
+  .view { flex: 1; display: none; flex-direction: column; min-height: 0; }
+  .view.active { display: flex; animation: fadeUp 0.7s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* THIS WEEK VIEW */
+  .winners-grid {
+    flex: 1; padding: 12px 16px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px; overflow: hidden; align-content: start;
+  }
+  .wcard {
+    background: #141414; border: 1px solid #202020;
+    border-radius: 10px; padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .wcard.hot { border-color: #008a50; background: #0d1a14; }
+  .wcard-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .wcard-names { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.3; }
+  .wcard-chips { font-size: 20px; font-weight: 800; color: #00c46a; flex-shrink: 0; line-height: 1; }
+  .wcard-cat { font-size: 10px; color: #008a50; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .wcard-note { font-size: 11px; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ALL-TIME VIEW */
+  .alltime-list { flex: 1; padding: 10px 20px; display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
+  .at-row {
+    display: flex; align-items: center; gap: 14px;
+    background: #141414; border: 1px solid #1e1e1e;
+    border-radius: 8px; padding: 10px 16px;
+  }
+  .at-rank { width: 26px; font-size: 13px; color: #555; font-weight: 800; text-align: center; flex-shrink: 0; }
+  .at-rank.top3 { color: #00c46a; }
+  .at-name { flex: 1; font-size: 15px; font-weight: 500; color: #ddd; }
+  .at-bar-wrap { width: 180px; height: 4px; background: #222; border-radius: 2px; flex-shrink: 0; }
+  .at-bar { height: 100%; background: #008a50; border-radius: 2px; transition: width 1.2s ease; }
+  .at-chips { font-size: 20px; font-weight: 800; color: #00c46a; min-width: 44px; text-align: right; flex-shrink: 0; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: #0a0a0a; border-top: 1px solid #181818;
+    height: 32px; display: flex; align-items: center;
+    padding: 0 20px; gap: 10px; flex-shrink: 0;
+  }
+  .view-dots { display: flex; gap: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #222; transition: background 0.3s; }
+  .dot.on { background: #008a50; }
+  .ticker-wrap { flex: 1; overflow: hidden; }
+  .ticker { font-size: 12px; color: #3a3a3a; white-space: nowrap; display: inline-block; animation: scroll 40s linear infinite; }
+  @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+  .loading { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 18px; color: #444; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="chip-icon"></div>
+      <div class="top-title">Poker Chips 2026</div>
+      <div class="top-week" id="top-week">Loading...</div>
+    </div>
+    <div class="top-right">
+      <div class="top-date" id="top-date">—</div>
+      <div class="top-time" id="top-time">—</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="left-col">
+      <div class="col-header">All-Time Leaderboard</div>
+      <div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div>
+    </div>
+    <div class="right-col" id="right-col">
+      <div class="view active" id="view-week">
+        <div class="col-header">This Week's Winners</div>
+        <div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div>
+      </div>
+      <div class="view" id="view-alltime">
+        <div class="col-header">All-Time Chip Totals</div>
+        <div class="alltime-list" id="alltime-list"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="view-dots">
+      <div class="dot on" id="d0"></div>
+      <div class="dot" id="d1"></div>
+    </div>
+    <div class="ticker-wrap"><div class="ticker" id="ticker">Loading data...</div></div>
+  </div>
+</div>
+
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
+const REFRESH_MS = 5 * 60 * 1000;
+const FLIP_MS = 10 * 1000;
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line => {
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += c; }
+    }
+    cols.push(cur.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g,'').trim());
+    return obj;
+  }).filter(r => r.Category);
+}
+
+function buildAllTime(rows) {
+  const totals = {};
+  rows.forEach(r => {
+    const chips = parseInt(r['Manager Over-ride'] || r.Chips) || 0;
+    if (!chips) return;
+    const names = r.Technician.split(',').map(n => n.trim()).filter(Boolean);
+    names.forEach(name => {
+      if (!name) return;
+      totals[name] = (totals[name] || 0) + chips;
+    });
+  });
+  return Object.entries(totals).sort((a,b) => b[1]-a[1]);
+}
+
+function getCurrentWeekRows(rows) {
+  let maxWeek = 0;
+  rows.forEach(r => { const w = parseInt(r.Week); if (w > maxWeek) maxWeek = w; });
+  const weekRows = rows.filter(r => parseInt(r.Week) === maxWeek);
+  return { weekRows, maxWeek };
+}
+
+function render(rows) {
+  const allTime = buildAllTime(rows);
+  const { weekRows, maxWeek } = getCurrentWeekRows(rows);
+
+  // Top week label
+  const weekDate = weekRows.find(r => r.Date)?.Date || '';
+  document.getElementById('top-week').textContent = `Week ${maxWeek}${weekDate ? '  ·  ' + weekDate : ''}`;
+
+  // LEFT: All-time leaderboard (top 10)
+  const top10 = allTime.slice(0, 10);
+  const maxChips = top10[0]?.[1] || 1;
+  const lbEl = document.getElementById('lb-list');
+  lbEl.innerHTML = top10.map(([name, chips], i) => {
+    const mClass = i === 0 ? 'm1' : i === 1 ? 'm2' : i === 2 ? 'm3' : 'mx';
+    const podium = i < 3 ? ' podium' : '';
+    const pct = Math.round(chips / maxChips * 100);
+    return `<div class="lb-row${podium}">
+      <div class="medal ${mClass}">${i+1}</div>
+      <div class="lb-name">${name}</div>
+      <div class="lb-right">
+        <div class="lb-chips">${chips}</div>
+        <div class="lb-bar-wrap"><div class="lb-bar" style="width:${pct}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // RIGHT VIEW 1: This week's winners
+  const wg = document.getElementById('winners-grid');
+  const hotCats = ['Intangible Impact', 'New Sale/ Gross Add', 'Accident-Free Month', 'Perfect Attendance'];
+  wg.innerHTML = weekRows.map(r => {
+    const chips = parseInt(r['Manager Over-ride'] || r.Chips) || 0;
+    const names = r.Technician || '—';
+    const hot = hotCats.includes(r.Category) || chips >= 3;
+    return `<div class="wcard${hot?' hot':''}">
+      <div class="wcard-top">
+        <div class="wcard-names">${names}</div>
+        <div class="wcard-chips">+${chips}</div>
+      </div>
+      <div class="wcard-cat">${r.Category}</div>
+      ${r.Notes ? `<div class="wcard-note">${r.Notes}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // RIGHT VIEW 2: All-time list
+  const al = document.getElementById('alltime-list');
+  const maxAt = allTime[0]?.[1] || 1;
+  al.innerHTML = allTime.slice(0, 12).map(([name, chips], i) => {
+    const pct = Math.round(chips / maxAt * 100);
+    const top3 = i < 3 ? ' top3' : '';
+    return `<div class="at-row">
+      <div class="at-rank${top3}">${i+1}</div>
+      <div class="at-name">${name}</div>
+      <div class="at-bar-wrap"><div class="at-bar" style="width:${pct}%"></div></div>
+      <div class="at-chips">${chips}</div>
+    </div>`;
+  }).join('');
+
+  // Ticker — notable wins from this week
+  const notable = weekRows.filter(r => r.Notes || parseInt(r['Manager Over-ride']||r.Chips) >= 2);
+  const tickerItems = notable.map(r => `${r.Technician || 'Team'} — ${r.Category}${r.Notes ? ': ' + r.Notes : ''}`);
+  if (tickerItems.length) {
+    document.getElementById('ticker').textContent = tickerItems.join('     •     ');
+  }
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(CSV_URL + '&t=' + Date.now());
+    const text = await res.text();
+    const rows = parseCSV(text);
+    render(rows);
+  } catch(e) {
+    console.error('Failed to load data', e);
+  }
+}
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('top-date').textContent = now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+  document.getElementById('top-time').textContent = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+}
+updateClock();
+setInterval(updateClock, 10000);
+
+// View flip
+let viewIdx = 0;
+function flip() {
+  const views = ['view-week','view-alltime'];
+  document.getElementById(views[viewIdx]).classList.remove('active');
+  document.getElementById('d'+viewIdx).classList.remove('on');
+  viewIdx = (viewIdx + 1) % 2;
+  document.getElementById(views[viewIdx]).classList.add('active');
+  document.getElementById('d'+viewIdx).classList.add('on');
+}
+setInterval(flip, FLIP_MS);
+
+// Load + auto-refresh
+loadData();
+setInterval(loadData, REFRESH_MS);
+</script>
+</body>
+</html>

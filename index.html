@@ -10,10 +10,7 @@
   #app { width: 1920px; height: 1080px; display: flex; flex-direction: column; color: #fff; }
 
   /* TOP BAR */
-  .top-bar {
-    background: #008a50; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 48px; height: 110px; flex-shrink: 0;
-  }
+  .top-bar { background: #008a50; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 110px; flex-shrink: 0; }
   .top-bar-left { display: flex; align-items: center; gap: 20px; }
   .chip-icon { width: 52px; height: 52px; border-radius: 50%; border: 7px solid rgba(255,255,255,0.6); background: #006e40; display: grid; place-items: center; }
   .chip-icon::after { content: ''; width: 22px; height: 22px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.5); }
@@ -24,8 +21,6 @@
   .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
   .top-date { font-size: 22px; color: rgba(255,255,255,0.85); font-weight: 500; }
   .top-time { font-size: 36px; color: #fff; font-weight: 800; letter-spacing: 0.05em; }
-
-  /* NAV DOTS */
   .nav-dots { display: flex; gap: 10px; align-items: center; margin-left: 24px; }
   .nav-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background 0.4s, transform 0.4s; }
   .nav-dot.on { background: #fff; transform: scale(1.3); }
@@ -36,11 +31,28 @@
   .screen.active { display: flex; animation: fadeUp 0.8s ease; }
   @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
 
+  /* SECTION HEADER — bigger, more prominent */
+  .section-header {
+    background: #005c35;
+    padding: 16px 36px;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    flex-shrink: 0;
+    border-bottom: 3px solid #00c46a;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-header-icon { font-size: 30px; }
+
   /* SHARED LAYOUT */
   .two-col { display: grid; grid-template-columns: 480px 1fr; height: 100%; }
   .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; }
   .right-col { display: flex; flex-direction: column; }
-  .col-header { background: #006e40; padding: 14px 28px; font-size: 16px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.9); flex-shrink: 0; }
+  .col-header { background: #006e40; padding: 12px 28px; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.9); flex-shrink: 0; }
 
   /* LEADERBOARD */
   .leaderboard { flex: 1; overflow: hidden; padding: 10px 0; }
@@ -70,8 +82,10 @@
   .lb-bar-wrap { width:90px;height:5px;background:#222;border-radius:3px; }
   .lb-bar { height:100%;background:#008a50;border-radius:3px; }
 
-  /* POKER CHIPS VIEWS */
-  .winners-grid { flex:1;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;overflow:hidden;align-content:start; }
+  /* POKER INNER VIEWS */
+  .inner-view { flex:1;display:none;flex-direction:column;min-height:0; }
+  .inner-view.active { display:flex;animation:fadeUp 0.7s ease; }
+  .winners-grid { flex:1;padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;overflow:hidden;align-content:start; }
   .wcard { background:#141414;border:1px solid #202020;border-radius:12px;padding:14px 20px;display:flex;flex-direction:column;gap:6px; }
   .wcard.hot { border-color:#008a50;background:#0d1a14; }
   .wcard-top { display:flex;align-items:flex-start;justify-content:space-between;gap:10px; }
@@ -79,8 +93,8 @@
   .wcard-chips { font-size:30px;font-weight:900;color:#00c46a;flex-shrink:0;line-height:1; }
   .wcard-cat { font-size:14px;color:#008a50;font-weight:800;text-transform:uppercase;letter-spacing:0.06em; }
   .wcard-note { font-size:15px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .alltime-list { flex:1;padding:14px 28px;display:flex;flex-direction:column;gap:10px;overflow:hidden; }
-  .at-row { display:flex;align-items:center;gap:20px;background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:14px 22px; }
+  .alltime-list { flex:1;padding:12px 24px;display:flex;flex-direction:column;gap:9px;overflow:hidden; }
+  .at-row { display:flex;align-items:center;gap:20px;background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:13px 20px; }
   .at-rank { width:36px;font-size:18px;color:#555;font-weight:900;text-align:center;flex-shrink:0; }
   .at-rank.top3 { color:#00c46a; }
   .at-name { flex:1;font-size:22px;font-weight:600;color:#ddd; }
@@ -88,46 +102,43 @@
   .at-bar { height:100%;background:#008a50;border-radius:3px; }
   .at-chips { font-size:28px;font-weight:900;color:#00c46a;min-width:60px;text-align:right;flex-shrink:0; }
 
-  /* INNER VIEW FLIP (week/alltime) */
-  .inner-view { flex:1;display:none;flex-direction:column;min-height:0; }
-  .inner-view.active { display:flex;animation:fadeUp 0.7s ease; }
-
-  /* NPS SCREEN */
-  .nps-grid { flex:1;padding:20px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;overflow:hidden;align-content:start; }
-  .nps-card { background:#141414;border:1px solid #202020;border-radius:14px;padding:18px 22px;display:flex;flex-direction:column;gap:8px; }
+  /* NPS — 2 columns so nothing gets cut */
+  .nps-grid { flex:1;padding:16px 28px;display:grid;grid-template-columns:1fr 1fr;gap:14px;overflow:hidden;align-content:start; }
+  .nps-card { background:#141414;border:1px solid #202020;border-radius:14px;padding:16px 22px;display:flex;flex-direction:column;gap:8px; }
   .nps-name { font-size:22px;font-weight:700;color:#fff; }
-  .nps-score-row { display:flex;align-items:center;justify-content:space-between; }
-  .nps-score { font-size:48px;font-weight:900;line-height:1; }
-  .nps-score.green { color:#00c46a; }
+  .nps-score-row { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+  .nps-score { font-size:52px;font-weight:900;line-height:1; }
+  .nps-score.green  { color:#00c46a; }
   .nps-score.yellow { color:#f0c040; }
-  .nps-score.red { color:#e05555; }
-  .nps-score.none { color:#555;font-size:28px; }
-  .nps-meta { display:flex;gap:16px; }
-  .nps-pill { font-size:13px;font-weight:700;padding:4px 12px;border-radius:20px; }
-  .nps-pill.pro { background:rgba(0,196,106,0.15);color:#00c46a; }
-  .nps-pill.det { background:rgba(224,85,85,0.15);color:#e05555; }
+  .nps-score.red    { color:#e05555; }
+  .nps-score.none   { color:#555;font-size:30px; }
+  .nps-meta { display:flex;gap:12px;flex-wrap:wrap; }
+  .nps-pill { font-size:14px;font-weight:700;padding:5px 14px;border-radius:20px; }
+  .nps-pill.pro  { background:rgba(0,196,106,0.15);color:#00c46a; }
+  .nps-pill.det  { background:rgba(224,85,85,0.15);color:#e05555; }
   .nps-pill.resp { background:rgba(255,255,255,0.07);color:#888; }
   .nps-bar-wrap { height:6px;background:#222;border-radius:3px; }
   .nps-bar { height:100%;border-radius:3px;background:#008a50; }
 
-  /* DRIVER SCORE SCREEN */
-  .ds-full { flex:1;padding:16px 28px;display:flex;flex-direction:column;gap:10px;overflow:hidden; }
-  .ds-row { display:flex;align-items:center;gap:16px;background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:12px 20px; }
-  .ds-name { width:220px;font-size:21px;font-weight:600;color:#eee;flex-shrink:0; }
-  .ds-months { display:flex;gap:8px;flex:1;align-items:center; }
-  .ds-month { display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px; }
-  .ds-month-label { font-size:10px;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
+  /* DRIVER SCORES */
+  .ds-full { flex:1;padding:14px 28px;display:flex;flex-direction:column;gap:9px;overflow:hidden; }
+  .ds-row { display:flex;align-items:center;gap:14px;background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:11px 18px; }
+  .ds-name { width:200px;font-size:20px;font-weight:600;color:#eee;flex-shrink:0; }
+  .ds-months { display:flex;gap:6px;flex:1;align-items:center; }
+  .ds-month { display:flex;flex-direction:column;align-items:center;gap:2px;min-width:50px; }
+  .ds-month-label { font-size:10px;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:0.05em; }
   .ds-month-val { font-size:17px;font-weight:800; }
   .ds-month-val.green  { color:#00c46a; }
   .ds-month-val.yellow { color:#f0c040; }
   .ds-month-val.red    { color:#e05555; }
-  .ds-month-val.empty  { color:#333; }
-  .ds-yearend { font-size:26px;font-weight:900;min-width:64px;text-align:right;flex-shrink:0; }
+  .ds-month-val.empty  { color:#2a2a2a; }
+  .ds-yearend-wrap { display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:80px; }
+  .ds-yearend-label { font-size:10px;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
+  .ds-yearend { font-size:26px;font-weight:900; }
   .ds-yearend.green  { color:#00c46a; }
   .ds-yearend.yellow { color:#f0c040; }
   .ds-yearend.red    { color:#e05555; }
-  .ds-yearend-label { font-size:10px;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;text-align:center; }
-  .ds-yearend-wrap { display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:80px; }
+  .ds-yearend.empty  { color:#333; }
 
   /* BOTTOM BAR */
   .bottom-bar { background:#0d1a14;border-top:2px solid #008a50;height:48px;display:flex;align-items:center;padding:0 28px;gap:16px;flex-shrink:0; }
@@ -136,7 +147,6 @@
   .ticker-wrap { flex:1;overflow:hidden; }
   .ticker { font-size:20px;font-weight:700;color:#00c46a;white-space:nowrap;display:inline-block;animation:scroll 55s linear infinite; }
   @keyframes scroll { 0%{transform:translateX(1920px)}100%{transform:translateX(-100%)} }
-
   .loading { display:flex;align-items:center;justify-content:center;height:100%;font-size:26px;color:#444; }
 </style>
 </head>
@@ -147,13 +157,13 @@
       <div class="chip-icon"></div>
       <div class="top-titles">
         <div class="top-title">NexGreen Sterling Heights</div>
-        <div class="top-subtitle" id="top-section-label">Team Dashboard 2026</div>
+        <div class="top-subtitle">Team Performance Dashboard 2026</div>
       </div>
       <div class="top-section" id="top-week"></div>
       <div class="nav-dots">
-        <div class="nav-dot on" id="nd0" title="Poker Chips"></div>
-        <div class="nav-dot" id="nd1" title="NPS"></div>
-        <div class="nav-dot" id="nd2" title="Driver Scores"></div>
+        <div class="nav-dot on" id="nd0"></div>
+        <div class="nav-dot" id="nd1"></div>
+        <div class="nav-dot" id="nd2"></div>
       </div>
     </div>
     <div class="top-right">
@@ -166,18 +176,19 @@
 
     <!-- SCREEN 1: POKER CHIPS -->
     <div class="screen active" id="screen-chips">
-      <div class="two-col">
+      <div class="section-header"><span class="section-header-icon">🏆</span> Poker Chips — Employee Recognition</div>
+      <div class="two-col" style="flex:1;min-height:0;">
         <div class="left-col">
-          <div class="col-header">🏆 All-Time Leaderboard</div>
+          <div class="col-header">All-Time Leaderboard</div>
           <div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div>
         </div>
         <div class="right-col">
           <div class="inner-view active" id="view-week">
-            <div class="col-header">🎯 This Week's Winners</div>
+            <div class="col-header">This Week's Winners</div>
             <div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div>
           </div>
           <div class="inner-view" id="view-alltime">
-            <div class="col-header">📊 All-Time Chip Totals</div>
+            <div class="col-header">All-Time Chip Totals</div>
             <div class="alltime-list" id="alltime-list"><div class="loading">Loading...</div></div>
           </div>
         </div>
@@ -186,13 +197,13 @@
 
     <!-- SCREEN 2: NPS -->
     <div class="screen" id="screen-nps">
-      <div class="col-header" style="flex-shrink:0;">⭐ Net Promoter Scores — Year to Date</div>
+      <div class="section-header"><span class="section-header-icon">⭐</span> Net Promoter Scores — Year to Date</div>
       <div class="nps-grid" id="nps-grid"><div class="loading">Loading...</div></div>
     </div>
 
     <!-- SCREEN 3: DRIVER SCORES -->
     <div class="screen" id="screen-drivers">
-      <div class="col-header" style="flex-shrink:0;">🚗 Driver Safety Scores — 2026</div>
+      <div class="section-header"><span class="section-header-icon">🚗</span> Driver Safety Scores — 2026</div>
       <div class="ds-full" id="ds-list"><div class="loading">Loading...</div></div>
     </div>
 
@@ -210,46 +221,51 @@ const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFk
 const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
 const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
 
-const SCREEN_MS = 14000;
+const SCREEN_MS  = 30000;
 const REFRESH_MS = 5 * 60 * 1000;
-
 const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
-const SECTION_LABELS = ['Poker Chips 2026', 'Net Promoter Score', 'Driver Safety Scores'];
-const TICKER_LABELS  = ['Poker Chips', 'NPS', 'Driver Scores'];
+const TICKER_LABELS = ['Poker Chips','NPS','Driver Scores'];
 
-function parseCSV(text) {
+function parseCSVRaw(text) {
+  // Returns array of arrays (raw rows, no header assumption)
   const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
-  return lines.slice(1).map(line => {
+  return lines.map(line => {
     const cols = []; let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
       if (c==='"'){inQ=!inQ;}
-      else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
+      else if(c===','&&!inQ){cols.push(cur.trim().replace(/^"|"$/g,''));cur='';}
       else{cur+=c;}
     }
-    cols.push(cur.trim());
+    cols.push(cur.trim().replace(/^"|"$/g,''));
+    return cols;
+  });
+}
+
+function parseCSV(text) {
+  const raw = parseCSVRaw(text);
+  if (!raw.length) return [];
+  const headers = raw[0];
+  return raw.slice(1).map(cols => {
     const obj = {};
-    headers.forEach((h,i) => obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim());
+    headers.forEach((h,i) => obj[h]=(cols[i]||'').trim());
     return obj;
   }).filter(r => Object.values(r).some(v=>v));
 }
 
 function npsColor(val) {
-  if (val === null || val === undefined || isNaN(val)) return 'none';
+  if (val===null||val===undefined||isNaN(val)) return 'none';
   if (val >= 9)  return 'green';
   if (val >= 7)  return 'yellow';
   return 'red';
 }
-
 function dsColor(val) {
   const n = parseFloat(val);
-  if (isNaN(n) || val === '' || val === null) return 'empty';
+  if (isNaN(n)||val===''||val===null||val===undefined) return 'empty';
   if (n >= 90) return 'green';
   if (n >= 75) return 'yellow';
   return 'red';
 }
-
 function medalHTML(i) {
   if (i===0) return `<div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div>`;
   if (i===1) return `<div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div>`;
@@ -257,13 +273,13 @@ function medalHTML(i) {
   return `<div class="medal-wrap"><div class="mx">${i+1}</div></div>`;
 }
 
-// ---- POKER CHIPS ----
+// ---- POKER ----
 function buildAllTime(rows) {
   const totals = {};
   rows.forEach(r => {
     const chips = parseInt(r['Manager Over-ride']||r.Chips)||0;
     if (!chips) return;
-    r.Technician.split(',').map(n=>n.trim()).filter(Boolean).forEach(name=>{
+    (r.Technician||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(name=>{
       totals[name]=(totals[name]||0)+chips;
     });
   });
@@ -279,182 +295,170 @@ function renderPoker(rows) {
   const {weekRows,maxWeek} = getCurrentWeekRows(rows);
   const weekDate = weekRows.find(r=>r.Date)?.Date||'';
   document.getElementById('top-week').textContent = `Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
-
-  const top10 = allTime.slice(0,10);
-  const maxC = top10[0]?.[1]||1;
-  document.getElementById('lb-list').innerHTML = top10.map(([name,chips],i)=>`
-    <div class="lb-row${i<3?' podium':''}">
-      ${medalHTML(i)}
+  const top10=allTime.slice(0,10); const maxC=top10[0]?.[1]||1;
+  document.getElementById('lb-list').innerHTML=top10.map(([name,chips],i)=>`
+    <div class="lb-row${i<3?' podium':''}">${medalHTML(i)}
       <div class="lb-name">${name}</div>
-      <div class="lb-right">
-        <div class="lb-chips">${chips}</div>
+      <div class="lb-right"><div class="lb-chips">${chips}</div>
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
-      </div>
-    </div>`).join('');
-
+      </div></div>`).join('');
   const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
-  document.getElementById('winners-grid').innerHTML = weekRows.map(r=>{
+  document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{
     const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
     return `<div class="wcard${(hotCats.includes(r.Category)||chips>=3)?' hot':''}">
       <div class="wcard-top"><div class="wcard-names">${r.Technician||'—'}</div><div class="wcard-chips">+${chips}</div></div>
       <div class="wcard-cat">${r.Category}</div>
-      ${r.Notes?`<div class="wcard-note">${r.Notes}</div>`:''}
-    </div>`;
+      ${r.Notes?`<div class="wcard-note">${r.Notes}</div>`:''}</div>`;
   }).join('');
-
   const maxAt=allTime[0]?.[1]||1;
-  document.getElementById('alltime-list').innerHTML = allTime.slice(0,12).map(([name,chips],i)=>`
-    <div class="at-row">
-      <div class="at-rank${i<3?' top3':''}">${i+1}</div>
+  document.getElementById('alltime-list').innerHTML=allTime.slice(0,12).map(([name,chips],i)=>`
+    <div class="at-row"><div class="at-rank${i<3?' top3':''}">${i+1}</div>
       <div class="at-name">${name}</div>
       <div class="at-bar-wrap"><div class="at-bar" style="width:${Math.round(chips/maxAt*100)}%"></div></div>
-      <div class="at-chips">${chips}</div>
-    </div>`).join('');
-
+      <div class="at-chips">${chips}</div></div>`).join('');
   const notable=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
-  const items=notable.map(r=>`${r.Technician||'Team'}  —  ${r.Category}${r.Notes?':  '+r.Notes:''}`);
-  window._tickerPoker = items.length ? items.join('     •     ') : 'Great work team!';
+  window._tickerPoker=notable.length?notable.map(r=>`${r.Technician||'Team'}  —  ${r.Category}${r.Notes?':  '+r.Notes:''}`).join('     •     '):'Great work team!';
 }
 
 // ---- NPS ----
 function renderNPS(rows) {
-  // Expected cols: Tech, Total Promoters, Total Detractors, Total Responses, Final Year End Score
-  const techKey  = Object.keys(rows[0]||{})[0];
-  const proKey   = Object.keys(rows[0]||{})[1];
-  const detKey   = Object.keys(rows[0]||{})[2];
-  const respKey  = Object.keys(rows[0]||{})[3];
-  const scoreKey = Object.keys(rows[0]||{})[4];
-
-  const valid = rows.filter(r=>r[techKey]&&r[techKey]!=='Tech'&&r[techKey]!=='');
-  const maxResp = Math.max(...valid.map(r=>parseInt(r[respKey])||0), 1);
-
-  document.getElementById('nps-grid').innerHTML = valid.map(r => {
-    const raw = r[scoreKey];
-    const isNone = !raw || raw==='None' || raw==='' || raw==='#DIV/0!';
-    const score = isNone ? null : parseFloat(raw);
-    const cls = npsColor(score);
-    const pro = parseInt(r[proKey])||0;
-    const det = parseInt(r[detKey])||0;
-    const resp = parseInt(r[respKey])||0;
-    const pct = Math.round(resp/maxResp*100);
+  const keys = Object.keys(rows[0]||{});
+  const techKey=keys[0], proKey=keys[1], detKey=keys[2], respKey=keys[3], scoreKey=keys[4];
+  const valid = rows.filter(r=>{
+    const t=r[techKey];
+    return t && t!=='Tech' && t!=='' && t!=='0';
+  }).map(r=>({...r, [techKey]: r[techKey]==='0'?'Unassigned':r[techKey]}));
+  // Also replace "0" tech names
+  const maxResp=Math.max(...valid.map(r=>parseInt(r[respKey])||0),1);
+  document.getElementById('nps-grid').innerHTML=valid.map(r=>{
+    const name = r[techKey]==='0'?'Unassigned':r[techKey];
+    const raw=r[scoreKey]; const isNone=!raw||raw==='None'||raw===''||raw==='#DIV/0!';
+    const score=isNone?null:parseFloat(raw);
+    const cls=npsColor(score);
+    const pro=parseInt(r[proKey])||0, det=parseInt(r[detKey])||0, resp=parseInt(r[respKey])||0;
     return `<div class="nps-card">
-      <div class="nps-name">${r[techKey]}</div>
+      <div class="nps-name">${name}</div>
       <div class="nps-score-row">
         <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
         <div class="nps-meta">
-          <div class="nps-pill pro">👍 ${pro}</div>
-          <div class="nps-pill det">👎 ${det}</div>
-          <div class="nps-pill resp">${resp} reviews</div>
+          <div class="nps-pill pro">👍 ${pro} Promoters</div>
+          <div class="nps-pill det">👎 ${det} Detractors</div>
+          <div class="nps-pill resp">${resp} Total Reviews</div>
         </div>
       </div>
-      <div class="nps-bar-wrap"><div class="nps-bar" style="width:${pct}%"></div></div>
+      <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxResp*100)}%"></div></div>
     </div>`;
   }).join('');
-
-  const top = valid.filter(r=>{
-    const raw=r[scoreKey]; if(!raw||raw==='None'||raw==='')return false;
-    return parseFloat(raw)>=9;
-  });
-  window._tickerNPS = top.length
-    ? 'Top NPS performers: ' + top.map(r=>`${r[techKey]} (${parseFloat(r[scoreKey]).toFixed(1)})`).join('  •  ')
-    : 'NPS scores updated — keep earning those great reviews!';
+  const top=valid.filter(r=>{const raw=r[scoreKey];return raw&&raw!=='None'&&raw!==''&&parseFloat(raw)>=9;});
+  window._tickerNPS=top.length?'Top NPS: '+top.map(r=>`${r[techKey]==='0'?'Unassigned':r[techKey]} (${parseFloat(r[scoreKey]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
 }
 
 // ---- DRIVER SCORES ----
-function renderDrivers(rows) {
-  // Cols: Specialist Name, Jan, Feb, Mar, Apr, May, June, July, Aug, Sept, Oct, Nov, Dec, Year End
-  const nameKey = Object.keys(rows[0]||{})[0];
-  const valid = rows.filter(r=>r[nameKey]&&r[nameKey]!=='Specialist Name'&&r[nameKey]!=='');
+// Row 0,1 = junk/blank, Row 2 = headers (Specialist Name, Jan, Feb...Year End)
+// Rows 3-22 = technicians (up to but NOT including row 23 = branch averages, index 23)
+function renderDrivers(text) {
+  const raw = parseCSVRaw(text);
+  // Find header row — the one containing "Specialist Name"
+  let headerRowIdx = -1;
+  for (let i=0;i<raw.length;i++) {
+    if (raw[i].some(c=>c.trim().toLowerCase().includes('specialist'))) { headerRowIdx=i; break; }
+  }
+  if (headerRowIdx===-1) { document.getElementById('ds-list').innerHTML='<div class="loading">Could not find header row</div>'; return; }
 
-  const yearKey = Object.keys(rows[0]||{}).find(k=>k.toLowerCase().includes('year'))||Object.keys(rows[0]||{}).slice(-1)[0];
+  const headers = raw[headerRowIdx].map(h=>h.trim());
+  const nameIdx = headers.findIndex(h=>h.toLowerCase().includes('specialist'));
 
-  document.getElementById('ds-list').innerHTML = valid.map(r => {
-    const monthCells = MONTHS.map(m => {
-      const val = r[m]||r[m.toLowerCase()]||'';
-      const n = parseFloat(val);
-      const cls = dsColor(val);
-      return `<div class="ds-month">
-        <div class="ds-month-label">${m}</div>
-        <div class="ds-month-val ${cls}">${isNaN(n)||val===''?'—':n}</div>
-      </div>`;
+  // Collect data rows — stop at "Branch" average row or empty name
+  const dataRows = [];
+  for (let i=headerRowIdx+1; i<raw.length; i++) {
+    const row = raw[i];
+    const name = (row[nameIdx]||'').trim();
+    if (!name) continue;
+    if (name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')||name.toLowerCase().includes('avg')) break;
+    dataRows.push(row);
+  }
+
+  // Build month indices from headers
+  const monthIndices = MONTHS.map(m=>headers.findIndex(h=>h.toLowerCase()===m.toLowerCase()||h.toLowerCase()===m.toLowerCase().replace('e','').slice(0,3)));
+  const yearIdx = headers.findIndex(h=>h.toLowerCase().includes('year'));
+
+  document.getElementById('ds-list').innerHTML = dataRows.map(row=>{
+    const name=(row[nameIdx]||'Unassigned').trim();
+    const monthCells = MONTHS.map((m,mi)=>{
+      const idx=headers.findIndex(h=>h.trim()===m);
+      const val=idx>=0?(row[idx]||'').trim():'';
+      const n=parseFloat(val);
+      const cls=dsColor(val);
+      return `<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${cls}">${isNaN(n)||val===''?'—':n}</div></div>`;
     }).join('');
-    const ye = r[yearKey]||'';
-    const yen = parseFloat(ye);
-    const yeCls = dsColor(ye);
+    const yeVal=yearIdx>=0?(row[yearIdx]||'').trim():'';
+    const yeN=parseFloat(yeVal);
+    const yeCls=dsColor(yeVal);
     return `<div class="ds-row">
-      <div class="ds-name">${r[nameKey]}</div>
+      <div class="ds-name">${name}</div>
       <div class="ds-months">${monthCells}</div>
       <div class="ds-yearend-wrap">
         <div class="ds-yearend-label">Year End</div>
-        <div class="ds-yearend ${yeCls}">${isNaN(yen)||ye===''?'—':yen}</div>
+        <div class="ds-yearend ${yeCls}">${isNaN(yeN)||yeVal===''?'—':yeN}</div>
       </div>
     </div>`;
   }).join('');
 
-  const top = valid.filter(r=>{const ye=r[yearKey]||'';return parseFloat(ye)>=90;});
-  window._tickerDrivers = top.length
-    ? 'Top driver scores: '+top.map(r=>`${r[nameKey]} (${parseFloat(r[yearKey])})`).join('  •  ')
-    : 'Driver scores updated — stay safe out there!';
+  const top=dataRows.filter(row=>{const v=yearIdx>=0?(row[yearIdx]||'').trim():'';return parseFloat(v)>=90;});
+  window._tickerDrivers=top.length?'Top driver scores: '+top.map(row=>`${(row[nameIdx]||'').trim()} (${parseFloat(row[yearIdx]||0)})`).join('  •  '):'Driver scores updated — stay safe out there!';
 }
 
-// ---- DATA LOADING ----
-async function fetchCSV(url) {
-  const res = await fetch(url+'&t='+Date.now());
-  return parseCSV(await res.text());
+// ---- FETCH ----
+async function fetchText(url) {
+  const res=await fetch(url+'&t='+Date.now());
+  return res.text();
 }
 async function loadAll() {
-  try { renderPoker(await fetchCSV(POKER_URL)); } catch(e){console.error('Poker load failed',e);}
-  try { renderNPS(await fetchCSV(NPS_URL)); } catch(e){console.error('NPS load failed',e);}
-  try { renderDrivers(await fetchCSV(DRIVER_URL)); } catch(e){console.error('Driver load failed',e);}
+  try { renderPoker(parseCSV(await fetchText(POKER_URL))); } catch(e){console.error('Poker',e);}
+  try { renderNPS(parseCSV(await fetchText(NPS_URL))); }    catch(e){console.error('NPS',e);}
+  try { renderDrivers(await fetchText(DRIVER_URL)); }        catch(e){console.error('Drivers',e);}
 }
 
 // ---- CLOCK ----
 function updateClock() {
-  const now = new Date();
-  document.getElementById('top-date').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('top-time').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const now=new Date();
+  document.getElementById('top-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('top-time').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
-updateClock();
-setInterval(updateClock,10000);
+updateClock(); setInterval(updateClock,10000);
 
 // ---- SCREEN ROTATION ----
-const screens = ['screen-chips','screen-nps','screen-drivers'];
-let screenIdx = 0;
-let innerIdx = 0;
-
-function setTicker(idx) {
-  document.getElementById('ticker-label').textContent = TICKER_LABELS[idx];
-  const texts = [window._tickerPoker||'Loading...', window._tickerNPS||'Loading...', window._tickerDrivers||'Loading...'];
-  const t = document.getElementById('ticker');
-  t.textContent = texts[idx];
-  t.style.animation='none'; t.offsetHeight; t.style.animation='';
+const screens=['screen-chips','screen-nps','screen-drivers'];
+let screenIdx=0;
+function setTicker(idx){
+  document.getElementById('ticker-label').textContent=TICKER_LABELS[idx];
+  const texts=[window._tickerPoker||'Loading...',window._tickerNPS||'Loading...',window._tickerDrivers||'Loading...'];
+  const t=document.getElementById('ticker');
+  t.textContent=texts[idx]; t.style.animation='none'; t.offsetHeight; t.style.animation='';
 }
-
-function nextScreen() {
+function nextScreen(){
   document.getElementById(screens[screenIdx]).classList.remove('active');
   document.getElementById('nd'+screenIdx).classList.remove('on');
-  screenIdx = (screenIdx+1)%screens.length;
+  screenIdx=(screenIdx+1)%screens.length;
   document.getElementById(screens[screenIdx]).classList.add('active');
   document.getElementById('nd'+screenIdx).classList.add('on');
-  document.getElementById('top-section-label').textContent = SECTION_LABELS[screenIdx];
   if(screenIdx!==0) document.getElementById('top-week').textContent='';
   setTicker(screenIdx);
 }
-setInterval(nextScreen, SCREEN_MS);
+setInterval(nextScreen,SCREEN_MS);
 
 // ---- POKER INNER FLIP ----
-function flipInner() {
-  if(screenIdx!==0) return;
+let innerIdx=0;
+setInterval(()=>{
+  if(screenIdx!==0)return;
   const views=['view-week','view-alltime'];
   document.getElementById(views[innerIdx]).classList.remove('active');
   innerIdx=(innerIdx+1)%2;
   document.getElementById(views[innerIdx]).classList.add('active');
-}
-setInterval(flipInner, 10000);
+},12000);
 
-// ---- INIT ----
 loadAll();
-setInterval(loadAll, REFRESH_MS);
+setInterval(loadAll,REFRESH_MS);
 setTicker(0);
 </script>
 </body>

@@ -2,372 +2,612 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1920, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>NexGreen Sterling Heights — Live Dashboard</title>
-<!-- Google Fonts: consistent, modern typography -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; user-select:none; }
+:root {
+  --brand:#008a50; --brand-bright:#00c472; --green-deep:#020d07;
+  --gray-dim:#6a9278; --gold:#FFD166; --amber:#F4A261;
+  --red-soft:#FF6B6B; --white:#edf7f2; --card-border:rgba(0,138,80,0.18);
+}
+body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:flex; align-items:center; justify-content:center; }
+#root {
+  width:1920px; height:1080px; position:relative; transform-origin:center center; overflow:hidden;
+  background:var(--green-deep);
+  background-image:
+    radial-gradient(ellipse 80% 70% at 0% 50%, rgba(0,80,40,0.75) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 60% at 100% 80%, rgba(0,60,30,0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 45% at 50% 0%, rgba(0,138,80,0.12) 0%, transparent 55%);
+  font-family:'DM Sans',Arial,sans-serif; color:var(--white);
+  display:flex; flex-direction:column;
+}
 
-  :root {
-    --brand: #008a50;
-    --brand-bright: #00c472;
-    --green-deep: #020d07;
-    --gray-dim: #6a9278;
-    --gold: #FFD166;
-    --amber: #F4A261;
-    --red-soft: #FF6B6B;
-    --white: #edf7f2;
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --card-border: rgba(0, 138, 80, 0.18);
-  }
+/* SCREEN ROTATION */
+.screen { position:absolute; top:85px; left:0; width:1920px; bottom:44px; opacity:0; visibility:hidden; transition:opacity 0.5s ease-in-out; }
+.screen.active { opacity:1; visibility:visible; z-index:10; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-  html, body {
-    width: 1920px;
-    height: 1080px;
-    overflow: hidden;
-    background: var(--green-deep);
-    font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif;
-    background-image: radial-gradient(ellipse 80% 70% at 0% 50%, rgba(0, 80, 40, 0.75) 0%, transparent 65%),
-                      radial-gradient(ellipse 60% 60% at 100% 80%, rgba(0, 60, 30, 0.5) 0%, transparent 60%),
-                      radial-gradient(ellipse 100% 45% at 50% 0%, rgba(0, 138, 80, 0.12) 0%, transparent 55%);
-  }
+/* TOP BAR */
+.top-bar { background:#008a50; display:flex; align-items:center; justify-content:space-between; padding:0 44px; height:85px; flex-shrink:0; position:relative; z-index:20; }
+.top-left { display:flex; align-items:center; gap:20px; }
+.logo { height:48px; width:auto; object-fit:contain; }
+.top-divider { width:1px; height:38px; background:rgba(255,255,255,0.3); }
+.top-titles { display:flex; flex-direction:column; gap:2px; }
+.top-title { font-size:15px; font-weight:700; color:#fff; letter-spacing:0.08em; text-transform:uppercase; line-height:1; }
+.top-subtitle { font-size:12px; color:rgba(255,255,255,0.7); font-weight:400; letter-spacing:0.06em; text-transform:uppercase; }
+.top-section { font-size:18px; color:rgba(255,255,255,0.75); letter-spacing:0.1em; text-transform:uppercase; padding-left:20px; border-left:2px solid rgba(255,255,255,0.3); }
+.top-week { font-size:14px; color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase; }
+.nav-dots { display:flex; gap:10px; margin-left:8px; }
+.nav-dot { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.3); transition:all 0.3s; }
+.nav-dot.on { background:#fff; transform:scale(1.3); box-shadow:0 0 6px #fff; }
+.top-right { text-align:right; }
+.top-date { font-size:14px; color:rgba(255,255,255,0.85); font-weight:500; }
+.top-time { font-size:28px; font-weight:800; color:#fff; letter-spacing:1px; line-height:1.2; }
 
-  /* ========= GLOBAL ROTATION & PROGRESS ========= */
-  .dashboard-container { position: relative; width: 1920px; height: 1080px; }
-  .screen {
-    position: absolute; top: 0; left: 0;
-    width: 1920px; height: 1080px;
-    opacity: 0; visibility: hidden;
-    transition: opacity 0.5s ease-in-out;
-  }
-  .screen.active { opacity: 1; visibility: visible; z-index: 10; }
+/* BOTTOM BAR */
+.bottom-bar { background:#0d1a14; border-top:2px solid #008a50; height:44px; display:flex; align-items:center; padding:0 20px; gap:14px; flex-shrink:0; position:relative; z-index:20; }
+.ticker-label { font-size:11px; font-weight:800; color:#008a50; letter-spacing:2px; text-transform:uppercase; flex-shrink:0; }
+.ticker-div { width:1px; height:20px; background:#008a50; opacity:0.4; flex-shrink:0; }
+.ticker-wrap { flex:1; overflow:hidden; white-space:nowrap; }
+.ticker { display:inline-block; font-size:16px; font-weight:700; color:#00c46a; white-space:nowrap; animation:scrollTicker 55s linear infinite; }
+@keyframes scrollTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.progress-wrap { width:100%; height:3px; background:rgba(0,196,114,0.2); position:absolute; bottom:44px; left:0; z-index:30; }
+.progress-bar { height:100%; width:0%; background:var(--brand-bright); box-shadow:0 0 8px var(--brand-bright); }
+.refresh-tag { position:absolute; bottom:50px; right:16px; font-size:10px; color:var(--gray-dim); background:rgba(0,0,0,0.5); padding:3px 10px; border-radius:20px; z-index:40; }
 
-  /* progress bar + bottom status */
-  .progress-container {
-    position: fixed; bottom: 0; left: 0; right: 0; height: 4px;
-    background: rgba(0, 196, 114, 0.25); z-index: 200;
-  }
-  .progress-bar {
-    height: 100%; width: 0%;
-    background: var(--brand-bright);
-    transition: width linear;
-    box-shadow: 0 0 8px var(--brand-bright);
-  }
-  .progress-text {
-    position: fixed; bottom: 10px; right: 24px;
-    font-size: 12px; font-weight: 600;
-    color: var(--gray-dim);
-    font-family: 'DM Sans', monospace;
-    letter-spacing: 0.5px; z-index: 200;
-    background: rgba(0, 0, 0, 0.6); padding: 4px 14px;
-    border-radius: 40px; backdrop-filter: blur(4px);
-  }
-  .last-updated {
-    position: fixed; bottom: 10px; left: 24px;
-    font-size: 11px; color: var(--gray-dim);
-    font-family: 'DM Sans', monospace;
-    background: rgba(0, 0, 0, 0.5); padding: 4px 12px;
-    border-radius: 40px; backdrop-filter: blur(4px);
-    z-index: 200;
-  }
-  .last-updated span { color: var(--brand-bright); font-weight: 700; }
+/* SHARED LAYOUT */
+.two-col { display:grid; grid-template-columns:400px 1fr; height:100%; }
+.left-panel { background:rgba(0,138,80,0.04); border-right:1px solid var(--card-border); display:flex; flex-direction:column; position:relative; overflow:hidden; }
+.left-panel::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--brand-bright),transparent); }
+.right-panel { display:flex; flex-direction:column; overflow:hidden; }
+.panel-hdr { background:#005c35; padding:9px 24px; font-size:13px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.9); flex-shrink:0; border-bottom:2px solid var(--brand-bright); }
+.panel-body { flex:1; overflow:hidden; display:flex; flex-direction:column; }
 
-  /* ========= TOP BAR ========= */
-  .top-bar {
-    background: #008a50; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 48px; height: 85px; flex-shrink: 0;
-  }
-  .top-bar-left { display: flex; align-items: center; gap: 24px; }
-  .logo-img { height: 52px; width: auto; object-fit: contain; }
-  .top-titles { display: flex; flex-direction: column; gap: 2px; }
-  .top-subtitle { font-size: 15px; color: rgba(255,255,255,0.85); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-  .top-week { font-size: 18px; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-transform: uppercase; border-left: 2px solid rgba(255,255,255,0.3); padding-left: 20px; margin-left: 8px; }
-  .nav-dots { display: flex; gap: 12px; margin-left: 16px; }
-  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.35); transition: all 0.2s; }
-  .nav-dot.on { background: #fff; transform: scale(1.3); box-shadow: 0 0 4px white; }
-  .top-right { text-align: right; }
-  .top-date { font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.9); }
-  .top-time { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: 1px; line-height: 1.2; }
+/* LEFT STATS (shared) */
+.left-inner { padding:28px 28px 20px; display:flex; flex-direction:column; flex:1; overflow:hidden; }
+.brand-logo { font-family:'Bebas Neue',sans-serif; font-size:54px; letter-spacing:5px; color:var(--brand-bright); line-height:1; text-shadow:0 0 50px rgba(0,196,114,0.35); margin-bottom:2px; }
+.brand-sub { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--gray-dim); font-weight:300; margin-bottom:18px; }
+.stat-divider { width:32px; height:2px; background:var(--brand); margin-bottom:18px; box-shadow:0 0 10px rgba(0,138,80,0.6); }
+.stat-block { margin-bottom:14px; }
+.stat-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:2px; }
+.stat-value { font-family:'Bebas Neue',sans-serif; font-size:38px; color:var(--brand-bright); letter-spacing:1px; line-height:1; }
+.stat-value.gold { color:var(--gold); }
+.stat-value.red  { color:var(--red-soft); }
+.stat-value.amber{ color:var(--amber); }
+.stat-note { font-size:10px; color:var(--gray-dim); margin-top:1px; }
+.legend { margin-top:auto; }
+.legend-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:8px; }
+.legend-item { display:flex; align-items:center; gap:8px; margin-bottom:7px; font-size:11px; color:var(--gray-dim); }
+.legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.bottom-badge { display:inline-flex; align-items:center; gap:8px; margin-top:auto; background:rgba(0,138,80,0.08); border:1px solid rgba(0,138,80,0.25); border-radius:100px; padding:8px 14px; flex-shrink:0; }
+.pulse-dot { width:6px; height:6px; border-radius:50%; background:var(--brand-bright); box-shadow:0 0 8px var(--brand-bright); animation:pulse 2s infinite; flex-shrink:0; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.badge-text { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--brand-bright); font-weight:500; }
 
-  /* ========= COMMON COLUMN STYLES ========= */
-  .two-col { display: grid; grid-template-columns: 440px 1fr; height: 100%; }
-  .col-header {
-    background: #006e40; padding: 8px 22px; font-size: 13px; font-weight: 800;
-    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.95);
-    flex-shrink: 0;
-  }
-  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; }
+/* MEDALS */
+.medal-wrap { position:relative; width:42px; height:42px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.mg { position:absolute; inset:-4px; border-radius:50%; opacity:0.2; animation:pulse 2s infinite; }
+.mr { position:absolute; inset:-7px; border-radius:50%; opacity:0.3; animation:ray 2s infinite; }
+@keyframes ray { 0%,100%{opacity:0.2}50%{opacity:0.6} }
+.mg-gold{background:#FAC775;animation-duration:2s} .mr-gold{box-shadow:0 0 10px 3px #FAC775;animation-duration:2s}
+.mg-silver{background:#C8C8C8;animation-duration:2.4s} .mr-silver{box-shadow:0 0 10px 3px #C8C8C8;animation-duration:2.4s}
+.mg-bronze{background:#C87941;animation-duration:2.8s} .mr-bronze{box-shadow:0 0 10px 3px #C87941;animation-duration:2.8s}
+.medal { position:relative; z-index:2; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:17px; font-weight:900; }
+.m1{background:#FAC775;color:#412402;border:2px solid #e8a830}
+.m2{background:#C8C8C8;color:#1a1a1a;border:2px solid #a0a0a0}
+.m3{background:#C87941;color:#1a1a1a;border:2px solid #a05a28}
+.mx{background:#1e1e1e;color:#888;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px}
 
-  /* ========= POKER LEADERBOARD (CONDENSED) ========= */
-  .leaderboard { flex: 1; overflow-y: auto; padding: 4px 0; }
-  .lb-row { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #191919; }
-  .lb-row.top3 { padding: 6px 20px; background: rgba(0,138,80,0.07); }
-  .lb-row.other { padding: 3px 20px; }
-  .medal-wrap { position: relative; width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .medal-glow-gold, .medal-glow-silver, .medal-glow-bronze { position: absolute; inset: -4px; border-radius: 50%; opacity: 0.2; animation: pulse 2s infinite; }
-  .medal-glow-gold { background: #FAC775; }
-  .medal-glow-silver { background: #C8C8C8; }
-  .medal-glow-bronze { background: #C87941; }
-  .medal-rays-gold, .medal-rays-silver, .medal-rays-bronze { position: absolute; inset: -8px; border-radius: 50%; opacity: 0.3; animation: rayPulse 2s infinite; }
-  @keyframes pulse { 0%,100%{transform:scale(1);opacity:0.2}50%{transform:scale(1.4);opacity:0.4} }
-  @keyframes rayPulse { 0%,100%{opacity:0.2}50%{opacity:0.6} }
-  .medal { position: relative; z-index: 2; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: 18px; font-weight: 900; }
-  .m1 { background: #FAC775; color: #412402; border: 2px solid #e8a830; }
-  .m2 { background: #C8C8C8; color: #1a1a1a; border: 2px solid #a0a0a0; }
-  .m3 { background: #C87941; color: #1a1a1a; border: 2px solid #a05a28; }
-  .mx { background: #1e1e1e; color: #aaa; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: 16px; }
-  .lb-name { flex: 1; font-size: 15px; font-weight: 600; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'DM Sans', sans-serif; }
-  .lb-chips { font-size: 20px; font-weight: 900; color: #00c46a; font-family: 'Bebas Neue', cursive; }
-  .lb-bar-wrap { width: 60px; height: 3px; background: #222; border-radius: 2px; }
-  .lb-bar { height: 100%; background: #008a50; border-radius: 2px; }
+/* ===== POKER SCREEN ===== */
+.poker-lb { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:4px 0; }
+.lb-row { display:flex; align-items:center; gap:10px; border-bottom:1px solid #181818; flex:1; min-height:0; padding:0 16px; }
+.lb-row.podium { background:rgba(0,138,80,0.06); }
+.lb-name { flex:1; font-size:15px; font-weight:600; color:#eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lb-right { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.lb-chips { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#00c46a; line-height:1; }
+.lb-bar-wrap { width:56px; height:3px; background:#222; border-radius:2px; }
+.lb-bar { height:100%; background:#008a50; border-radius:2px; }
 
-  /* right panel (alternating) */
-  .right-panel-view { flex: 1; overflow-y: auto; padding: 12px; }
-  .view { display: none; animation: fadeUp 0.4s; }
-  .view.active { display: block; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* poker right view flip */
+.pview { flex:1; overflow:hidden; display:none; flex-direction:column; }
+.pview.active { display:flex; animation:fadeUp 0.5s; }
 
-  /* winners grid */
-  .winners-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .wcard { background: #141414; border: 1px solid #202020; border-radius: 10px; padding: 8px 12px; }
-  .wcard.hot { border-color: #008a50; background: #0d1a14; }
-  .wcard-names { font-size: 15px; font-weight: 700; color: #fff; font-family: 'DM Sans', sans-serif; }
-  .wcard-chips { font-size: 20px; font-weight: 900; color: #00c46a; font-family: 'Bebas Neue', cursive; }
-  .wcard-cat { font-size: 10px; color: #008a50; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
-  .wcard-note { font-size: 10px; color: #f0a040; font-style: italic; margin-top: 3px; }
+/* winners grid */
+.winners-wrap { flex:1; padding:10px 14px; display:grid; grid-template-columns:1fr 1fr; gap:8px; overflow:hidden; align-content:start; }
+.wcard { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; display:flex; flex-direction:column; gap:3px; }
+.wcard.hot { border-color:#008a50; background:#0d1a14; }
+.wcard-top { display:flex; align-items:flex-start; justify-content:space-between; gap:6px; }
+.wcard-name { font-size:15px; font-weight:700; color:#fff; line-height:1.3; }
+.wcard-chips { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#00c46a; flex-shrink:0; line-height:1; }
+.wcard-cat { font-size:10px; color:#008a50; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; }
+.wcard-note { font-size:10px; color:var(--amber); font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-  /* dynamic prize board */
-  .prize-board-container { background: linear-gradient(135deg, #006a3e 0%, #004d2e 100%); border-radius: 16px; padding: 12px; height: 100%; overflow-y: auto; }
-  .prize-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
-  .prize-card { background: white; border-radius: 14px; padding: 12px 6px; text-align: center; box-shadow: 0 6px 12px rgba(0,0,0,0.2); transition: transform 0.1s; }
-  .prize-name { font-size: 16px; font-weight: 800; color: #1e3a2f; font-family: 'DM Sans', sans-serif; margin-bottom: 8px; }
-  .prize-chips { font-family: 'Bebas Neue', cursive; font-size: 28px; font-weight: 900; color: #008a50; background: rgba(0,138,80,0.1); display: inline-block; padding: 4px 12px; border-radius: 40px; }
-  .prize-chips-label { font-size: 11px; font-weight: 600; color: #2c5a45; margin-top: 4px; }
+/* prize board */
+.prize-wrap { flex:1; padding:14px 18px; overflow:hidden; }
+.prize-title { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:12px; font-weight:700; }
+.prize-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.prize-card { background:#fff; border-radius:12px; padding:10px 6px; text-align:center; }
+.prize-name { font-size:13px; font-weight:800; color:#1e3a2f; font-family:'DM Sans',sans-serif; margin-bottom:6px; line-height:1.2; }
+.prize-cost { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#008a50; background:rgba(0,138,80,0.1); display:inline-block; padding:2px 10px; border-radius:30px; }
+.prize-unit { font-size:10px; font-weight:600; color:#2c5a45; margin-top:2px; }
 
-  /* NPS LAYOUT */
-  .nps-layout { display: grid; grid-template-columns: 280px 1fr; height: 100%; }
-  .nps-left-panel { background: #0f0f0f; border-right: 2px solid #1c1c1c; padding: 20px; display: flex; flex-direction: column; }
-  .nps-stat-block { margin-bottom: 24px; }
-  .nps-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6a9278; margin-bottom: 4px; }
-  .nps-stat-value { font-family: 'Bebas Neue', cursive; font-size: 48px; font-weight: 900; color: #00c46a; }
-  .nps-stat-value.gold { color: #FFD166; }
-  .nps-stat-value.red { color: #FF6B6B; }
-  .nps-right { overflow-y: auto; padding: 12px 18px; }
-  .nps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .nps-card { background: #141414; border: 1px solid #202020; border-radius: 10px; padding: 8px 12px; }
-  .nps-card.terminated { opacity: 0.75; border-color: #e05555; background: rgba(224,85,85,0.1); }
-  .nps-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; font-family: 'DM Sans', sans-serif; }
-  .terminated .nps-name { color: #e05555; text-decoration: line-through; }
-  .nps-score-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-  .nps-score { font-family: 'Bebas Neue', cursive; font-size: 28px; font-weight: 900; line-height: 1; }
-  .nps-score.green { color: #00c46a; } .nps-score.yellow { color: #f0c040; } .nps-score.red { color: #e05555; } .nps-score.none { color: #555; font-size: 18px; }
-  .nps-pill { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 20px; }
-  .nps-pill.pro { background: rgba(0,196,106,0.15); color: #00c46a; }
-  .nps-pill.det { background: rgba(224,85,85,0.15); color: #e05555; }
-  .nps-pill.resp { background: rgba(255,255,255,0.07); color: #aaa; }
-  .nps-divider { margin: 14px 0 8px; padding: 4px; background: rgba(0,138,80,0.15); text-align: center; font-size: 11px; font-weight: 700; color: #008a50; letter-spacing: 1px; grid-column: 1/-1; border-radius: 6px; }
+/* ===== NPS SCREEN ===== */
+.nps-grid { flex:1; padding:8px 14px; display:grid; gap:7px; overflow:hidden; align-content:start; }
+.nps-card { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; display:flex; flex-direction:column; gap:4px; }
+.nps-name { font-size:14px; font-weight:700; color:#fff; line-height:1.2; }
+.nps-score-row { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.nps-score { font-family:'Bebas Neue',sans-serif; font-size:30px; font-weight:900; line-height:1; }
+.nps-score.green{color:#00c46a} .nps-score.yellow{color:#f0c040} .nps-score.red{color:#e05555} .nps-score.none{color:#444;font-size:18px}
+.nps-pills { display:flex; gap:5px; flex-wrap:wrap; }
+.nps-pill { font-size:13px; font-weight:800; padding:2px 7px; border-radius:14px; }
+.nps-pill.pro{background:rgba(0,196,106,0.15);color:#00c46a}
+.nps-pill.det{background:rgba(224,85,85,0.15);color:#e05555}
+.nps-pill.resp{background:rgba(255,255,255,0.07);color:#999}
+.nps-bar-wrap { height:3px; background:#222; border-radius:2px; }
+.nps-bar { height:100%; background:#008a50; border-radius:2px; }
+.nps-section-sep { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); font-weight:700; padding:5px 0 2px; border-bottom:1px solid rgba(0,138,80,0.15); grid-column:1/-1; }
 
-  /* DRIVER SCORES */
-  .driver-layout { display: grid; grid-template-columns: 280px 1fr; height: 100%; }
-  .driver-left-panel { background: #0f0f0f; border-right: 2px solid #1c1c1c; padding: 20px; }
-  .driver-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6a9278; margin-bottom: 4px; }
-  .driver-stat-value { font-family: 'Bebas Neue', cursive; font-size: 48px; color: #00c46a; }
-  .podium-item { display: flex; align-items: center; gap: 12px; padding: 6px 0; border-bottom: 1px solid #1c1c1c; }
-  .podium-medal { width: 38px; }
-  .podium-name { flex: 1; font-size: 14px; font-weight: 600; color: #fff; }
-  .podium-score { font-family: 'Bebas Neue', cursive; font-size: 20px; color: #00c46a; }
-  .driver-right { overflow-y: auto; padding: 10px 16px; }
-  .ds-list { display: flex; flex-direction: column; gap: 4px; }
-  .ds-row { display: flex; align-items: center; gap: 8px; background: #141414; border-radius: 6px; padding: 3px 10px; border: 1px solid #1e1e1e; }
-  .ds-name { width: 150px; font-size: 12px; font-weight: 600; color: #eee; flex-shrink: 0; }
-  .ds-months { display: flex; gap: 3px; flex-wrap: wrap; }
-  .ds-month { text-align: center; min-width: 32px; }
-  .ds-month-label { font-size: 6px; color: #666; text-transform: uppercase; }
-  .ds-month-val { font-size: 10px; font-weight: 800; }
-  .ds-month-val.green { color: #00c46a; } .ds-month-val.yellow { color: #f0c040; } .ds-month-val.red { color: #e05555; }
-  .ds-yearend-wrap { text-align: center; min-width: 50px; }
-  .ds-yearend-label { font-size: 6px; color: #666; }
-  .ds-yearend { font-size: 14px; font-weight: 900; font-family: 'Bebas Neue', cursive; }
-  .ds-yearend.green { color: #00c46a; } .ds-yearend.yellow { color: #f0c040; } .ds-yearend.red { color: #e05555; }
+/* ===== DRIVER SCREEN ===== */
+.ds-podium { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:4px 0; }
+.ds-pod-row { display:flex; align-items:center; gap:10px; flex:1; min-height:0; padding:0 14px; border-bottom:1px solid #181818; }
+.ds-pod-row.podium { background:rgba(0,138,80,0.06); }
+.ds-pod-name { flex:1; font-size:15px; font-weight:600; color:#eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ds-pod-score { font-family:'Bebas Neue',sans-serif; font-size:22px; }
+.ds-pod-score.green{color:#00c46a} .ds-pod-score.yellow{color:#f0c040} .ds-pod-score.red{color:#e05555}
 
-  /* bottom ticker */
-  .bottom-bar { background: #0d1a14; border-top: 2px solid #008a50; height: 44px; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0; }
-  .ticker-label { font-size: 11px; font-weight: 800; color: #008a50; letter-spacing: 2px; text-transform: uppercase; }
-  .ticker-wrap { flex: 1; overflow: hidden; white-space: nowrap; }
-  .ticker { display: inline-block; white-space: nowrap; font-size: 15px; font-weight: 600; color: #00c46a; animation: scrollTicker 40s linear infinite; }
-  @keyframes scrollTicker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-  .loading { text-align: center; padding: 30px; color: #aaa; font-size: 18px; }
+.ds-list { flex:1; padding:6px 18px; display:flex; flex-direction:column; gap:4px; overflow:hidden; }
+.ds-row { display:flex; align-items:center; gap:8px; background:#141414; border:1px solid #1e1e1e; border-radius:7px; flex:1; min-height:0; padding:0 12px; }
+.ds-name { width:170px; font-size:15px; font-weight:600; color:#eee; flex-shrink:0; }
+.ds-months { display:flex; gap:3px; flex:1; align-items:center; }
+.ds-month { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:44px; }
+.ds-month-label { font-size:8px; color:#444; font-weight:700; text-transform:uppercase; }
+.ds-month-val { font-size:13px; font-weight:800; }
+.ds-month-val.green{color:#00c46a} .ds-month-val.yellow{color:#f0c040} .ds-month-val.red{color:#e05555} .ds-month-val.empty{color:#242424}
+.ds-ye-wrap { display:flex; flex-direction:column; align-items:center; gap:1px; flex-shrink:0; min-width:56px; }
+.ds-ye-label { font-size:8px; color:#444; font-weight:700; text-transform:uppercase; }
+.ds-ye { font-family:'Bebas Neue',sans-serif; font-size:18px; }
+.ds-ye.green{color:#00c46a} .ds-ye.yellow{color:#f0c040} .ds-ye.red{color:#e05555} .ds-ye.empty{color:#333}
+
+.loading { display:flex; align-items:center; justify-content:center; height:100%; font-size:20px; color:var(--gray-dim); }
 </style>
 </head>
 <body>
-<div class="dashboard-container">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <img class="logo-img" src="https://nexgreen.com/wp-content/uploads/2023/11/logo-c35c53c3d80b07c4427a965f36f1a450-768x219.png" alt="NexGreen Logo">
-      <div class="top-subtitle" id="top-section-label">Team Dashboard 2026</div>
-      <div class="top-week" id="top-week"></div>
-      <div class="nav-dots" id="navDots"><div class="nav-dot on"></div><div class="nav-dot"></div><div class="nav-dot"></div></div>
-    </div>
-    <div class="top-right"><div class="top-date" id="top-date">—</div><div class="top-time" id="top-time">—</div></div>
-  </div>
+<div id="root">
 
-  <div class="body">
-    <!-- POKER SCREEN -->
-    <div class="screen active" id="screen-poker"><div class="two-col"><div class="left-col"><div class="col-header">🏆 All-Time Leaderboard</div><div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div></div><div class="right-col"><div class="col-header">🎁 Prize & Recognition</div><div class="right-panel-view"><div class="view" id="view-redemption"><div id="prize-board-container" class="prize-board-container"><div class="loading">Loading prizes...</div></div></div><div class="view" id="view-winners"><div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div></div></div></div></div></div>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-left">
+      <img class="logo" src="https://nexgreen.com/wp-content/uploads/2023/11/logo-c35c53c3d80b07c4427a965f36f1a450-768x219.png" alt="NexGreen" onerror="this.style.display='none'">
+      <div class="top-divider"></div>
+      <div class="top-titles">
+        <div class="top-title">Team Dashboard 2026</div>
+        <div class="top-subtitle">NexGreen Sterling Heights</div>
+      </div>
+      <div class="top-section" id="top-section">Poker Chips</div>
+      <div class="top-week" id="top-week"></div>
+      <div class="nav-dots">
+        <div class="nav-dot on" id="nd0"></div>
+        <div class="nav-dot" id="nd1"></div>
+        <div class="nav-dot" id="nd2"></div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="top-date" id="top-date">—</div>
+      <div class="top-time" id="top-time">—</div>
+    </div>
+  </div>
 
-    <!-- NPS SCREEN -->
-    <div class="screen" id="screen-nps"><div class="nps-layout"><div class="nps-left-panel"><div class="nps-stat-block"><div class="nps-stat-label">Year End Total</div><div class="nps-stat-value gold" id="branch-nps">—</div></div><div class="nps-stat-block"><div class="nps-stat-label">Updated to</div><div class="nps-stat-value" id="nps-updated-date" style="font-size:24px;">—</div></div><div class="nps-stat-block"><div class="nps-stat-label">Total Responses</div><div class="nps-stat-value" id="total-responses">—</div></div><div class="nps-stat-block"><div class="nps-stat-label">Below 70 — Attention</div><div class="nps-stat-value red" id="attention-count">—</div></div></div><div class="nps-right"><div class="nps-grid" id="nps-grid"><div class="loading">Loading NPS...</div></div></div></div></div>
+  <!-- SCREEN 1: POKER CHIPS -->
+  <div class="screen active" id="screen-poker">
+    <div class="two-col">
+      <div class="left-panel">
+        <div class="left-inner">
+          <div class="brand-logo">NexGreen</div>
+          <div class="brand-sub">Sterling Heights · Poker Chips</div>
+          <div class="stat-divider"></div>
+          <div class="stat-block">
+            <div class="stat-label">Total Chips Awarded</div>
+            <div class="stat-value gold" id="total-chips">—</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Current Leader</div>
+            <div class="stat-value" id="current-leader">—</div>
+            <div class="stat-note" id="leader-chips">—</div>
+          </div>
+          <div class="stat-label" style="margin-bottom:8px;">All-Time Leaderboard</div>
+          <div class="poker-lb" id="lb-list"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+      <div class="right-panel">
+        <!-- Prize Board view -->
+        <div class="pview active" id="pview-prize">
+          <div class="panel-hdr">🎁 Prize Board — What Can You Win?</div>
+          <div class="panel-body">
+            <div class="prize-wrap" id="prize-wrap"><div class="loading">Loading prizes...</div></div>
+          </div>
+        </div>
+        <!-- Winners view -->
+        <div class="pview" id="pview-winners">
+          <div class="panel-hdr">🏆 This Week's Winners</div>
+          <div class="panel-body">
+            <div class="winners-wrap" id="winners-grid"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- DRIVER SCREEN -->
-    <div class="screen" id="screen-driver"><div class="driver-layout"><div class="driver-left-panel"><div class="driver-stat-block"><div class="driver-stat-label">Branch Average YTD</div><div class="driver-stat-value" id="branch-avg">—</div></div><div class="driver-stat-block"><div class="driver-stat-label">Total Drivers Tracked</div><div class="driver-stat-value" id="total-drivers">—</div></div><div class="driver-podium"><div class="driver-stat-label" style="margin-bottom: 12px;">🏆 Top 3 Performers</div><div id="driver-podium-list"><div class="loading">Loading...</div></div></div></div><div class="driver-right"><div class="ds-list" id="ds-list"><div class="loading">Loading driver scores...</div></div></div></div></div>
-  </div>
+  <!-- SCREEN 2: NPS -->
+  <div class="screen" id="screen-nps">
+    <div class="two-col" style="grid-template-columns:320px 1fr">
+      <div class="left-panel">
+        <div class="left-inner">
+          <div class="brand-logo">NexGreen</div>
+          <div class="brand-sub">Sterling Heights · NPS</div>
+          <div class="stat-divider"></div>
+          <div class="stat-block">
+            <div class="stat-label">Team Year-End Score</div>
+            <div class="stat-value gold" id="nps-team-score">—</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Total Responses</div>
+            <div class="stat-value" id="nps-total-resp">—</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Total Promoters</div>
+            <div class="stat-value" style="color:#00c46a" id="nps-total-pro">—</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Total Detractors</div>
+            <div class="stat-value red" id="nps-total-det">—</div>
+          </div>
+          <div class="legend">
+            <div class="legend-label">Score Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90+ — Excellent</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>50–89 — Good</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Below 50 — Needs Attention</span></div>
+          </div>
+          <div class="bottom-badge" style="margin-top:12px;">
+            <div class="pulse-dot"></div>
+            <div class="badge-text" id="nps-updated">Loading...</div>
+          </div>
+        </div>
+      </div>
+      <div class="right-panel">
+        <div class="panel-hdr">⭐ Net Promoter Scores — Year to Date</div>
+        <div class="panel-body">
+          <div class="nps-grid" id="nps-grid"><div class="loading">Loading NPS data...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div class="bottom-bar"><div class="ticker-label" id="ticker-label">Poker Chips</div><div class="ticker-wrap"><div class="ticker" id="ticker">Loading latest updates...</div></div></div>
-  <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-  <div class="progress-text" id="progressText">Poker Chips · 30s</div>
-  <div class="last-updated">Data refresh: <span id="updateTime">--:--:--</span></div>
-</div>
+  <!-- SCREEN 3: DRIVER SCORES -->
+  <div class="screen" id="screen-driver">
+    <div class="two-col" style="grid-template-columns:320px 1fr">
+      <div class="left-panel">
+        <div class="left-inner">
+          <div class="brand-logo">NexGreen</div>
+          <div class="brand-sub">Sterling Heights · Driver Scores</div>
+          <div class="stat-divider"></div>
+          <div class="stat-block">
+            <div class="stat-label">Branch Average YTD</div>
+            <div class="stat-value gold" id="ds-avg">—</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Total Drivers</div>
+            <div class="stat-value" id="ds-total">—</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Below 90 Year-End</div>
+            <div class="stat-value amber" id="ds-below90">—</div>
+            <div class="stat-note">Drivers needing attention</div>
+          </div>
+          <div class="legend">
+            <div class="legend-label">Score Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90+ — Good Standing</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>75–89 — Monitor</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Below 75 — Needs Attention</span></div>
+          </div>
+          <div class="bottom-badge" style="margin-top:12px;">
+            <div class="pulse-dot"></div>
+            <div class="badge-text">2026 Season · Fleetio</div>
+          </div>
+        </div>
+        <div class="panel-hdr">🏅 Top Performers</div>
+        <div class="ds-podium" id="ds-podium"><div class="loading">Loading...</div></div>
+      </div>
+      <div class="right-panel">
+        <div class="panel-hdr">🚗 Driver Safety Scores — Full Team</div>
+        <div class="panel-body">
+          <div class="ds-list" id="ds-list"><div class="loading">Loading driver scores...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="ticker-label" id="ticker-label">Poker Chips</div>
+    <div class="ticker-div"></div>
+    <div class="ticker-wrap"><div class="ticker" id="ticker">Loading updates...</div></div>
+    <div class="refresh-tag">Refreshed: <span id="refresh-time">--:--</span></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+
+</div><!-- #root -->
 
 <script>
-  // -------- GOOGLE SHEETS URLS ----------
-  const POKER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
-  const NPS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
-  const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
-  const PRIZE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?gid=1043164795&output=csv';
+// ============ CONFIG ============
+const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
+const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
+const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
+const PRIZE_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?gid=1043164795&output=csv';
+const SCREEN_MS  = 30000;
+const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
 
-  const SCREEN_DURATION = 30000;
-  const REFRESH_MS = 5 * 60 * 1000;
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
-  const SCREEN_IDS = ['screen-poker', 'screen-nps', 'screen-driver'];
-  const SCREEN_NAMES = ['Poker Chips', 'NPS', 'Driver Scores'];
-  let currentScreen = 0;
-  let rightPanelIndex = 0;  // 0:prize board, 1:winners
-  let progressInterval = null;
+// ============ SCALE ============
+function scale() {
+  const el = document.getElementById('root');
+  const s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+  el.style.transform = `scale(${s})`;
+}
+window.addEventListener('resize', scale); scale();
 
-  async function fetchCSV(url) { const r = await fetch(url+'&t='+Date.now()); const txt = await r.text(); return parseCSV(txt); }
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
-    return lines.slice(1).map(line => {
-      const cols = []; let cur='', inQ=false;
-      for(let c of line) { if(c==='"') inQ=!inQ; else if(c===',' && !inQ) { cols.push(cur.trim()); cur=''; } else cur+=c; }
-      cols.push(cur.trim());
-      const obj = {};
-      headers.forEach((h,i)=> obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim());
-      return obj;
-    }).filter(r=>Object.values(r).some(v=>v));
-  }
+// ============ CSV ============
+function parseCSVRaw(txt) {
+  return txt.trim().split('\n').map(line => {
+    const cols=[]; let cur='',inQ=false;
+    for(const c of line){ if(c==='"'){inQ=!inQ;} else if(c===','&&!inQ){cols.push(cur.trim().replace(/^"|"$/g,''));cur='';} else cur+=c; }
+    cols.push(cur.trim().replace(/^"|"$/g,''));
+    return cols;
+  });
+}
+function parseCSV(txt) {
+  const raw=parseCSVRaw(txt); if(!raw.length) return {rows:[],raw};
+  const headers=raw[0];
+  const rows=raw.slice(1).map(cols=>{ const o={}; headers.forEach((h,i)=>o[h]=(cols[i]||'').trim()); return o; }).filter(r=>Object.values(r).some(v=>v));
+  return {rows,raw};
+}
+async function fetchTxt(url){ const r=await fetch(url+'&t='+Date.now()); return r.text(); }
 
-  // -------- POKER CHIPS ----------------
-  function buildAllTime(rows) { const t={}; rows.forEach(r=>{ let chips=parseInt(r['Manager Over-ride']||r.Chips)||0; if(chips && r.Technician) r.Technician.split(',').map(n=>n.trim()).forEach(name=>t[name]=(t[name]||0)+chips); }); return Object.entries(t).sort((a,b)=>b[1]-a[1]); }
-  function getCurrentWeek(rows) { let max=0; rows.forEach(r=>{let w=parseInt(r.Week);if(w>max)max=w;}); return {weekRows:rows.filter(r=>parseInt(r.Week)===max),maxWeek:max}; }
-  async function loadPrizeBoard() {
-    try {
-      const rows = await fetchCSV(PRIZE_SHEET_URL);
-      if(rows.length) {
-        const prizes = rows.map(row => ({ name: row.Prize || row[Object.keys(row)[0]], cost: row['Chip cost'] || row[Object.keys(row)[1]] }));
-        const grid = document.getElementById('prize-board-container');
-        let html = `<div class="prize-grid">`;
-        prizes.slice(0,10).forEach(p => { html += `<div class="prize-card"><div class="prize-name">${p.name}</div><div class="prize-chips">${p.cost}</div><div class="prize-chips-label">chips</div></div>`; });
-        html += `</div>`;
-        if(prizes.length > 10) { html += `<div class="prize-grid" style="justify-content:center;">${prizes.slice(10).map(p=>`<div class="prize-card"><div class="prize-name">${p.name}</div><div class="prize-chips">${p.cost}</div><div class="prize-chips-label">chips</div></div>`).join('')}</div>`; }
-        grid.innerHTML = html;
-      } else throw new Error();
-    } catch(e) { document.getElementById('prize-board-container').innerHTML = '<div class="loading">Prize board unavailable</div>'; }
-  }
-  async function renderPoker() {
-    const rows = await fetchCSV(POKER_URL);
-    const allTime = buildAllTime(rows);
-    const {weekRows, maxWeek} = getCurrentWeek(rows);
-    const weekDate = weekRows.find(r=>r.Date)?.Date||'';
-    document.getElementById('top-week').innerHTML = `Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
-    const maxC = allTime[0]?.[1]||1;
-    document.getElementById('lb-list').innerHTML = allTime.map(([name,chips],i)=>`<div class="lb-row ${i<3?'top3':'other'}">${medalHtml(i)}<div class="lb-name">${name}</div><div class="lb-right"><div class="lb-chips">${chips}</div><div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div></div></div>`).join('');
-    const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
-    document.getElementById('winners-grid').innerHTML = weekRows.map(r=>{let chips=parseInt(r['Manager Over-ride']||r.Chips)||0; return `<div class="wcard ${hotCats.includes(r.Category)||chips>=3?'hot':''}"><div class="wcard-top"><div class="wcard-names">${r.Technician||'—'}</div><div class="wcard-chips">+${chips}</div></div><div class="wcard-cat">${r.Category}</div>${r.Notes?`<div class="wcard-note">📝 ${r.Notes}</div>`:''}</div>`;}).join('');
-    await loadPrizeBoard();
-    const notable = weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
-    window._tickerPoker = notable.length ? notable.map(r=>`${r.Technician}  —  ${r.Category}${r.Notes?': '+r.Notes:''}`).join('     •     ') : 'Great work team!';
-  }
+// ============ HELPERS ============
+function dsColor(v){ const n=parseFloat(v); if(isNaN(n)||v==='')return'empty'; if(n>=90)return'green'; if(n>=75)return'yellow'; return'red'; }
+function npsColor(v){ if(v===null||isNaN(v))return'none'; if(v>=90)return'green'; if(v>=50)return'yellow'; return'red'; }
+function medalHtml(i){
+  if(i===0) return `<div class="medal-wrap"><div class="mg mg-gold"></div><div class="mr mr-gold"></div><div class="medal m1">1</div></div>`;
+  if(i===1) return `<div class="medal-wrap"><div class="mg mg-silver"></div><div class="mr mr-silver"></div><div class="medal m2">2</div></div>`;
+  if(i===2) return `<div class="medal-wrap"><div class="mg mg-bronze"></div><div class="mr mr-bronze"></div><div class="medal m3">3</div></div>`;
+  return `<div class="medal-wrap"><div class="mx">${i+1}</div></div>`;
+}
 
-  // ---------- NPS with special rows & terminated -------------
-  async function renderNPS() {
-    const rows = await fetchCSV(NPS_URL);
-    const techKey=Object.keys(rows[0])[0], proKey=Object.keys(rows[0])[1], detKey=Object.keys(rows[0])[2], respKey=Object.keys(rows[0])[3], scoreKey=Object.keys(rows[0])[4];
-    let regular=[], unassigned=[], managers=[], terminated=[];
-    rows.forEach(r=>{
-      let name=r[techKey];
-      if(!name || name==='Tech') return;
-      if(name === '0' || name === ')' || name === 'Unassigned') unassigned.push(r);
-      else if(name.toLowerCase().includes('michael riley') || name.toLowerCase().includes('raymond knox')) terminated.push(r);
-      else if(name.toLowerCase().includes('joe') || name.toLowerCase().includes('troy') || name.toLowerCase().includes('eddie') || name.toLowerCase().includes('manager')) managers.push(r);
-      else regular.push(r);
-    });
-    // find year total from row with 'Year Total' or read cell C29:E29 via fallback
-    let yearTotal = 52.78;
-    for(let r of rows) if(r[techKey] && r[techKey].includes('Year Total')) { yearTotal = parseFloat(r[scoreKey]); break; }
-    document.getElementById('branch-nps').innerHTML = isNaN(yearTotal)?'52.78':yearTotal.toFixed(1);
-    let updatedDate = '5/31/26';
-    for(let r of rows) if(r[techKey] && r[techKey].includes('Updated')) { updatedDate = r[Object.keys(r)[1]] || r[techKey]; break; }
-    document.getElementById('nps-updated-date').innerHTML = updatedDate;
-    let totalResp = [...regular,...managers,...unassigned,...terminated].reduce((s,r)=>s+(parseInt(r[respKey])||0),0);
-    document.getElementById('total-responses').innerHTML = totalResp;
-    let lowCount = [...regular,...managers].filter(r=>{let sc=parseFloat(r[scoreKey]); return !isNaN(sc) && sc<70; }).length;
-    document.getElementById('attention-count').innerHTML = lowCount;
-    const maxResp = Math.max(...[...regular,...managers,...unassigned,...terminated].map(r=>parseInt(r[respKey])||0),1);
-    let html='';
-    html += regular.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp)).join('');
-    if(managers.length || unassigned.length) { html += `<div class="nps-divider">👔 Management Team & Unassigned</div>`; html += managers.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, true)).join(''); html += unassigned.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, true, true)).join(''); }
-    if(terminated.length) { html += `<div class="nps-divider" style="background:#2a1a1a; color:#e05555;">⚠️ Terminated (data included in totals)</div>`; html += terminated.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, false, false, true)).join(''); }
-    document.getElementById('nps-grid').innerHTML = html;
-    window._tickerNPS = regular.filter(r=>parseFloat(r[scoreKey])>=9).length ? 'Top NPS: '+regular.filter(r=>parseFloat(r[scoreKey])>=9).map(r=>r[techKey]).join(', ') : 'NPS scores updated';
-  }
-  function npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, isSub=false, isUnassigned=false, isTerm=false) {
-    let raw = r[scoreKey]; let isNone=!raw || raw==='None'||raw===''; let score=isNone?null:parseFloat(raw);
-    let cls = isNone?'none':(score>=9?'green':(score>=7?'yellow':'red'));
-    let pro=parseInt(r[proKey])||0, det=parseInt(r[detKey])||0, resp=parseInt(r[respKey])||0, pct=Math.round(resp/maxResp*100);
-    let name = isUnassigned ? 'Unassigned' : r[Object.keys(r)[0]];
-    if(isTerm) name = name.replace(' (Terminated)','');
-    let termClass = isTerm ? 'terminated' : '';
-    return `<div class="nps-card ${termClass} ${isSub?'nps-subcard':''}"><div class="nps-name">${name}</div><div class="nps-score-row"><div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div><div class="nps-meta"><div class="nps-pill pro">👍 ${pro}</div><div class="nps-pill det">👎 ${det}</div><div class="nps-pill resp">${resp}</div></div></div><div class="nps-bar-wrap"><div class="nps-bar" style="width:${pct}%"></div></div>${isTerm?'<div style="font-size:8px; color:#e05555; margin-top:4px;">🔴 Terminated</div>':''}</div>`;
-  }
+// ============ POKER ============
+function buildAllTime(rows){
+  const t={};
+  rows.forEach(r=>{ const c=parseInt(r['Manager Over-ride']||r.Chips)||0; if(!c)return; (r.Technician||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>{t[n]=(t[n]||0)+c;}); });
+  return Object.entries(t).sort((a,b)=>b[1]-a[1]);
+}
+function getWeek(rows){ let m=0; rows.forEach(r=>{const w=parseInt(r.Week);if(w>m)m=w;}); return{weekRows:rows.filter(r=>parseInt(r.Week)===m),maxWeek:m}; }
 
-  // ---------- DRIVER SCORES (medals top3) ----------
-  async function renderDrivers() {
-    const res = await fetch(DRIVER_URL+'&t='+Date.now()); const text = await res.text();
-    const lines = text.trim().split('\n').map(l=>l.split(',').map(c=>c.trim().replace(/^"|"$/g,'')));
-    let hidx=-1; for(let i=0;i<lines.length;i++) if(lines[i].some(c=>c.toLowerCase().includes('specialist'))) { hidx=i; break; }
-    if(hidx===-1) return;
-    const headers=lines[hidx]; const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist')); const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
-    const monthIdx = MONTHS.map(m=>headers.findIndex(h=>h===m)).filter(i=>i!==-1);
-    let data=[];
-    for(let i=hidx+1;i<lines.length;i++) { let name=lines[i][nameIdx]||''; if(!name) continue; if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')) break; data.push(lines[i]); }
-    let scores = data.map(row=>({ name:row[nameIdx], ye:parseFloat(row[yearIdx]), row })).filter(s=>!isNaN(s.ye));
-    let avg = scores.length ? scores.reduce((a,b)=>a+b.ye,0)/scores.length:0;
-    document.getElementById('branch-avg').innerHTML = avg.toFixed(1);
-    document.getElementById('total-drivers').innerHTML = data.length;
-    const top3 = [...scores].sort((a,b)=>b.ye-a.ye).slice(0,3);
-    document.getElementById('driver-podium-list').innerHTML = top3.map((d,i)=>`<div class="podium-item">${medalSmall(i)}<div class="podium-name">${d.name}</div><div class="podium-score">${d.ye.toFixed(1)}</div></div>`).join('');
-    document.getElementById('ds-list').innerHTML = data.map(row=>{ let name=row[nameIdx]; let monthCells=monthIdx.map(idx=>{ let val=row[idx]; let num=parseFloat(val); if(!val||isNaN(num)) return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val empty">—</div></div>`; let c=num>=90?'green':(num>=75?'yellow':'red'); return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val ${c}">${num}</div></div>`; }).join(''); let ye=row[yearIdx]; let yeNum=parseFloat(ye); let yeCls=!ye||isNaN(yeNum)?'empty':(yeNum>=90?'green':(yeNum>=75?'yellow':'red')); return `<div class="ds-row"><div class="ds-name">${name}</div><div class="ds-months">${monthCells}</div><div class="ds-yearend-wrap"><div class="ds-yearend-label">Year End</div><div class="ds-yearend ${yeCls}">${isNaN(yeNum)?'—':yeNum.toFixed(1)}</div></div></div>`; }).join('');
-    window._tickerDrivers = top3.length ? `Top drivers: ${top3.map(d=>`${d.name} (${d.ye.toFixed(1)})`).join('  •  ')}` : 'Driver scores updated';
-  }
-  function medalSmall(i) { if(i===0) return `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div></div>`; if(i===1) return `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div></div>`; return `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div></div>`; }
-  function medalHtml(i) { if(i===0) return `<div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div>`; if(i===1) return `<div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div>`; if(i===2) return `<div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div>`; return `<div class="medal-wrap"><div class="mx">${i+1}</div></div>`; }
+async function renderPoker(){
+  try{
+    const txt=await fetchTxt(POKER_URL);
+    const {rows}=parseCSV(txt);
+    const allTime=buildAllTime(rows);
+    const {weekRows,maxWeek}=getWeek(rows);
+    const weekDate=weekRows.find(r=>r.Date)?.Date||'';
+    document.getElementById('top-week').textContent=`Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
+    const total=allTime.reduce((s,e)=>s+e[1],0);
+    document.getElementById('total-chips').textContent=total;
+    document.getElementById('current-leader').textContent=allTime[0]?.[0]||'—';
+    document.getElementById('leader-chips').textContent=allTime[0]?allTime[0][1]+' chips':'—';
+    const maxC=allTime[0]?.[1]||1;
+    document.getElementById('lb-list').innerHTML=allTime.map(([name,chips],i)=>`
+      <div class="lb-row${i<3?' podium':''}">${medalHtml(i)}
+        <div class="lb-name">${name}</div>
+        <div class="lb-right"><div class="lb-chips">${chips}</div>
+          <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
+        </div></div>`).join('');
+    const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
+    document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{
+      const c=parseInt(r['Manager Over-ride']||r.Chips)||0;
+      return`<div class="wcard${(hotCats.includes(r.Category)||c>=3)?' hot':''}">
+        <div class="wcard-top"><div class="wcard-name">${r.Technician||'—'}</div><div class="wcard-chips">+${c}</div></div>
+        <div class="wcard-cat">${r.Category}</div>
+        ${r.Notes?`<div class="wcard-note">📝 ${r.Notes}</div>`:''}</div>`;
+    }).join('');
+    window._tickerPoker=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2).map(r=>`${r.Technician} — ${r.Category}${r.Notes?': '+r.Notes:''}`).join('     •     ')||'Great work team!';
+  }catch(e){console.error('Poker',e);}
+}
 
-  async function refreshAll() { await Promise.all([renderPoker(), renderNPS(), renderDrivers()]); updateTimestamp(); }
-  function updateTimestamp() { document.getElementById('updateTime').innerHTML = new Date().toLocaleTimeString(); }
-  function updateClock() { const d = new Date(); document.getElementById('top-date').innerHTML = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); document.getElementById('top-time').innerHTML = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
-  function startProgressBar(dur) { let bar=document.getElementById('progressBar'), txt=document.getElementById('progressText'); bar.style.transition=`width ${dur}ms linear`; bar.style.width='100%'; txt.innerHTML=`${SCREEN_NAMES[currentScreen]} · ${dur/1000}s`; setTimeout(()=>{ bar.style.transition='none'; bar.style.width='0%'; },dur); }
-  function nextScreen() { document.getElementById(SCREEN_IDS[currentScreen]).classList.remove('active'); document.querySelectorAll('.nav-dot')[currentScreen].classList.remove('on'); currentScreen = (currentScreen+1)%SCREEN_IDS.length; document.getElementById(SCREEN_IDS[currentScreen]).classList.add('active'); document.querySelectorAll('.nav-dot')[currentScreen].classList.add('on'); document.getElementById('top-section-label').innerHTML = ['Poker Chips 2026','Net Promoter Score','Driver Safety Scores'][currentScreen]; if(currentScreen!==0) document.getElementById('top-week').innerHTML=''; setTicker(currentScreen); startProgressBar(SCREEN_DURATION); }
-  function setTicker(idx) { const tickerTexts = [window._tickerPoker||'Loading...', window._tickerNPS||'Loading...', window._tickerDrivers||'Loading...']; document.getElementById('ticker').innerHTML = tickerTexts[idx]; }
-  function flipRightPanel() { if(currentScreen!==0) return; const views=['view-redemption','view-winners']; document.getElementById(views[rightPanelIndex]).classList.remove('active'); rightPanelIndex = (rightPanelIndex+1)%2; document.getElementById(views[rightPanelIndex]).classList.add('active'); }
+async function renderPrizes(){
+  try{
+    const txt=await fetchTxt(PRIZE_URL);
+    const {rows}=parseCSV(txt);
+    if(!rows.length) throw new Error();
+    const keys=Object.keys(rows[0]);
+    const nameKey=keys[0], costKey=keys[1];
+    document.getElementById('prize-wrap').innerHTML=`
+      <div class="prize-title">Redeem Your Chips — Available Prizes</div>
+      <div class="prize-grid">${rows.slice(0,10).map(r=>`
+        <div class="prize-card">
+          <div class="prize-name">${r[nameKey]||'Prize'}</div>
+          <div class="prize-cost">${r[costKey]||'?'}</div>
+          <div class="prize-unit">chips</div>
+        </div>`).join('')}</div>`;
+  }catch(e){
+    document.getElementById('prize-wrap').innerHTML='<div class="loading" style="color:var(--gray-dim);font-size:14px;">Prize board coming soon</div>';
+  }
+}
 
-  setInterval(updateClock,1000); updateClock(); setInterval(nextScreen, SCREEN_DURATION); setInterval(flipRightPanel, 12000); setInterval(refreshAll, REFRESH_MS); refreshAll(); startProgressBar(SCREEN_DURATION); updateTimestamp(); setInterval(updateTimestamp, 10000); document.getElementById('view-redemption').classList.add('active');
+// ============ NPS ============
+async function renderNPS(){
+  try{
+    const txt=await fetchTxt(NPS_URL);
+    const {rows,raw}=parseCSV(txt);
+    const keys=Object.keys(rows[0]||{});
+    const[tK,pK,dK,rK,sK]=[keys[0],keys[1],keys[2],keys[3],keys[4]];
+    // B28 = raw row 28, col 1
+    const updatedVal=(raw.length>28&&raw[28]&&raw[28][1])?raw[28][1].trim():'';
+    document.getElementById('nps-updated').textContent=updatedVal?`Updated through ${updatedVal}`:'NPS · Year to Date';
+    const valid=rows.filter(r=>r[tK]&&r[tK]!=='Tech'&&r[tK]!=='');
+    let tPro=0,tDet=0,tResp=0;
+    valid.forEach(r=>{tPro+=parseInt(r[pK])||0;tDet+=parseInt(r[dK])||0;tResp+=parseInt(r[rK])||0;});
+    const teamScore=tResp>0?((tPro-tDet)/tResp)*100:null;
+    const tsCls=npsColor(teamScore);
+    document.getElementById('nps-team-score').className=`stat-value ${tsCls==='green'?'':''}${tsCls==='yellow'?'gold':''}${tsCls==='red'?'red':''}${tsCls==='none'?'':''}`;
+    if(teamScore!==null) document.getElementById('nps-team-score').style.color=tsCls==='green'?'#00c46a':tsCls==='yellow'?'#f0c040':tsCls==='red'?'#e05555':'var(--gray-dim)';
+    document.getElementById('nps-team-score').textContent=teamScore!==null?teamScore.toFixed(1):'—';
+    document.getElementById('nps-total-resp').textContent=tResp;
+    document.getElementById('nps-total-pro').textContent=tPro;
+    document.getElementById('nps-total-det').textContent=tDet;
+    const maxR=Math.max(...valid.map(r=>parseInt(r[rK])||0),1);
+    // Auto grid columns based on count
+    const cols=valid.length<=8?2:valid.length<=15?3:4;
+    const grid=document.getElementById('nps-grid');
+    grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+    grid.innerHTML=valid.map(r=>{
+      const name=(!r[tK]||r[tK]==='0')?'Unassigned':r[tK];
+      const raw2=r[sK],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!'||raw2==='#VALUE!';
+      const sc=isNone?null:parseFloat(raw2);
+      const cls=npsColor(sc);
+      const pro=parseInt(r[pK])||0,det=parseInt(r[dK])||0,resp=parseInt(r[rK])||0;
+      return`<div class="nps-card">
+        <div class="nps-name">${name}</div>
+        <div class="nps-score-row">
+          <div class="nps-score ${cls}">${isNone?'—':(sc>=0?'+':'')+sc.toFixed(1)}</div>
+          <div class="nps-pills">
+            <div class="nps-pill pro">👍 ${pro}</div>
+            <div class="nps-pill det">👎 ${det}</div>
+            <div class="nps-pill resp">${resp} rev</div>
+          </div>
+        </div>
+        <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxR*100)}%"></div></div>
+      </div>`;
+    }).join('');
+    const top=valid.filter(r=>{const v=r[sK];return v&&v!=='None'&&parseFloat(v)>=90;});
+    window._tickerNPS=top.length?'Top NPS: '+top.map(r=>`${r[tK]==='0'?'Unassigned':r[tK]} (${parseFloat(r[sK]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
+  }catch(e){console.error('NPS',e);}
+}
+
+// ============ DRIVER SCORES ============
+async function renderDrivers(){
+  try{
+    const txt=await fetchTxt(DRIVER_URL);
+    const raw=parseCSVRaw(txt);
+    let hidx=-1;
+    for(let i=0;i<raw.length;i++){if(raw[i].some(c=>c.toLowerCase().includes('specialist'))){hidx=i;break;}}
+    if(hidx===-1){console.error('Driver header not found');return;}
+    const headers=raw[hidx].map(h=>h.trim());
+    const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist'));
+    const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
+    const dataRows=[];
+    for(let i=hidx+1;i<raw.length;i++){
+      const row=raw[i],name=(row[nameIdx]||'').trim();
+      if(!name)continue;
+      if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')||name.toLowerCase().includes('avg'))break;
+      dataRows.push(row);
+    }
+    // Stats
+    const withYE=dataRows.filter(r=>!isNaN(parseFloat((r[yearIdx]||'').trim())));
+    const avg=withYE.length?withYE.reduce((s,r)=>s+parseFloat(r[yearIdx]),0)/withYE.length:0;
+    document.getElementById('ds-avg').textContent=avg?avg.toFixed(1):'—';
+    document.getElementById('ds-total').textContent=dataRows.length;
+    const below90=withYE.filter(r=>parseFloat(r[yearIdx])<90).length;
+    document.getElementById('ds-below90').textContent=below90||'✓ None';
+    if(!below90){document.getElementById('ds-below90').style.color='#00c46a';}
+    // Podium sorted by year-end
+    const sorted=[...withYE].sort((a,b)=>parseFloat(b[yearIdx])-parseFloat(a[yearIdx]));
+    document.getElementById('ds-podium').innerHTML=sorted.map((row,i)=>{
+      const name=(row[nameIdx]||'').trim();
+      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye),cls=dsColor(ye);
+      return`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}
+        <div class="ds-pod-name">${name}</div>
+        <div class="ds-pod-score ${cls}">${isNaN(yeN)?'—':yeN.toFixed(1)}</div>
+      </div>`;
+    }).join('');
+    // Full list
+    document.getElementById('ds-list').innerHTML=dataRows.map(row=>{
+      const name=(row[nameIdx]||'Unassigned').trim();
+      const monthCells=MONTHS.map(m=>{
+        const idx=headers.findIndex(h=>h.trim()===m);
+        const val=idx>=0?(row[idx]||'').trim():'';
+        const n=parseFloat(val),cls=dsColor(val);
+        return`<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${cls}">${isNaN(n)||val===''?'—':n}</div></div>`;
+      }).join('');
+      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye),yeCls=dsColor(ye);
+      return`<div class="ds-row">
+        <div class="ds-name">${name}</div>
+        <div class="ds-months">${monthCells}</div>
+        <div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeCls}">${isNaN(yeN)||ye===''?'—':yeN.toFixed(1)}</div></div>
+      </div>`;
+    }).join('');
+    window._tickerDrivers=sorted.length?'Top driver scores: '+sorted.slice(0,3).map(r=>`${(r[nameIdx]||'').trim()} (${parseFloat(r[yearIdx]).toFixed(1)})`).join('  •  '):'Driver scores updated — stay safe!';
+  }catch(e){console.error('Drivers',e);}
+}
+
+// ============ CLOCK ============
+function clock(){
+  const n=new Date();
+  document.getElementById('top-date').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('top-time').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+clock(); setInterval(clock,10000);
+
+// ============ ROTATION ============
+const SCREENS=['screen-poker','screen-nps','screen-driver'];
+const NAMES=['Poker Chips','Net Promoter Score','Driver Safety Scores'];
+const TICKERS=['Poker Chips','NPS','Driver Scores'];
+let si=0;
+function setTicker(i){
+  document.getElementById('ticker-label').textContent=TICKERS[i];
+  const texts=[window._tickerPoker,window._tickerNPS,window._tickerDrivers];
+  const t=document.getElementById('ticker');
+  // Double the text so scroll loops seamlessly
+  const txt=(texts[i]||'Loading...')+'          •          '+(texts[i]||'Loading...');
+  t.textContent=txt; t.style.animation='none'; t.offsetHeight; t.style.animation='';
+}
+function nextScreen(){
+  document.getElementById(SCREENS[si]).classList.remove('active');
+  document.getElementById('nd'+si).classList.remove('on');
+  si=(si+1)%SCREENS.length;
+  document.getElementById(SCREENS[si]).classList.add('active');
+  document.getElementById('nd'+si).classList.add('on');
+  document.getElementById('top-section').textContent=NAMES[si];
+  if(si!==0)document.getElementById('top-week').textContent='';
+  setTicker(si);
+  startProgress();
+}
+setInterval(nextScreen,SCREEN_MS);
+
+// ============ PROGRESS BAR ============
+function startProgress(){
+  const bar=document.getElementById('prog-bar');
+  bar.style.transition='none'; bar.style.width='0%'; bar.offsetHeight;
+  bar.style.transition=`width ${SCREEN_MS}ms linear`; bar.style.width='100%';
+}
+startProgress();
+
+// ============ POKER RIGHT PANEL FLIP ============
+let pi=0;
+const PVIEWS=['pview-prize','pview-winners'];
+setInterval(()=>{
+  if(si!==0)return;
+  document.getElementById(PVIEWS[pi]).classList.remove('active');
+  pi=(pi+1)%2;
+  document.getElementById(PVIEWS[pi]).classList.add('active');
+},14000);
+
+// ============ LOAD + REFRESH ============
+async function loadAll(){
+  await Promise.all([renderPoker(),renderPrizes(),renderNPS(),renderDrivers()]);
+  document.getElementById('refresh-time').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  setTicker(si);
+}
+loadAll();
+setInterval(loadAll,5*60*1000);
 </script>
 </body>
 </html>

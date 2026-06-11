@@ -2,143 +2,290 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>NexGreen Sterling Heights — 2026 Net Promoter Scores</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=1920">
+<title>NexGreen Sterling Heights</title>
 <style>
-  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-  :root {
-    --brand:#008a50; --brand-bright:#00c472; --green-deep:#020d07;
-    --gray-dim:#6a9278; --gold:#FFD166; --amber:#F4A261;
-    --red-soft:#FF6B6B; --white:#edf7f2; --card-border:rgba(0,138,80,0.18);
-  }
-  html, body {
-    width:1920px; height:1080px; overflow:hidden;
-    background:var(--green-deep); color:var(--white);
-    font-family:'DM Sans',Arial,sans-serif;
-    background-image:
-      radial-gradient(ellipse 80% 70% at 0% 50%, rgba(0,80,40,0.75) 0%, transparent 65%),
-      radial-gradient(ellipse 100% 45% at 50% 0%, rgba(0,138,80,0.12) 0%, transparent 55%);
-  }
-  .dashboard { width:1920px; height:1080px; display:grid; grid-template-columns:310px 1fr; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; background: #0a0a0a; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+  #app { width: 1920px; height: 1080px; display: flex; flex-direction: column; color: #fff; }
 
-  /* LEFT */
-  .left-panel {
-    background:rgba(0,138,80,0.05); border-right:1px solid var(--card-border);
-    display:flex; flex-direction:column; padding:40px 34px 34px;
-    position:relative; overflow:hidden;
-  }
-  .left-panel::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--brand-bright),transparent); }
-  .brand-logo { font-family:'Bebas Neue',Impact,sans-serif; font-size:56px; letter-spacing:5px; color:var(--brand-bright); line-height:1; text-shadow:0 0 50px rgba(0,196,114,0.35); margin-bottom:2px; }
-  .brand-sub { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gray-dim); font-weight:300; margin-bottom:20px; }
-  .badge-pill { display:inline-flex; align-items:center; gap:8px; background:rgba(0,138,80,0.1); border:1px solid rgba(0,138,80,0.3); border-radius:100px; padding:7px 14px; margin-bottom:20px; width:fit-content; }
-  .pulse-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; background:var(--brand-bright); box-shadow:0 0 8px var(--brand-bright); animation:pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-  .badge-text { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--brand-bright); }
-  .divider { width:36px; height:2px; background:var(--brand); margin-bottom:20px; box-shadow:0 0 12px rgba(0,138,80,0.6); }
-  .stat-block { margin-bottom:14px; }
-  .stat-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:2px; }
-  .stat-value { font-family:'Bebas Neue',Impact,sans-serif; font-size:42px; color:var(--brand-bright); letter-spacing:1px; line-height:1; }
-  .stat-note { font-size:11px; color:var(--gray-dim); margin-top:2px; }
-  .sv-gold { color:var(--gold); }
-  .sv-red  { color:var(--red-soft); }
-  .legend { margin-top:4px; }
-  .legend-item { display:flex; align-items:center; gap:9px; margin-bottom:8px; font-size:12px; color:var(--gray-dim); }
-  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .active-badge { display:inline-flex; align-items:center; gap:8px; margin-top:auto; background:rgba(0,138,80,0.08); border:1px solid rgba(0,138,80,0.25); border-radius:100px; padding:10px 16px; }
-  .active-text { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--brand-bright); font-weight:500; }
+  /* TOP BAR */
+  .top-bar { background: #008a50; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 100px; flex-shrink: 0; }
+  .top-bar-left { display: flex; align-items: center; gap: 20px; }
+  .top-titles { display: flex; flex-direction: column; gap: 3px; }
+  .top-title { font-size: 38px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; line-height: 1; }
+  .top-subtitle { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.9; }
+  .top-week { font-size: 18px; color: rgba(255,255,255,0.65); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 12px; padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.3); align-self: center; }
+  .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .top-date { font-size: 20px; color: rgba(255,255,255,0.85); font-weight: 500; }
+  .top-time { font-size: 32px; color: #fff; font-weight: 800; letter-spacing: 0.05em; }
+  .nav-dots { display: flex; gap: 10px; align-items: center; margin-left: 24px; }
+  .nav-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background 0.4s, transform 0.4s; }
+  .nav-dot.on { background: #fff; transform: scale(1.3); }
 
-  /* RIGHT */
-  .right-panel { padding:26px 42px 22px; display:flex; flex-direction:column; gap:6px; overflow:hidden; }
-  .grid-table { width:100%; border-collapse:collapse; table-layout:fixed; }
-  .grid-table th { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gray-dim); font-weight:500; padding:6px 10px; border-bottom:2px solid rgba(0,138,80,0.25); text-align:center; }
-  .grid-table th.col-name { text-align:left; padding-left:16px; }
-  .grid-table th.col-score { color:var(--gold); }
-  .grid-table td { padding:0 10px; height:46px; text-align:center; border-bottom:1px solid rgba(0,138,80,0.08); vertical-align:middle; font-size:16px; }
-  .grid-table tr:nth-child(even) td { background:rgba(255,255,255,0.013); }
-  .col-name { text-align:left !important; padding-left:16px !important; font-size:15px; font-weight:500; color:var(--white); }
-  .col-pro  { color:var(--brand-bright); font-weight:600; font-size:17px; }
-  .col-det-zero { color:rgba(255,255,255,0.2); font-size:15px; }
-  .col-det-pos  { color:var(--red-soft); font-weight:600; font-size:17px; }
-  .col-res  { color:var(--gray-dim); font-size:14px; }
-  .chip { display:inline-flex; align-items:center; justify-content:center; min-width:110px; height:34px; border-radius:8px; font-family:'Bebas Neue',Impact,sans-serif; font-size:22px; letter-spacing:1px; }
-  .chip-green  { background:rgba(0,196,114,0.18); color:#00c472; border:1px solid rgba(0,196,114,0.35); }
-  .chip-yellow { background:rgba(255,209,102,0.15); color:#FFD166; border:1px solid rgba(255,209,102,0.3); }
-  .chip-red    { background:rgba(255,107,107,0.15); color:#FF6B6B; border:1px solid rgba(255,107,107,0.3); }
-  .chip-none   { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.08); font-size:14px; }
-  .row-term td { opacity:0.5; }
-  .row-term .col-name { color:var(--amber) !important; font-style:italic; font-size:13px; }
-  .row-unsign td { background:rgba(255,209,102,0.04) !important; }
-  .row-unsign .col-name { color:rgba(255,209,102,0.65) !important; font-style:italic; }
-  .row-mgr td { background:rgba(0,138,80,0.04) !important; }
-  .row-mgr .col-name { color:rgba(0,196,114,0.6) !important; font-size:13px; }
-  .row-section-label td { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); font-weight:600; padding:6px 0 3px 16px; border-bottom:1px solid rgba(0,138,80,0.15) !important; background:transparent !important; height:auto; }
-  .no-data-section { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:9px 16px; }
-  .no-data-hdr { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
-  .no-data-dot { width:6px; height:6px; border-radius:50%; background:var(--gray-dim); }
-  .no-data-title { font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gray-dim); font-weight:500; }
-  .pills { display:flex; flex-wrap:wrap; gap:6px; }
-  .pill { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:5px 14px; font-size:12px; font-weight:500; color:var(--gray-dim); }
-  .footer { margin-top:auto; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--card-border); padding-top:8px; }
-  .footer-note { font-size:10px; color:var(--gray-dim); letter-spacing:1px; }
-  .loading { display:flex; align-items:center; justify-content:center; height:200px; font-size:22px; color:var(--gray-dim); }
+  /* BODY */
+  .body { flex: 1; min-height: 0; position: relative; }
+  .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+  .screen.active { display: flex; animation: fadeUp 0.8s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  /* SECTION HEADER */
+  .section-header { background: #005c35; padding: 10px 36px; font-size: 26px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; flex-shrink: 0; border-bottom: 3px solid #00c46a; display: flex; align-items: center; gap: 14px; }
+
+  /* SHARED */
+  .two-col { display: grid; grid-template-columns: 400px 1fr; flex: 1; min-height: 0; overflow: hidden; }
+  .three-col { display: grid; grid-template-columns: 340px 1fr; flex: 1; min-height: 0; overflow: hidden; }
+  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; overflow: hidden; }
+  .right-col { display: flex; flex-direction: column; overflow: hidden; }
+  .col-header { background: #006e40; padding: 10px 24px; font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.9); flex-shrink: 0; }
+
+  /* MEDALS */
+  .medal-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .medal-glow-gold   { position:absolute;inset:-4px;border-radius:50%;background:#FAC775;opacity:0.18;animation:pulse-gold 2s ease-in-out infinite; }
+  .medal-glow-silver { position:absolute;inset:-4px;border-radius:50%;background:#C8C8C8;opacity:0.15;animation:pulse-silver 2.4s ease-in-out infinite; }
+  .medal-glow-bronze { position:absolute;inset:-4px;border-radius:50%;background:#C87941;opacity:0.18;animation:pulse-bronze 2.8s ease-in-out infinite; }
+  @keyframes pulse-gold   { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.32} }
+  @keyframes pulse-silver { 0%,100%{transform:scale(1);opacity:0.15}50%{transform:scale(1.5);opacity:0.26} }
+  @keyframes pulse-bronze { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.28} }
+  .medal-rays-gold   { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #FAC775;opacity:0.4;animation:ray-gold 2s ease-in-out infinite; }
+  .medal-rays-silver { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C8C8C8;opacity:0.3;animation:ray-silver 2.4s ease-in-out infinite; }
+  .medal-rays-bronze { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C87941;opacity:0.35;animation:ray-bronze 2.8s ease-in-out infinite; }
+  @keyframes ray-gold   { 0%,100%{opacity:0.4}50%{opacity:0.75} }
+  @keyframes ray-silver { 0%,100%{opacity:0.3}50%{opacity:0.6} }
+  @keyframes ray-bronze { 0%,100%{opacity:0.35}50%{opacity:0.65} }
+  .medal { position:relative;z-index:2;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900; }
+  .m1 { background:#FAC775;color:#412402;border:2px solid #e8a830; }
+  .m2 { background:#C8C8C8;color:#1a1a1a;border:2px solid #a0a0a0; }
+  .m3 { background:#C87941;color:#1a1a1a;border:2px solid #a05a28; }
+  .mx { background:#1e1e1e;color:#666;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900; }
+
+  /* POKER LEADERBOARD — auto-sizes rows to fill available height */
+  .leaderboard { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 4px 0; }
+  .lb-row { display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #181818; flex: 1; min-height: 0; }
+  .lb-row.podium { background: rgba(0,138,80,0.07); }
+  .lb-name { flex:1;font-size:17px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .lb-right { display:flex;flex-direction:column;align-items:flex-end;gap:3px; }
+  .lb-chips { font-size:22px;font-weight:900;color:#00c46a;line-height:1; }
+  .lb-bar-wrap { width:60px;height:3px;background:#222;border-radius:2px; }
+  .lb-bar { height:100%;background:#008a50;border-radius:2px; }
+
+  /* POKER INNER VIEWS */
+  .inner-view { flex:1;display:none;flex-direction:column;min-height:0;overflow:hidden; }
+  .inner-view.active { display:flex;animation:fadeUp 0.7s ease; }
+
+  /* WINNERS GRID — auto column count */
+  .winners-grid { flex:1;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;overflow:hidden;align-content:start; }
+  .wcard { background:#141414;border:1px solid #202020;border-radius:9px;padding:9px 12px;display:flex;flex-direction:column;gap:3px; }
+  .wcard.hot { border-color:#008a50;background:#0d1a14; }
+  .wcard-top { display:flex;align-items:flex-start;justify-content:space-between;gap:6px; }
+  .wcard-names { font-size:16px;font-weight:700;color:#fff;line-height:1.3; }
+  .wcard-chips { font-size:22px;font-weight:900;color:#00c46a;flex-shrink:0;line-height:1; }
+  .wcard-cat { font-size:11px;color:#008a50;font-weight:800;text-transform:uppercase;letter-spacing:0.05em; }
+  .wcard-note { font-size:11px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+  /* ALL-TIME LIST */
+  .alltime-list { flex:1;padding:8px 14px;display:flex;flex-direction:column;gap:5px;overflow:hidden; }
+  .at-row { display:flex;align-items:center;gap:12px;background:#141414;border:1px solid #1e1e1e;border-radius:7px;flex:1;min-height:0;padding:0 14px; }
+  .at-rank { width:26px;font-size:14px;color:#555;font-weight:900;text-align:center;flex-shrink:0; }
+  .at-rank.top3 { color:#00c46a; }
+  .at-name { flex:1;font-size:18px;font-weight:600;color:#ddd; }
+  .at-bar-wrap { width:180px;height:4px;background:#222;border-radius:3px;flex-shrink:0; }
+  .at-bar { height:100%;background:#008a50;border-radius:3px; }
+  .at-chips { font-size:20px;font-weight:900;color:#00c46a;min-width:42px;text-align:right;flex-shrink:0; }
+
+  /* NPS SIDE PANEL */
+  .nps-side { background:#0f0f0f;border-right:2px solid #1c1c1c;display:flex;flex-direction:column; }
+  .nps-side-section { padding:14px 18px;border-bottom:1px solid #1c1c1c; }
+  .nps-side-label { font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#008a50;margin-bottom:6px; }
+  .nps-side-score { font-size:60px;font-weight:900;line-height:1; }
+  .nps-side-score.green  { color:#00c46a; }
+  .nps-side-score.yellow { color:#f0c040; }
+  .nps-side-score.red    { color:#e05555; }
+  .nps-side-score.none   { color:#444;font-size:30px; }
+  .nps-side-stat { display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #181818; }
+  .nps-side-stat:last-child { border-bottom:none; }
+  .nps-side-stat-label { font-size:14px;color:#888;font-weight:600; }
+  .nps-side-stat-val { font-size:22px;font-weight:800;color:#fff; }
+  .nps-side-stat-val.green { color:#00c46a; }
+  .nps-side-stat-val.red   { color:#e05555; }
+  .nps-updated { margin-top:auto;padding:14px 18px;border-top:1px solid #1c1c1c; }
+  .nps-updated-label { font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:4px; }
+  .nps-updated-val { font-size:17px;font-weight:700;color:#008a50; }
+
+  /* NPS GRID — auto-sizes to fit all techs */
+  .nps-grid { flex:1;padding:8px 12px;display:grid;gap:6px;overflow:hidden;align-content:start; }
+  .nps-card { background:#141414;border:1px solid #202020;border-radius:9px;padding:8px 12px;display:flex;flex-direction:column;gap:4px; }
+  .nps-name { font-size:16px;font-weight:700;color:#fff; }
+  .nps-score-row { display:flex;align-items:center;justify-content:space-between;gap:6px; }
+  .nps-score { font-size:32px;font-weight:900;line-height:1; }
+  .nps-score.green  { color:#00c46a; }
+  .nps-score.yellow { color:#f0c040; }
+  .nps-score.red    { color:#e05555; }
+  .nps-score.none   { color:#444;font-size:20px; }
+  .nps-meta { display:flex;gap:6px;flex-wrap:wrap;align-items:center; }
+  .nps-pill { font-size:14px;font-weight:800;padding:2px 8px;border-radius:14px; }
+  .nps-pill.pro  { background:rgba(0,196,106,0.15);color:#00c46a; }
+  .nps-pill.det  { background:rgba(224,85,85,0.15);color:#e05555; }
+  .nps-pill.resp { background:rgba(255,255,255,0.07);color:#888; }
+  .nps-bar-wrap { height:3px;background:#222;border-radius:3px; }
+  .nps-bar { height:100%;border-radius:3px;background:#008a50; }
+
+  /* DRIVER SIDE PANEL */
+  .ds-side { background:#0f0f0f;border-right:2px solid #1c1c1c;display:flex;flex-direction:column;overflow:hidden; }
+  .ds-podium { flex:1;overflow:hidden;display:flex;flex-direction:column;padding:4px 0; }
+  .ds-lb-row { display:flex;align-items:center;gap:10px;flex:1;min-height:0;padding:0 16px;border-bottom:1px solid #181818; }
+  .ds-lb-row.podium { background:rgba(0,138,80,0.07); }
+  .ds-lb-name { flex:1;font-size:17px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .ds-lb-score { font-size:22px;font-weight:900; }
+  .ds-lb-score.green  { color:#00c46a; }
+  .ds-lb-score.yellow { color:#f0c040; }
+  .ds-lb-score.red    { color:#e05555; }
+  .ds-lb-score.empty  { color:#444; }
+
+  /* DRIVER MAIN LIST — auto-sizes rows */
+  .ds-full { flex:1;padding:6px 16px;display:flex;flex-direction:column;gap:4px;overflow:hidden; }
+  .ds-row { display:flex;align-items:center;gap:8px;background:#141414;border:1px solid #1e1e1e;border-radius:7px;flex:1;min-height:0;padding:0 12px; }
+  .ds-name { width:165px;font-size:16px;font-weight:600;color:#eee;flex-shrink:0; }
+  .ds-months { display:flex;gap:2px;flex:1;align-items:center; }
+  .ds-month { display:flex;flex-direction:column;align-items:center;gap:1px;min-width:42px; }
+  .ds-month-label { font-size:8px;color:#444;font-weight:700;text-transform:uppercase; }
+  .ds-month-val { font-size:13px;font-weight:800; }
+  .ds-month-val.green  { color:#00c46a; }
+  .ds-month-val.yellow { color:#f0c040; }
+  .ds-month-val.red    { color:#e05555; }
+  .ds-month-val.empty  { color:#242424; }
+  .ds-yearend-wrap { display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;min-width:58px; }
+  .ds-yearend-label { font-size:8px;color:#444;font-weight:700;text-transform:uppercase; }
+  .ds-yearend { font-size:18px;font-weight:900; }
+  .ds-yearend.green  { color:#00c46a; }
+  .ds-yearend.yellow { color:#f0c040; }
+  .ds-yearend.red    { color:#e05555; }
+  .ds-yearend.empty  { color:#333; }
+
+  /* BOTTOM BAR */
+  .bottom-bar { background:#0d1a14;border-top:2px solid #008a50;height:44px;display:flex;align-items:center;padding:0 28px;gap:16px;flex-shrink:0; }
+  .ticker-label { font-size:13px;font-weight:800;color:#008a50;letter-spacing:0.12em;text-transform:uppercase;flex-shrink:0; }
+  .ticker-divider { width:2px;height:22px;background:#008a50;opacity:0.4;flex-shrink:0; }
+  .ticker-wrap { flex:1;overflow:hidden; }
+  .ticker { font-size:20px;font-weight:700;color:#00c46a;white-space:nowrap;display:inline-block;animation:scroll 55s linear infinite; }
+  @keyframes scroll { 0%{transform:translateX(1920px)}100%{transform:translateX(-100%)} }
+  .loading { display:flex;align-items:center;justify-content:center;height:100%;font-size:22px;color:#444; }
 </style>
 </head>
 <body>
-<div class="dashboard">
-  <div class="left-panel">
-    <div class="brand-logo">NexGreen</div>
-    <div class="brand-sub">Sterling Heights · Net Promoter Score</div>
-    <div class="badge-pill"><div class="pulse-dot"></div><div class="badge-text" id="updated-badge">Loading...</div></div>
-    <div class="divider"></div>
-    <div class="stat-block">
-      <div class="stat-label">Team Year-End Score</div>
-      <div class="stat-value sv-gold" id="s-team">—</div>
-      <div class="stat-note">All active tech responses</div>
+<div id="app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-titles">
+        <div class="top-title">Team Dashboard 2026</div>
+        <div class="top-subtitle">NexGreen Sterling Heights</div>
+      </div>
+      <div class="top-week" id="top-week"></div>
+      <div class="nav-dots">
+        <div class="nav-dot on" id="nd0"></div>
+        <div class="nav-dot" id="nd1"></div>
+        <div class="nav-dot" id="nd2"></div>
+      </div>
     </div>
-    <div class="stat-block">
-      <div class="stat-label">Total Responses</div>
-      <div class="stat-value" id="s-res">—</div>
-      <div class="stat-note">Active technicians only</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-label">Top Performer</div>
-      <div class="stat-value sv-gold" id="s-top">—</div>
-      <div class="stat-note" id="s-top-name">—</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-label">Needs Attention (score &lt; 50)</div>
-      <div class="stat-value sv-red" id="s-low">—</div>
-      <div class="stat-note">Technicians scoring under 50</div>
-    </div>
-    <div class="legend">
-      <div class="stat-label" style="margin-bottom:10px;">Score Key</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#00c472"></div><span>90 and above — excellent</span></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#FFD166"></div><span>50 – 89 — good</span></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div><span>Below 50 — needs attention</span></div>
-    </div>
-    <div class="active-badge">
-      <div class="pulse-dot"></div>
-      <div class="active-text">Formula: ((Promoters − Detractors) / Responses) × 100</div>
+    <div class="top-right">
+      <div class="top-date" id="top-date">—</div>
+      <div class="top-time" id="top-time">—</div>
     </div>
   </div>
 
-  <div class="right-panel">
-    <div id="table-wrap">
-      <div class="loading">Loading NPS data...</div>
+  <div class="body">
+
+    <!-- SCREEN 1: POKER CHIPS -->
+    <div class="screen active" id="screen-chips">
+      <div class="section-header">🏆 Poker Chips — Employee Recognition</div>
+      <div class="two-col">
+        <div class="left-col">
+          <div class="col-header">All-Time Leaderboard</div>
+          <div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="right-col">
+          <div class="inner-view active" id="view-week">
+            <div class="col-header">This Week's Winners</div>
+            <div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div>
+          </div>
+          <div class="inner-view" id="view-alltime">
+            <div class="col-header">All-Time Chip Totals</div>
+            <div class="alltime-list" id="alltime-list"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="no-data-section" id="no-data-section" style="display:none">
-      <div class="no-data-hdr"><div class="no-data-dot"></div><div class="no-data-title">No Responses Yet</div></div>
-      <div class="pills" id="no-data-pills"></div>
+
+    <!-- SCREEN 2: NPS -->
+    <div class="screen" id="screen-nps">
+      <div class="section-header">⭐ Net Promoter Scores — Year to Date</div>
+      <div class="three-col">
+        <div class="nps-side">
+          <div class="col-header">Team Summary</div>
+          <div class="nps-side-section">
+            <div class="nps-side-label">Team Year-End Score</div>
+            <div class="nps-side-score none" id="nps-team-score">—</div>
+          </div>
+          <div class="nps-side-section" style="flex:1;">
+            <div class="nps-side-label">Totals</div>
+            <div class="nps-side-stat">
+              <div class="nps-side-stat-label">👍 Total Promoters</div>
+              <div class="nps-side-stat-val green" id="nps-total-pro">—</div>
+            </div>
+            <div class="nps-side-stat">
+              <div class="nps-side-stat-label">👎 Total Detractors</div>
+              <div class="nps-side-stat-val red" id="nps-total-det">—</div>
+            </div>
+            <div class="nps-side-stat">
+              <div class="nps-side-stat-label">📋 Total Responses</div>
+              <div class="nps-side-stat-val" id="nps-total-resp">—</div>
+            </div>
+          </div>
+          <div class="nps-updated">
+            <div class="nps-updated-label">Data Updated Through</div>
+            <div class="nps-updated-val" id="nps-updated-val">—</div>
+          </div>
+        </div>
+        <div class="right-col">
+          <div class="col-header">Individual Scores</div>
+          <div class="nps-grid" id="nps-grid"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
     </div>
-    <div class="footer">
-      <div class="footer-note" id="footer-left">NPS Survey · Formula: ((Promoters − Detractors) / Total Responses) × 100 · NexGreen Sterling Heights</div>
-      <div class="footer-note">Confidential — Internal Use Only</div>
+
+    <!-- SCREEN 3: DRIVER SCORES -->
+    <div class="screen" id="screen-drivers">
+      <div class="section-header">🚗 Driver Safety Scores — 2026</div>
+      <div class="three-col">
+        <div class="ds-side">
+          <div class="col-header">Top Drivers</div>
+          <div class="ds-podium" id="ds-podium"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="right-col">
+          <div class="col-header">Full Team — Monthly Scores</div>
+          <div class="ds-full" id="ds-list"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
     </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <div class="ticker-label" id="ticker-label">Poker Chips</div>
+    <div class="ticker-divider"></div>
+    <div class="ticker-wrap"><div class="ticker" id="ticker">Loading...</div></div>
   </div>
 </div>
 
 <script>
-const NPS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
+const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
+const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
+const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
+
+const SCREEN_MS  = 30000;
+const REFRESH_MS = 5 * 60 * 1000;
+const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
+const TICKER_LABELS = ['Poker Chips','NPS','Driver Scores'];
 
 function parseCSVRaw(text) {
   return text.trim().split('\n').map(line => {
@@ -153,143 +300,245 @@ function parseCSVRaw(text) {
     return cols;
   });
 }
-
-function chipClass(score) {
-  if(score===null) return 'chip-none';
-  if(score>=90) return 'chip-green';
-  if(score>=50) return 'chip-yellow';
-  return 'chip-red';
+function parseCSV(text) {
+  const raw=parseCSVRaw(text);
+  if(!raw.length)return{rows:[],raw};
+  const headers=raw[0];
+  const rows=raw.slice(1).map(cols=>{
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=(cols[i]||'').trim());
+    return obj;
+  }).filter(r=>Object.values(r).some(v=>v));
+  return{rows,raw};
+}
+function npsColor(val){
+  if(val===null||isNaN(val))return'none';
+  if(val>=9)return'green'; if(val>=7)return'yellow'; return'red';
+}
+function dsColor(val){
+  const n=parseFloat(val);
+  if(isNaN(n)||val===''||val==null)return'empty';
+  if(n>=90)return'green'; if(n>=75)return'yellow'; return'red';
+}
+function medalHTML(i){
+  if(i===0)return`<div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div>`;
+  if(i===1)return`<div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div>`;
+  if(i===2)return`<div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div>`;
+  return`<div class="medal-wrap"><div class="mx">${i+1}</div></div>`;
 }
 
-function scoreVal(raw) {
-  if(!raw||raw==='None'||raw===''||raw==='#DIV/0!'||raw==='#VALUE!') return null;
-  const n=parseFloat(raw);
-  return isNaN(n)?null:n;
+// ---- POKER ----
+function buildAllTime(rows){
+  const totals={};
+  rows.forEach(r=>{
+    const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
+    if(!chips)return;
+    (r.Technician||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(name=>{totals[name]=(totals[name]||0)+chips;});
+  });
+  return Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+}
+function getCurrentWeekRows(rows){
+  let maxWeek=0;
+  rows.forEach(r=>{const w=parseInt(r.Week);if(w>maxWeek)maxWeek=w;});
+  return{weekRows:rows.filter(r=>parseInt(r.Week)===maxWeek),maxWeek};
+}
+function renderPoker(rows){
+  const allTime=buildAllTime(rows);
+  const{weekRows,maxWeek}=getCurrentWeekRows(rows);
+  const weekDate=weekRows.find(r=>r.Date)?.Date||'';
+  document.getElementById('top-week').textContent=`Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
+
+  // Leaderboard — all techs, rows flex to fill height
+  const maxC=allTime[0]?.[1]||1;
+  document.getElementById('lb-list').innerHTML=allTime.map(([name,chips],i)=>`
+    <div class="lb-row${i<3?' podium':''}">${medalHTML(i)}
+      <div class="lb-name">${name}</div>
+      <div class="lb-right">
+        <div class="lb-chips">${chips}</div>
+        <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
+      </div>
+    </div>`).join('');
+
+  const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
+  document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{
+    const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
+    return`<div class="wcard${(hotCats.includes(r.Category)||chips>=3)?' hot':''}">
+      <div class="wcard-top"><div class="wcard-names">${r.Technician||'—'}</div><div class="wcard-chips">+${chips}</div></div>
+      <div class="wcard-cat">${r.Category}</div>
+      ${r.Notes?`<div class="wcard-note">${r.Notes}</div>`:''}</div>`;
+  }).join('');
+
+  // All-time list — all techs, rows flex to fill height
+  const maxAt=allTime[0]?.[1]||1;
+  document.getElementById('alltime-list').innerHTML=allTime.map(([name,chips],i)=>`
+    <div class="at-row">
+      <div class="at-rank${i<3?' top3':''}">${i+1}</div>
+      <div class="at-name">${name}</div>
+      <div class="at-bar-wrap"><div class="at-bar" style="width:${Math.round(chips/maxAt*100)}%"></div></div>
+      <div class="at-chips">${chips}</div>
+    </div>`).join('');
+
+  const notable=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
+  window._tickerPoker=notable.length?notable.map(r=>`${r.Technician||'Team'}  —  ${r.Category}${r.Notes?':  '+r.Notes:''}`).join('     •     '):'Great work team!';
 }
 
-async function loadNPS() {
-  try {
-    const res = await fetch(NPS_URL+'&t='+Date.now());
-    const text = await res.text();
-    const raw = parseCSVRaw(text);
+// ---- NPS ----
+function renderNPS(text){
+  const{rows,raw}=parseCSV(text);
+  const keys=Object.keys(rows[0]||{});
+  const techKey=keys[0],proKey=keys[1],detKey=keys[2],respKey=keys[3],scoreKey=keys[4];
 
-    // Headers in row 0: Tech, Total Promoters, Total Detractors, Total Responses, Final Year End Score
-    const headers = raw[0];
-    const techKey=headers[0],proKey=headers[1],detKey=headers[2],respKey=headers[3],scoreKey=headers[4];
+  // B28 = raw row 28 (0-based), col 1
+  let updatedVal='—';
+  if(raw.length>28&&raw[28]&&raw[28][1])updatedVal=raw[28][1].trim();
+  document.getElementById('nps-updated-val').textContent=updatedVal;
 
-    // B28 = row index 28, col 1
-    const updatedVal = (raw.length>28 && raw[28] && raw[28][1]) ? raw[28][1].trim() : '';
-    if(updatedVal) {
-      document.getElementById('updated-badge').textContent = 'Updated ' + updatedVal;
-      document.getElementById('footer-left').textContent = `NPS Survey · Formula: ((Promoters − Detractors) / Total Responses) × 100 · Updated ${updatedVal} · NexGreen Sterling Heights`;
-    }
+  const valid=rows.filter(r=>r[techKey]&&r[techKey]!=='Tech'&&r[techKey]!=='');
+  let totalPro=0,totalDet=0,totalResp=0;
+  valid.forEach(r=>{totalPro+=parseInt(r[proKey])||0;totalDet+=parseInt(r[detKey])||0;totalResp+=parseInt(r[respKey])||0;});
+  const teamScore=totalResp>0?((totalPro-totalDet)/totalResp)*100:null;
+  const teamCls=npsColor(teamScore);
+  document.getElementById('nps-team-score').className=`nps-side-score ${teamCls}`;
+  document.getElementById('nps-team-score').textContent=teamScore!==null?teamScore.toFixed(1):'—';
+  document.getElementById('nps-total-pro').textContent=totalPro;
+  document.getElementById('nps-total-det').textContent=totalDet;
+  document.getElementById('nps-total-resp').textContent=totalResp;
 
-    const dataRows = raw.slice(1).map(cols=>{
-      const obj={};
-      headers.forEach((h,i)=>obj[h]=(cols[i]||'').trim());
-      return obj;
-    }).filter(r=>r[techKey]&&r[techKey]!=='Tech'&&r[techKey]!=='');
+  const count=valid.length;
+  // Choose columns: up to 10 techs = 2 cols, 11-18 = 3 cols, 19+ = 4 cols
+  const cols=count<=10?2:count<=18?3:4;
+  const gridEl=document.getElementById('nps-grid');
+  gridEl.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;
 
-    // Separate categories
-    const techRows=[], unassigned=[], managers=[], terminated=[], noData=[];
-    const managerNames=['Troy Stasik','Eddie LaPointe','Joe Sepesi','Joe Herrera','troy stasik','eddie lapointe','joe sepesi','joe herrera'];
+  const maxResp=Math.max(...valid.map(r=>parseInt(r[respKey])||0),1);
+  gridEl.innerHTML=valid.map(r=>{
+    const name=(!r[techKey]||r[techKey]==='0')?'Unassigned':r[techKey];
+    const raw2=r[scoreKey],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!';
+    const score=isNone?null:parseFloat(raw2),cls=npsColor(score);
+    const pro=parseInt(r[proKey])||0,det=parseInt(r[detKey])||0,resp=parseInt(r[respKey])||0;
+    return`<div class="nps-card">
+      <div class="nps-name">${name}</div>
+      <div class="nps-score-row">
+        <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
+        <div class="nps-meta">
+          <div class="nps-pill pro">👍 ${pro}</div>
+          <div class="nps-pill det">👎 ${det}</div>
+          <div class="nps-pill resp">${resp} Reviews</div>
+        </div>
+      </div>
+      <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxResp*100)}%"></div></div>
+    </div>`;
+  }).join('');
 
-    dataRows.forEach(r=>{
-      const name=r[techKey];
-      const resp=parseInt(r[respKey])||0;
-      const isManager = managerNames.some(m=>m.toLowerCase()===name.toLowerCase());
-      const isTerm = name.toLowerCase().includes('terminat');
-      const isUnassigned = name==='0'||name.toLowerCase().includes('unassign');
-
-      if(isUnassigned){ unassigned.push(r); }
-      else if(isTerm){ terminated.push(r); }
-      else if(isManager){ managers.push(r); }
-      else if(resp===0){ noData.push(r); }
-      else { techRows.push(r); }
-    });
-
-    // Sort techs by score desc
-    techRows.sort((a,b)=>{
-      const sa=scoreVal(a[scoreKey]),sb=scoreVal(b[scoreKey]);
-      if(sa===null&&sb===null)return 0;
-      if(sa===null)return 1; if(sb===null)return -1;
-      return sb-sa;
-    });
-
-    // Stats
-    let totalPro=0,totalDet=0,totalResp=0,topScore=null,topName='';
-    techRows.forEach(r=>{
-      const pro=parseInt(r[proKey])||0,det=parseInt(r[detKey])||0,resp=parseInt(r[respKey])||0;
-      totalPro+=pro; totalDet+=det; totalResp+=resp;
-      const s=scoreVal(r[scoreKey]);
-      if(s!==null&&(topScore===null||s>topScore)){topScore=s;topName=r[techKey];}
-    });
-    const teamScore=totalResp>0?((totalPro-totalDet)/totalResp)*100:null;
-    document.getElementById('s-team').textContent=teamScore!==null?teamScore.toFixed(2):'—';
-    document.getElementById('s-res').textContent=totalResp;
-    document.getElementById('s-top').textContent=topScore!==null?(topScore>=0?'+':'')+topScore.toFixed(2):'—';
-    document.getElementById('s-top-name').textContent=topName||'—';
-    const lowCount=techRows.filter(r=>{const s=scoreVal(r[scoreKey]);return s!==null&&s<50;}).length;
-    document.getElementById('s-low').textContent=lowCount>0?lowCount:'✓ None';
-    if(lowCount===0)document.getElementById('s-low').style.color='var(--brand-bright)';
-
-    function buildRows(rows, rowClass='') {
-      return rows.map(r=>{
-        const name=(r[techKey]==='0'||r[techKey].toLowerCase().includes('unassign'))?'Unassigned':r[techKey];
-        const pro=parseInt(r[proKey])||0,det=parseInt(r[detKey])||0,resp=parseInt(r[respKey])||0;
-        const s=scoreVal(r[scoreKey]);
-        const chip=`<span class="chip ${chipClass(s)}">${s===null?'None':(s>=0?'+':'')+s.toFixed(2)}</span>`;
-        const detClass=det===0?'col-det-zero':'col-det-pos';
-        return`<tr class="${rowClass}">
-          <td class="col-name">${name}</td>
-          <td class="col-pro">${pro}</td>
-          <td class="${detClass}">${det}</td>
-          <td class="col-res">${resp||'—'}</td>
-          <td style="text-align:center">${chip}</td>
-        </tr>`;
-      }).join('');
-    }
-
-    let html=`<table class="grid-table">
-      <thead><tr>
-        <th class="col-name" style="width:240px">Technician</th>
-        <th style="width:140px">Promoters</th>
-        <th style="width:140px">Detractors</th>
-        <th style="width:140px">Responses</th>
-        <th class="col-score" style="width:180px">NPS Score</th>
-      </tr></thead><tbody>`;
-
-    if(techRows.length){
-      html+=`<tr class="row-section-label"><td colspan="5">Technicians</td></tr>`;
-      html+=buildRows(techRows);
-    }
-    if(unassigned.length){
-      html+=`<tr class="row-section-label"><td colspan="5">Unassigned Responses</td></tr>`;
-      html+=buildRows(unassigned,'row-unsign');
-    }
-    if(managers.length){
-      html+=`<tr class="row-section-label"><td colspan="5">Managers — Tracked Separately</td></tr>`;
-      html+=buildRows(managers,'row-mgr');
-    }
-    if(terminated.length){
-      html+=`<tr class="row-section-label"><td colspan="5">Terminated — Data Included in Branch Total</td></tr>`;
-      html+=buildRows(terminated,'row-term');
-    }
-    html+=`</tbody></table>`;
-    document.getElementById('table-wrap').innerHTML=html;
-
-    // No data pills
-    if(noData.length){
-      document.getElementById('no-data-section').style.display='';
-      document.getElementById('no-data-pills').innerHTML=noData.map(r=>`<div class="pill">${r[techKey]}</div>`).join('');
-    }
-  } catch(e){ console.error('NPS load failed',e); }
+  const top=valid.filter(r=>{const v=r[scoreKey];return v&&v!=='None'&&v!==''&&parseFloat(v)>=9;});
+  window._tickerNPS=top.length?'Top NPS: '+top.map(r=>`${r[techKey]==='0'?'Unassigned':r[techKey]} (${parseFloat(r[scoreKey]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
 }
 
-loadNPS();
-setInterval(loadNPS, 5*60*1000);
+// ---- DRIVER SCORES ----
+function renderDrivers(text){
+  const raw=parseCSVRaw(text);
+  let headerRowIdx=-1;
+  for(let i=0;i<raw.length;i++){if(raw[i].some(c=>c.trim().toLowerCase().includes('specialist'))){headerRowIdx=i;break;}}
+  if(headerRowIdx===-1){
+    document.getElementById('ds-list').innerHTML='<div class="loading">Could not find headers</div>';
+    document.getElementById('ds-podium').innerHTML='<div class="loading">—</div>';
+    return;
+  }
+  const headers=raw[headerRowIdx].map(h=>h.trim());
+  const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist'));
+  const dataRows=[];
+  for(let i=headerRowIdx+1;i<raw.length;i++){
+    const row=raw[i],name=(row[nameIdx]||'').trim();
+    if(!name)continue;
+    if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')||name.toLowerCase().includes('avg'))break;
+    dataRows.push(row);
+  }
+  const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
+
+  // Side panel: all techs sorted by year-end, flex rows to fill height
+  const sorted=[...dataRows].filter(r=>!isNaN(parseFloat((r[yearIdx]||'').trim())))
+    .sort((a,b)=>parseFloat(b[yearIdx]||0)-parseFloat(a[yearIdx]||0));
+  document.getElementById('ds-podium').innerHTML=sorted.map((row,i)=>{
+    const name=(row[nameIdx]||'').trim();
+    const yeVal=(row[yearIdx]||'').trim(),yeN=parseFloat(yeVal),yeCls=dsColor(yeVal);
+    return`<div class="ds-lb-row${i<3?' podium':''}">${medalHTML(i)}
+      <div class="ds-lb-name">${name}</div>
+      <div class="ds-lb-score ${yeCls}">${isNaN(yeN)?'—':yeN}</div>
+    </div>`;
+  }).join('');
+
+  // Main list: all techs, flex rows
+  document.getElementById('ds-list').innerHTML=dataRows.map(row=>{
+    const name=(row[nameIdx]||'Unassigned').trim();
+    const monthCells=MONTHS.map(m=>{
+      const idx=headers.findIndex(h=>h.trim()===m);
+      const val=idx>=0?(row[idx]||'').trim():'';
+      const n=parseFloat(val),cls=dsColor(val);
+      return`<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${cls}">${isNaN(n)||val===''?'—':n}</div></div>`;
+    }).join('');
+    const yeVal=yearIdx>=0?(row[yearIdx]||'').trim():'',yeN=parseFloat(yeVal),yeCls=dsColor(yeVal);
+    return`<div class="ds-row">
+      <div class="ds-name">${name}</div>
+      <div class="ds-months">${monthCells}</div>
+      <div class="ds-yearend-wrap"><div class="ds-yearend-label">Year End</div><div class="ds-yearend ${yeCls}">${isNaN(yeN)||yeVal===''?'—':yeN}</div></div>
+    </div>`;
+  }).join('');
+
+  window._tickerDrivers=sorted.length?'Top driver scores: '+sorted.slice(0,3).map(row=>`${(row[nameIdx]||'').trim()} (${parseFloat(row[yearIdx]||0)})`).join('  •  '):'Driver scores updated — stay safe!';
+}
+
+// ---- FETCH ----
+async function fetchText(url){const res=await fetch(url+'&t='+Date.now());return res.text();}
+async function loadAll(){
+  try{const{rows}=parseCSV(await fetchText(POKER_URL));renderPoker(rows);}catch(e){console.error('Poker',e);}
+  try{renderNPS(await fetchText(NPS_URL));}catch(e){console.error('NPS',e);}
+  try{renderDrivers(await fetchText(DRIVER_URL));}catch(e){console.error('Drivers',e);}
+}
+
+// ---- CLOCK ----
+function updateClock(){
+  const now=new Date();
+  document.getElementById('top-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('top-time').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+updateClock();setInterval(updateClock,10000);
+
+// ---- SCREEN ROTATION ----
+const screens=['screen-chips','screen-nps','screen-drivers'];
+let screenIdx=0;
+function setTicker(idx){
+  document.getElementById('ticker-label').textContent=TICKER_LABELS[idx];
+  const texts=[window._tickerPoker||'Loading...',window._tickerNPS||'Loading...',window._tickerDrivers||'Loading...'];
+  const t=document.getElementById('ticker');
+  t.textContent=texts[idx];t.style.animation='none';t.offsetHeight;t.style.animation='';
+}
+function nextScreen(){
+  document.getElementById(screens[screenIdx]).classList.remove('active');
+  document.getElementById('nd'+screenIdx).classList.remove('on');
+  screenIdx=(screenIdx+1)%screens.length;
+  document.getElementById(screens[screenIdx]).classList.add('active');
+  document.getElementById('nd'+screenIdx).classList.add('on');
+  if(screenIdx!==0)document.getElementById('top-week').textContent='';
+  setTicker(screenIdx);
+}
+setInterval(nextScreen,SCREEN_MS);
+
+// ---- POKER INNER FLIP ----
+let innerIdx=0;
+setInterval(()=>{
+  if(screenIdx!==0)return;
+  const views=['view-week','view-alltime'];
+  document.getElementById(views[innerIdx]).classList.remove('active');
+  innerIdx=(innerIdx+1)%2;
+  document.getElementById(views[innerIdx]).classList.add('active');
+},12000);
+
+loadAll();
+setInterval(loadAll,REFRESH_MS);
+setTicker(0);
 </script>
 </body>
 </html>
 HTMLEOF
-echo "NPS done"
+echo "Done"
+Output

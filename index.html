@@ -12,11 +12,8 @@
   /* TOP BAR */
   .top-bar { background: #008a50; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 100px; flex-shrink: 0; }
   .top-bar-left { display: flex; align-items: center; gap: 20px; }
-  .chip-icon { width: 48px; height: 48px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.6); background: #006e40; display: grid; place-items: center; }
-  .chip-icon::after { content: ''; width: 20px; height: 20px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.5); }
   .top-titles { display: flex; flex-direction: column; gap: 3px; }
   .top-title { font-size: 38px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; line-height: 1; }
-  /* BIGGER, MORE OBVIOUS SUBTITLE */
   .top-subtitle { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.9; }
   .top-week { font-size: 18px; color: rgba(255,255,255,0.65); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 12px; padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.3); align-self: center; }
   .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
@@ -36,93 +33,130 @@
   .section-header { background: #005c35; padding: 10px 36px; font-size: 26px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; flex-shrink: 0; border-bottom: 3px solid #00c46a; display: flex; align-items: center; gap: 14px; }
 
   /* SHARED */
-  .two-col { display: grid; grid-template-columns: 460px 1fr; flex: 1; min-height: 0; }
-  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; }
-  .right-col { display: flex; flex-direction: column; }
+  .two-col { display: grid; grid-template-columns: 400px 1fr; flex: 1; min-height: 0; overflow: hidden; }
+  .three-col { display: grid; grid-template-columns: 340px 1fr; flex: 1; min-height: 0; overflow: hidden; }
+  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; overflow: hidden; }
+  .right-col { display: flex; flex-direction: column; overflow: hidden; }
   .col-header { background: #006e40; padding: 10px 24px; font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.9); flex-shrink: 0; }
 
-  /* LEADERBOARD — compact so all names fit */
-  .leaderboard { flex: 1; overflow: hidden; padding: 4px 0; }
-  .lb-row { display: flex; align-items: center; gap: 14px; padding: 7px 22px; border-bottom: 1px solid #181818; }
-  .lb-row.podium { background: rgba(0,138,80,0.07); }
-  .medal-wrap { position: relative; width: 48px; height: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .medal-glow-gold   { position:absolute;inset:-5px;border-radius:50%;background:#FAC775;opacity:0.18;animation:pulse-gold 2s ease-in-out infinite; }
-  .medal-glow-silver { position:absolute;inset:-5px;border-radius:50%;background:#C8C8C8;opacity:0.15;animation:pulse-silver 2.4s ease-in-out infinite; }
-  .medal-glow-bronze { position:absolute;inset:-5px;border-radius:50%;background:#C87941;opacity:0.18;animation:pulse-bronze 2.8s ease-in-out infinite; }
+  /* MEDALS */
+  .medal-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .medal-glow-gold   { position:absolute;inset:-4px;border-radius:50%;background:#FAC775;opacity:0.18;animation:pulse-gold 2s ease-in-out infinite; }
+  .medal-glow-silver { position:absolute;inset:-4px;border-radius:50%;background:#C8C8C8;opacity:0.15;animation:pulse-silver 2.4s ease-in-out infinite; }
+  .medal-glow-bronze { position:absolute;inset:-4px;border-radius:50%;background:#C87941;opacity:0.18;animation:pulse-bronze 2.8s ease-in-out infinite; }
   @keyframes pulse-gold   { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.32} }
   @keyframes pulse-silver { 0%,100%{transform:scale(1);opacity:0.15}50%{transform:scale(1.5);opacity:0.26} }
   @keyframes pulse-bronze { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.28} }
-  .medal-rays-gold   { position:absolute;inset:-8px;border-radius:50%;box-shadow:0 0 12px 3px #FAC775;opacity:0.4;animation:ray-gold 2s ease-in-out infinite; }
-  .medal-rays-silver { position:absolute;inset:-8px;border-radius:50%;box-shadow:0 0 12px 3px #C8C8C8;opacity:0.3;animation:ray-silver 2.4s ease-in-out infinite; }
-  .medal-rays-bronze { position:absolute;inset:-8px;border-radius:50%;box-shadow:0 0 12px 3px #C87941;opacity:0.35;animation:ray-bronze 2.8s ease-in-out infinite; }
+  .medal-rays-gold   { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #FAC775;opacity:0.4;animation:ray-gold 2s ease-in-out infinite; }
+  .medal-rays-silver { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C8C8C8;opacity:0.3;animation:ray-silver 2.4s ease-in-out infinite; }
+  .medal-rays-bronze { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C87941;opacity:0.35;animation:ray-bronze 2.8s ease-in-out infinite; }
   @keyframes ray-gold   { 0%,100%{opacity:0.4}50%{opacity:0.75} }
   @keyframes ray-silver { 0%,100%{opacity:0.3}50%{opacity:0.6} }
   @keyframes ray-bronze { 0%,100%{opacity:0.35}50%{opacity:0.65} }
-  .medal { position:relative;z-index:2;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900; }
-  .m1 { background:#FAC775;color:#412402;border:3px solid #e8a830; }
-  .m2 { background:#C8C8C8;color:#1a1a1a;border:3px solid #a0a0a0; }
-  .m3 { background:#C87941;color:#1a1a1a;border:3px solid #a05a28; }
-  .mx { background:#1e1e1e;color:#666;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900; }
-  .lb-name { flex:1;font-size:19px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .lb-right { display:flex;flex-direction:column;align-items:flex-end;gap:4px; }
-  .lb-chips { font-size:26px;font-weight:900;color:#00c46a;line-height:1; }
-  .lb-bar-wrap { width:80px;height:4px;background:#222;border-radius:2px; }
+  .medal { position:relative;z-index:2;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900; }
+  .m1 { background:#FAC775;color:#412402;border:2px solid #e8a830; }
+  .m2 { background:#C8C8C8;color:#1a1a1a;border:2px solid #a0a0a0; }
+  .m3 { background:#C87941;color:#1a1a1a;border:2px solid #a05a28; }
+  .mx { background:#1e1e1e;color:#666;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900; }
+
+  /* POKER LEADERBOARD — auto-sizes rows to fill available height */
+  .leaderboard { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 4px 0; }
+  .lb-row { display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #181818; flex: 1; min-height: 0; }
+  .lb-row.podium { background: rgba(0,138,80,0.07); }
+  .lb-name { flex:1;font-size:17px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .lb-right { display:flex;flex-direction:column;align-items:flex-end;gap:3px; }
+  .lb-chips { font-size:22px;font-weight:900;color:#00c46a;line-height:1; }
+  .lb-bar-wrap { width:60px;height:3px;background:#222;border-radius:2px; }
   .lb-bar { height:100%;background:#008a50;border-radius:2px; }
 
   /* POKER INNER VIEWS */
-  .inner-view { flex:1;display:none;flex-direction:column;min-height:0; }
+  .inner-view { flex:1;display:none;flex-direction:column;min-height:0;overflow:hidden; }
   .inner-view.active { display:flex;animation:fadeUp 0.7s ease; }
-  .winners-grid { flex:1;padding:10px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;overflow:hidden;align-content:start; }
-  .wcard { background:#141414;border:1px solid #202020;border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:4px; }
-  .wcard.hot { border-color:#008a50;background:#0d1a14; }
-  .wcard-top { display:flex;align-items:flex-start;justify-content:space-between;gap:8px; }
-  .wcard-names { font-size:18px;font-weight:700;color:#fff;line-height:1.3; }
-  .wcard-chips { font-size:26px;font-weight:900;color:#00c46a;flex-shrink:0;line-height:1; }
-  .wcard-cat { font-size:12px;color:#008a50;font-weight:800;text-transform:uppercase;letter-spacing:0.06em; }
-  .wcard-note { font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .alltime-list { flex:1;padding:10px 20px;display:flex;flex-direction:column;gap:7px;overflow:hidden; }
-  .at-row { display:flex;align-items:center;gap:16px;background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 18px; }
-  .at-rank { width:30px;font-size:16px;color:#555;font-weight:900;text-align:center;flex-shrink:0; }
-  .at-rank.top3 { color:#00c46a; }
-  .at-name { flex:1;font-size:20px;font-weight:600;color:#ddd; }
-  .at-bar-wrap { width:240px;height:5px;background:#222;border-radius:3px;flex-shrink:0; }
-  .at-bar { height:100%;background:#008a50;border-radius:3px; }
-  .at-chips { font-size:24px;font-weight:900;color:#00c46a;min-width:50px;text-align:right;flex-shrink:0; }
 
-  /* NPS — 2 cols, compact cards so all fit */
-  .nps-grid { flex:1;padding:10px 24px;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:hidden;align-content:start; }
-  .nps-card { background:#141414;border:1px solid #202020;border-radius:12px;padding:12px 18px;display:flex;flex-direction:column;gap:6px; }
-  .nps-name { font-size:20px;font-weight:700;color:#fff; }
-  .nps-score-row { display:flex;align-items:center;justify-content:space-between;gap:10px; }
-  .nps-score { font-size:44px;font-weight:900;line-height:1; }
+  /* WINNERS GRID — auto column count */
+  .winners-grid { flex:1;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;overflow:hidden;align-content:start; }
+  .wcard { background:#141414;border:1px solid #202020;border-radius:9px;padding:9px 12px;display:flex;flex-direction:column;gap:3px; }
+  .wcard.hot { border-color:#008a50;background:#0d1a14; }
+  .wcard-top { display:flex;align-items:flex-start;justify-content:space-between;gap:6px; }
+  .wcard-names { font-size:16px;font-weight:700;color:#fff;line-height:1.3; }
+  .wcard-chips { font-size:22px;font-weight:900;color:#00c46a;flex-shrink:0;line-height:1; }
+  .wcard-cat { font-size:11px;color:#008a50;font-weight:800;text-transform:uppercase;letter-spacing:0.05em; }
+  .wcard-note { font-size:11px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+  /* ALL-TIME LIST */
+  .alltime-list { flex:1;padding:8px 14px;display:flex;flex-direction:column;gap:5px;overflow:hidden; }
+  .at-row { display:flex;align-items:center;gap:12px;background:#141414;border:1px solid #1e1e1e;border-radius:7px;flex:1;min-height:0;padding:0 14px; }
+  .at-rank { width:26px;font-size:14px;color:#555;font-weight:900;text-align:center;flex-shrink:0; }
+  .at-rank.top3 { color:#00c46a; }
+  .at-name { flex:1;font-size:18px;font-weight:600;color:#ddd; }
+  .at-bar-wrap { width:180px;height:4px;background:#222;border-radius:3px;flex-shrink:0; }
+  .at-bar { height:100%;background:#008a50;border-radius:3px; }
+  .at-chips { font-size:20px;font-weight:900;color:#00c46a;min-width:42px;text-align:right;flex-shrink:0; }
+
+  /* NPS SIDE PANEL */
+  .nps-side { background:#0f0f0f;border-right:2px solid #1c1c1c;display:flex;flex-direction:column; }
+  .nps-side-section { padding:14px 18px;border-bottom:1px solid #1c1c1c; }
+  .nps-side-label { font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#008a50;margin-bottom:6px; }
+  .nps-side-score { font-size:60px;font-weight:900;line-height:1; }
+  .nps-side-score.green  { color:#00c46a; }
+  .nps-side-score.yellow { color:#f0c040; }
+  .nps-side-score.red    { color:#e05555; }
+  .nps-side-score.none   { color:#444;font-size:30px; }
+  .nps-side-stat { display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #181818; }
+  .nps-side-stat:last-child { border-bottom:none; }
+  .nps-side-stat-label { font-size:14px;color:#888;font-weight:600; }
+  .nps-side-stat-val { font-size:22px;font-weight:800;color:#fff; }
+  .nps-side-stat-val.green { color:#00c46a; }
+  .nps-side-stat-val.red   { color:#e05555; }
+  .nps-updated { margin-top:auto;padding:14px 18px;border-top:1px solid #1c1c1c; }
+  .nps-updated-label { font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:4px; }
+  .nps-updated-val { font-size:17px;font-weight:700;color:#008a50; }
+
+  /* NPS GRID — auto-sizes to fit all techs */
+  .nps-grid { flex:1;padding:8px 12px;display:grid;gap:6px;overflow:hidden;align-content:start; }
+  .nps-card { background:#141414;border:1px solid #202020;border-radius:9px;padding:8px 12px;display:flex;flex-direction:column;gap:4px; }
+  .nps-name { font-size:16px;font-weight:700;color:#fff; }
+  .nps-score-row { display:flex;align-items:center;justify-content:space-between;gap:6px; }
+  .nps-score { font-size:32px;font-weight:900;line-height:1; }
   .nps-score.green  { color:#00c46a; }
   .nps-score.yellow { color:#f0c040; }
   .nps-score.red    { color:#e05555; }
-  .nps-score.none   { color:#555;font-size:26px; }
-  .nps-meta { display:flex;gap:10px;flex-wrap:wrap;align-items:center; }
-  /* slightly larger font for pills as requested */
-  .nps-pill { font-size:16px;font-weight:800;padding:4px 12px;border-radius:20px; }
+  .nps-score.none   { color:#444;font-size:20px; }
+  .nps-meta { display:flex;gap:6px;flex-wrap:wrap;align-items:center; }
+  .nps-pill { font-size:14px;font-weight:800;padding:2px 8px;border-radius:14px; }
   .nps-pill.pro  { background:rgba(0,196,106,0.15);color:#00c46a; }
   .nps-pill.det  { background:rgba(224,85,85,0.15);color:#e05555; }
   .nps-pill.resp { background:rgba(255,255,255,0.07);color:#888; }
-  .nps-bar-wrap { height:5px;background:#222;border-radius:3px; }
+  .nps-bar-wrap { height:3px;background:#222;border-radius:3px; }
   .nps-bar { height:100%;border-radius:3px;background:#008a50; }
 
-  /* DRIVER SCORES — compact rows so full team fits */
-  .ds-full { flex:1;padding:8px 24px;display:flex;flex-direction:column;gap:6px;overflow:hidden; }
-  .ds-row { display:flex;align-items:center;gap:12px;background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:8px 16px; }
-  .ds-name { width:190px;font-size:18px;font-weight:600;color:#eee;flex-shrink:0; }
-  .ds-months { display:flex;gap:4px;flex:1;align-items:center; }
-  .ds-month { display:flex;flex-direction:column;align-items:center;gap:2px;min-width:46px; }
-  .ds-month-label { font-size:9px;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:0.05em; }
-  .ds-month-val { font-size:15px;font-weight:800; }
+  /* DRIVER SIDE PANEL */
+  .ds-side { background:#0f0f0f;border-right:2px solid #1c1c1c;display:flex;flex-direction:column;overflow:hidden; }
+  .ds-podium { flex:1;overflow:hidden;display:flex;flex-direction:column;padding:4px 0; }
+  .ds-lb-row { display:flex;align-items:center;gap:10px;flex:1;min-height:0;padding:0 16px;border-bottom:1px solid #181818; }
+  .ds-lb-row.podium { background:rgba(0,138,80,0.07); }
+  .ds-lb-name { flex:1;font-size:17px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .ds-lb-score { font-size:22px;font-weight:900; }
+  .ds-lb-score.green  { color:#00c46a; }
+  .ds-lb-score.yellow { color:#f0c040; }
+  .ds-lb-score.red    { color:#e05555; }
+  .ds-lb-score.empty  { color:#444; }
+
+  /* DRIVER MAIN LIST — auto-sizes rows */
+  .ds-full { flex:1;padding:6px 16px;display:flex;flex-direction:column;gap:4px;overflow:hidden; }
+  .ds-row { display:flex;align-items:center;gap:8px;background:#141414;border:1px solid #1e1e1e;border-radius:7px;flex:1;min-height:0;padding:0 12px; }
+  .ds-name { width:165px;font-size:16px;font-weight:600;color:#eee;flex-shrink:0; }
+  .ds-months { display:flex;gap:2px;flex:1;align-items:center; }
+  .ds-month { display:flex;flex-direction:column;align-items:center;gap:1px;min-width:42px; }
+  .ds-month-label { font-size:8px;color:#444;font-weight:700;text-transform:uppercase; }
+  .ds-month-val { font-size:13px;font-weight:800; }
   .ds-month-val.green  { color:#00c46a; }
   .ds-month-val.yellow { color:#f0c040; }
   .ds-month-val.red    { color:#e05555; }
-  .ds-month-val.empty  { color:#2a2a2a; }
-  .ds-yearend-wrap { display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;min-width:72px; }
-  .ds-yearend-label { font-size:9px;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
-  .ds-yearend { font-size:22px;font-weight:900; }
+  .ds-month-val.empty  { color:#242424; }
+  .ds-yearend-wrap { display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;min-width:58px; }
+  .ds-yearend-label { font-size:8px;color:#444;font-weight:700;text-transform:uppercase; }
+  .ds-yearend { font-size:18px;font-weight:900; }
   .ds-yearend.green  { color:#00c46a; }
   .ds-yearend.yellow { color:#f0c040; }
   .ds-yearend.red    { color:#e05555; }
@@ -135,16 +169,15 @@
   .ticker-wrap { flex:1;overflow:hidden; }
   .ticker { font-size:20px;font-weight:700;color:#00c46a;white-space:nowrap;display:inline-block;animation:scroll 55s linear infinite; }
   @keyframes scroll { 0%{transform:translateX(1920px)}100%{transform:translateX(-100%)} }
-  .loading { display:flex;align-items:center;justify-content:center;height:100%;font-size:24px;color:#444; }
+  .loading { display:flex;align-items:center;justify-content:center;height:100%;font-size:22px;color:#444; }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="top-bar">
     <div class="top-bar-left">
-      <div class="chip-icon"></div>
       <div class="top-titles">
-        <div class="top-title">Poker Chips 2026</div>
+        <div class="top-title">Team Dashboard 2026</div>
         <div class="top-subtitle">NexGreen Sterling Heights</div>
       </div>
       <div class="top-week" id="top-week"></div>
@@ -186,13 +219,53 @@
     <!-- SCREEN 2: NPS -->
     <div class="screen" id="screen-nps">
       <div class="section-header">⭐ Net Promoter Scores — Year to Date</div>
-      <div class="nps-grid" id="nps-grid"><div class="loading">Loading...</div></div>
+      <div class="three-col">
+        <div class="nps-side">
+          <div class="col-header">Team Summary</div>
+          <div class="nps-side-section">
+            <div class="nps-side-label">Team Year-End Score</div>
+            <div class="nps-side-score none" id="nps-team-score">—</div>
+          </div>
+          <div class="nps-side-section" style="flex:1;">
+            <div class="nps-side-label">Totals</div>
+            <div class="nps-side-stat">
+              <div class="nps-side-stat-label">👍 Total Promoters</div>
+              <div class="nps-side-stat-val green" id="nps-total-pro">—</div>
+            </div>
+            <div class="nps-side-stat">
+              <div class="nps-side-stat-label">👎 Total Detractors</div>
+              <div class="nps-side-stat-val red" id="nps-total-det">—</div>
+            </div>
+            <div class="nps-side-stat">
+              <div class="nps-side-stat-label">📋 Total Responses</div>
+              <div class="nps-side-stat-val" id="nps-total-resp">—</div>
+            </div>
+          </div>
+          <div class="nps-updated">
+            <div class="nps-updated-label">Data Updated Through</div>
+            <div class="nps-updated-val" id="nps-updated-val">—</div>
+          </div>
+        </div>
+        <div class="right-col">
+          <div class="col-header">Individual Scores</div>
+          <div class="nps-grid" id="nps-grid"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
     </div>
 
     <!-- SCREEN 3: DRIVER SCORES -->
     <div class="screen" id="screen-drivers">
       <div class="section-header">🚗 Driver Safety Scores — 2026</div>
-      <div class="ds-full" id="ds-list"><div class="loading">Loading...</div></div>
+      <div class="three-col">
+        <div class="ds-side">
+          <div class="col-header">Top Drivers</div>
+          <div class="ds-podium" id="ds-podium"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="right-col">
+          <div class="col-header">Full Team — Monthly Scores</div>
+          <div class="ds-full" id="ds-list"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -229,13 +302,14 @@ function parseCSVRaw(text) {
 }
 function parseCSV(text) {
   const raw=parseCSVRaw(text);
-  if(!raw.length)return[];
+  if(!raw.length)return{rows:[],raw};
   const headers=raw[0];
-  return raw.slice(1).map(cols=>{
+  const rows=raw.slice(1).map(cols=>{
     const obj={};
     headers.forEach((h,i)=>obj[h]=(cols[i]||'').trim());
     return obj;
   }).filter(r=>Object.values(r).some(v=>v));
+  return{rows,raw};
 }
 function npsColor(val){
   if(val===null||isNaN(val))return'none';
@@ -253,7 +327,7 @@ function medalHTML(i){
   return`<div class="medal-wrap"><div class="mx">${i+1}</div></div>`;
 }
 
-// POKER
+// ---- POKER ----
 function buildAllTime(rows){
   const totals={};
   rows.forEach(r=>{
@@ -273,13 +347,18 @@ function renderPoker(rows){
   const{weekRows,maxWeek}=getCurrentWeekRows(rows);
   const weekDate=weekRows.find(r=>r.Date)?.Date||'';
   document.getElementById('top-week').textContent=`Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
-  const top10=allTime.slice(0,10),maxC=top10[0]?.[1]||1;
-  document.getElementById('lb-list').innerHTML=top10.map(([name,chips],i)=>`
+
+  // Leaderboard — all techs, rows flex to fill height
+  const maxC=allTime[0]?.[1]||1;
+  document.getElementById('lb-list').innerHTML=allTime.map(([name,chips],i)=>`
     <div class="lb-row${i<3?' podium':''}">${medalHTML(i)}
       <div class="lb-name">${name}</div>
-      <div class="lb-right"><div class="lb-chips">${chips}</div>
+      <div class="lb-right">
+        <div class="lb-chips">${chips}</div>
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
-      </div></div>`).join('');
+      </div>
+    </div>`).join('');
+
   const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
   document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{
     const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
@@ -288,50 +367,83 @@ function renderPoker(rows){
       <div class="wcard-cat">${r.Category}</div>
       ${r.Notes?`<div class="wcard-note">${r.Notes}</div>`:''}</div>`;
   }).join('');
+
+  // All-time list — all techs, rows flex to fill height
   const maxAt=allTime[0]?.[1]||1;
-  document.getElementById('alltime-list').innerHTML=allTime.slice(0,12).map(([name,chips],i)=>`
-    <div class="at-row"><div class="at-rank${i<3?' top3':''}">${i+1}</div>
+  document.getElementById('alltime-list').innerHTML=allTime.map(([name,chips],i)=>`
+    <div class="at-row">
+      <div class="at-rank${i<3?' top3':''}">${i+1}</div>
       <div class="at-name">${name}</div>
       <div class="at-bar-wrap"><div class="at-bar" style="width:${Math.round(chips/maxAt*100)}%"></div></div>
-      <div class="at-chips">${chips}</div></div>`).join('');
+      <div class="at-chips">${chips}</div>
+    </div>`).join('');
+
   const notable=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
   window._tickerPoker=notable.length?notable.map(r=>`${r.Technician||'Team'}  —  ${r.Category}${r.Notes?':  '+r.Notes:''}`).join('     •     '):'Great work team!';
 }
 
-// NPS
-function renderNPS(rows){
+// ---- NPS ----
+function renderNPS(text){
+  const{rows,raw}=parseCSV(text);
   const keys=Object.keys(rows[0]||{});
   const techKey=keys[0],proKey=keys[1],detKey=keys[2],respKey=keys[3],scoreKey=keys[4];
+
+  // B28 = raw row 28 (0-based), col 1
+  let updatedVal='—';
+  if(raw.length>28&&raw[28]&&raw[28][1])updatedVal=raw[28][1].trim();
+  document.getElementById('nps-updated-val').textContent=updatedVal;
+
   const valid=rows.filter(r=>r[techKey]&&r[techKey]!=='Tech'&&r[techKey]!=='');
+  let totalPro=0,totalDet=0,totalResp=0;
+  valid.forEach(r=>{totalPro+=parseInt(r[proKey])||0;totalDet+=parseInt(r[detKey])||0;totalResp+=parseInt(r[respKey])||0;});
+  const teamScore=totalResp>0?((totalPro-totalDet)/totalResp)*100:null;
+  const teamCls=npsColor(teamScore);
+  document.getElementById('nps-team-score').className=`nps-side-score ${teamCls}`;
+  document.getElementById('nps-team-score').textContent=teamScore!==null?teamScore.toFixed(1):'—';
+  document.getElementById('nps-total-pro').textContent=totalPro;
+  document.getElementById('nps-total-det').textContent=totalDet;
+  document.getElementById('nps-total-resp').textContent=totalResp;
+
+  const count=valid.length;
+  // Choose columns: up to 10 techs = 2 cols, 11-18 = 3 cols, 19+ = 4 cols
+  const cols=count<=10?2:count<=18?3:4;
+  const gridEl=document.getElementById('nps-grid');
+  gridEl.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;
+
   const maxResp=Math.max(...valid.map(r=>parseInt(r[respKey])||0),1);
-  document.getElementById('nps-grid').innerHTML=valid.map(r=>{
+  gridEl.innerHTML=valid.map(r=>{
     const name=(!r[techKey]||r[techKey]==='0')?'Unassigned':r[techKey];
-    const raw=r[scoreKey],isNone=!raw||raw==='None'||raw===''||raw==='#DIV/0!';
-    const score=isNone?null:parseFloat(raw),cls=npsColor(score);
+    const raw2=r[scoreKey],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!';
+    const score=isNone?null:parseFloat(raw2),cls=npsColor(score);
     const pro=parseInt(r[proKey])||0,det=parseInt(r[detKey])||0,resp=parseInt(r[respKey])||0;
     return`<div class="nps-card">
       <div class="nps-name">${name}</div>
       <div class="nps-score-row">
         <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
         <div class="nps-meta">
-          <div class="nps-pill pro">👍 ${pro} Promoters</div>
-          <div class="nps-pill det">👎 ${det} Detractors</div>
+          <div class="nps-pill pro">👍 ${pro}</div>
+          <div class="nps-pill det">👎 ${det}</div>
           <div class="nps-pill resp">${resp} Reviews</div>
         </div>
       </div>
       <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxResp*100)}%"></div></div>
     </div>`;
   }).join('');
-  const top=valid.filter(r=>{const raw=r[scoreKey];return raw&&raw!=='None'&&raw!==''&&parseFloat(raw)>=9;});
+
+  const top=valid.filter(r=>{const v=r[scoreKey];return v&&v!=='None'&&v!==''&&parseFloat(v)>=9;});
   window._tickerNPS=top.length?'Top NPS: '+top.map(r=>`${r[techKey]==='0'?'Unassigned':r[techKey]} (${parseFloat(r[scoreKey]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
 }
 
-// DRIVER SCORES
+// ---- DRIVER SCORES ----
 function renderDrivers(text){
   const raw=parseCSVRaw(text);
   let headerRowIdx=-1;
   for(let i=0;i<raw.length;i++){if(raw[i].some(c=>c.trim().toLowerCase().includes('specialist'))){headerRowIdx=i;break;}}
-  if(headerRowIdx===-1){document.getElementById('ds-list').innerHTML='<div class="loading">Could not find headers</div>';return;}
+  if(headerRowIdx===-1){
+    document.getElementById('ds-list').innerHTML='<div class="loading">Could not find headers</div>';
+    document.getElementById('ds-podium').innerHTML='<div class="loading">—</div>';
+    return;
+  }
   const headers=raw[headerRowIdx].map(h=>h.trim());
   const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist'));
   const dataRows=[];
@@ -342,6 +454,20 @@ function renderDrivers(text){
     dataRows.push(row);
   }
   const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
+
+  // Side panel: all techs sorted by year-end, flex rows to fill height
+  const sorted=[...dataRows].filter(r=>!isNaN(parseFloat((r[yearIdx]||'').trim())))
+    .sort((a,b)=>parseFloat(b[yearIdx]||0)-parseFloat(a[yearIdx]||0));
+  document.getElementById('ds-podium').innerHTML=sorted.map((row,i)=>{
+    const name=(row[nameIdx]||'').trim();
+    const yeVal=(row[yearIdx]||'').trim(),yeN=parseFloat(yeVal),yeCls=dsColor(yeVal);
+    return`<div class="ds-lb-row${i<3?' podium':''}">${medalHTML(i)}
+      <div class="ds-lb-name">${name}</div>
+      <div class="ds-lb-score ${yeCls}">${isNaN(yeN)?'—':yeN}</div>
+    </div>`;
+  }).join('');
+
+  // Main list: all techs, flex rows
   document.getElementById('ds-list').innerHTML=dataRows.map(row=>{
     const name=(row[nameIdx]||'Unassigned').trim();
     const monthCells=MONTHS.map(m=>{
@@ -357,17 +483,19 @@ function renderDrivers(text){
       <div class="ds-yearend-wrap"><div class="ds-yearend-label">Year End</div><div class="ds-yearend ${yeCls}">${isNaN(yeN)||yeVal===''?'—':yeN}</div></div>
     </div>`;
   }).join('');
-  const top=dataRows.filter(row=>{const v=yearIdx>=0?(row[yearIdx]||'').trim():'';return parseFloat(v)>=90;});
-  window._tickerDrivers=top.length?'Top driver scores: '+top.map(row=>`${(row[nameIdx]||'').trim()} (${parseFloat(row[yearIdx]||0)})`).join('  •  '):'Driver scores updated — stay safe out there!';
+
+  window._tickerDrivers=sorted.length?'Top driver scores: '+sorted.slice(0,3).map(row=>`${(row[nameIdx]||'').trim()} (${parseFloat(row[yearIdx]||0)})`).join('  •  '):'Driver scores updated — stay safe!';
 }
 
+// ---- FETCH ----
 async function fetchText(url){const res=await fetch(url+'&t='+Date.now());return res.text();}
 async function loadAll(){
-  try{renderPoker(parseCSV(await fetchText(POKER_URL)));}catch(e){console.error('Poker',e);}
-  try{renderNPS(parseCSV(await fetchText(NPS_URL)));}catch(e){console.error('NPS',e);}
+  try{const{rows}=parseCSV(await fetchText(POKER_URL));renderPoker(rows);}catch(e){console.error('Poker',e);}
+  try{renderNPS(await fetchText(NPS_URL));}catch(e){console.error('NPS',e);}
   try{renderDrivers(await fetchText(DRIVER_URL));}catch(e){console.error('Drivers',e);}
 }
 
+// ---- CLOCK ----
 function updateClock(){
   const now=new Date();
   document.getElementById('top-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
@@ -375,6 +503,7 @@ function updateClock(){
 }
 updateClock();setInterval(updateClock,10000);
 
+// ---- SCREEN ROTATION ----
 const screens=['screen-chips','screen-nps','screen-drivers'];
 let screenIdx=0;
 function setTicker(idx){
@@ -394,6 +523,7 @@ function nextScreen(){
 }
 setInterval(nextScreen,SCREEN_MS);
 
+// ---- POKER INNER FLIP ----
 let innerIdx=0;
 setInterval(()=>{
   if(screenIdx!==0)return;

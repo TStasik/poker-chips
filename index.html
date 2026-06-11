@@ -81,8 +81,6 @@
     border-radius:20px;
     backdrop-filter:blur(4px);
   }
-
-  /* LAST UPDATED BADGE */
   .last-updated {
     position:fixed;
     bottom:12px;
@@ -101,9 +99,17 @@
     color:var(--brand-bright);
     font-weight:600;
   }
+  .loading-indicator {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    font-size:20px;
+    color:var(--gray-dim);
+  }
 
   /* ============================================ */
-  /* POKER CHIPS SCREEN (matching NPS/Driver style) */
+  /* POKER CHIPS SCREEN */
   /* ============================================ */
   .poker-dashboard {
     width:1920px; height:1080px;
@@ -148,6 +154,10 @@
     animation:pulse 2s infinite; flex-shrink:0;
   }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .badge-text {
+    font-size:11px; letter-spacing:2.5px;
+    text-transform:uppercase; color:var(--brand-bright);
+  }
   .poker-stat-block { margin-bottom:20px; }
   .poker-stat-label {
     font-size:10px; letter-spacing:3px;
@@ -234,9 +244,15 @@
     text-transform:uppercase;
     margin-top:5px;
   }
+  .poker-winner-note {
+    font-size:11px;
+    color:var(--amber);
+    margin-top:5px;
+    font-style:italic;
+  }
 
   /* ============================================ */
-  /* NPS SCREEN (from your working file) */
+  /* NPS SCREEN */
   /* ============================================ */
   .nps-dashboard {
     width:1920px; height:1080px;
@@ -327,7 +343,7 @@
   .chip-none   { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.08); }
 
   /* ============================================ */
-  /* DRIVER SCORES SCREEN (from your working file) */
+  /* DRIVER SCORES SCREEN */
   /* ============================================ */
   .driver-dashboard {
     width:1920px; height:1080px;
@@ -380,40 +396,39 @@
     padding:0 4px 10px;
     border-bottom:1px solid var(--card-border);
   }
-  .driver-table thead th.name-col { text-align:left; padding-left:16px; }
+  .driver-table thead th.name-col { text-align:left; padding-left:16px; width:180px; }
   .driver-table thead th.ye-col { color:var(--gold); }
   .driver-table tbody td {
-    padding:0 4px; height:45px;
+    padding:0 4px; height:42px;
     text-align:center;
     border-bottom:1px solid rgba(0,138,80,0.07);
     font-family:'Bebas Neue',sans-serif;
-    font-size:20px;
+    font-size:18px;
     vertical-align:middle;
   }
   .driver-name-cell {
     text-align:left; padding-left:16px;
     font-family:'DM Sans',sans-serif;
-    font-size:15px; font-weight:500;
+    font-size:14px; font-weight:500;
     color:var(--white);
   }
   .score-hi    { color:var(--brand-bright); }
   .score-mid   { color:var(--amber); }
   .score-lo    { color:var(--red-soft); }
   .score-blank { color:rgba(255,255,255,0.1); font-size:14px; }
-  .ye-cell.ye-hi  { color:var(--brand-bright); font-size:22px; }
-  .ye-cell.ye-mid { color:var(--amber); font-size:22px; }
-  .ye-cell.ye-lo  { color:var(--red-soft); font-size:22px; }
+  .ye-cell.ye-hi  { color:var(--brand-bright); font-size:20px; }
+  .ye-cell.ye-mid { color:var(--amber); font-size:20px; }
+  .ye-cell.ye-lo  { color:var(--red-soft); font-size:20px; }
 </style>
 </head>
 <body>
 <div class="dashboard-container">
   
-  <!-- PROGRESS BAR -->
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
   </div>
   <div class="progress-text" id="progressText">Poker Chips · 30s</div>
-  <div class="last-updated" id="lastUpdated">Last updated: <span id="updateTime">--:--:--</span></div>
+  <div class="last-updated">Last data refresh: <span id="updateTime">--:--:--</span></div>
 
   <!-- SCREEN 1: POKER CHIPS -->
   <div class="screen active" id="screen-poker">
@@ -423,7 +438,7 @@
         <div class="poker-sub">Sterling Heights · Poker Chips</div>
         <div class="poker-badge">
           <div class="pulse-dot"></div>
-          <div class="badge-text" id="poker-week">Week --</div>
+          <div class="badge-text" id="poker-week">Loading week...</div>
         </div>
         <div class="poker-divider"></div>
         <div class="poker-stat-block">
@@ -435,18 +450,18 @@
           <div class="poker-stat-value" id="top-leader">—</div>
         </div>
         <div class="poker-stat-label" style="margin-bottom:10px;">All-Time Leaderboard</div>
-        <div class="poker-leaderboard" id="leaderboard"></div>
+        <div class="poker-leaderboard" id="leaderboard"><div class="loading-indicator">Loading...</div></div>
       </div>
       <div class="poker-right">
         <div class="poker-section-hdr">🏆 This Week's Winners</div>
-        <div class="poker-winners-grid" id="winners-grid"></div>
-        <div class="poker-section-hdr" style="margin-top:20px;">📊 Weekly Recognition</div>
-        <div id="weekly-notes" style="color:var(--gray-dim); font-size:14px;"></div>
+        <div class="poker-winners-grid" id="winners-grid"><div class="loading-indicator">Loading...</div></div>
+        <div class="poker-section-hdr" style="margin-top:20px;">📝 Notes & Recognition</div>
+        <div id="weekly-notes" style="color:var(--gray-dim); font-size:13px; line-height:1.6;"></div>
       </div>
     </div>
   </div>
 
-  <!-- SCREEN 2: NPS (your working layout) -->
+  <!-- SCREEN 2: NPS -->
   <div class="screen" id="screen-nps">
     <div class="nps-dashboard">
       <div class="nps-left">
@@ -454,7 +469,7 @@
         <div class="nps-sub">Sterling Heights · Net Promoter Score</div>
         <div class="nps-badge">
           <div class="pulse-dot"></div>
-          <div class="badge-text" id="nps-updated-badge">Updated --/--/----</div>
+          <div class="badge-text" id="nps-updated-badge">Loading data...</div>
         </div>
         <div class="poker-divider"></div>
         <div class="nps-stat-block">
@@ -479,13 +494,13 @@
       <div class="nps-right">
         <table class="nps-grid-table">
           <thead><tr><th class="col-name">Technician</th><th>Promoters</th><th>Detractors</th><th>Responses</th><th>NPS Score</th></tr></thead>
-          <tbody id="nps-table-body"></tbody>
+          <tbody id="nps-table-body"><tr><td colspan="5" class="loading-indicator">Loading NPS data...</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- SCREEN 3: DRIVER SCORES (your working layout) -->
+  <!-- SCREEN 3: DRIVER SCORES -->
   <div class="screen" id="screen-driver">
     <div class="driver-dashboard">
       <div class="driver-left">
@@ -501,7 +516,7 @@
           <div class="nps-stat-value gold" id="branch-avg">—</div>
         </div>
         <div class="nps-stat-block">
-          <div class="nps-stat-label">Top Performer (May)</div>
+          <div class="nps-stat-label">Top Performer (Latest)</div>
           <div class="nps-stat-value" id="top-performer">—</div>
         </div>
         <div class="nps-stat-block">
@@ -520,7 +535,7 @@
           <thead>
             <tr><th class="name-col">Specialist</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th><th class="ye-col">Year End</th></tr>
           </thead>
-          <tbody id="driver-table-body"></tbody>
+          <tbody id="driver-table-body"><tr><td colspan="14" class="loading-indicator">Loading driver data...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -531,147 +546,262 @@
 // ============================================
 // CONFIGURATION
 // ============================================
-const SCREEN_DURATION = 30000; // 30 seconds per screen (change to 45000 for 45s, 60000 for 60s)
+const SCREEN_DURATION = 30000; // Change to 45000 for 45s, 60000 for 60s
 
-// Google Sheet URLs
+// Your actual Google Sheet URLs
 const POKER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
 const NPS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
 const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
 
-// ============================================
-// SAMPLE DATA (REMOVE THIS AND UNCOMMENT FETCH SECTION WHEN YOUR SHEETS ARE READY)
-// ============================================
-const SAMPLE_POKER = [
-  { Technician: "Celeste Moore", Week: "5", Chips: "8", Category: "Intangible Impact", Notes: "Excellent customer feedback" },
-  { Technician: "Chris Grogis", Week: "5", Chips: "5", Category: "New Sale", Notes: "Closed major account" },
-  { Technician: "Justin Barak", Week: "5", Chips: "4", Category: "Perfect Attendance", Notes: "" },
-  { Technician: "Tyler Burton", Week: "5", Chips: "3", Category: "Accident-Free Month", Notes: "" },
-  { Technician: "Eddie LaPointe", Week: "4", Chips: "6", Category: "Intangible Impact", Notes: "Leadership award" }
-];
-
-const SAMPLE_NPS = [
-  { Tech: "Celeste Moore", "Total Promoters": "5", "Total Detractors": "0", "Total Responses": "7", "Final Year End Score": "71.43" },
-  { Tech: "Chris Grogis", "Total Promoters": "9", "Total Detractors": "1", "Total Responses": "13", "Final Year End Score": "61.54" },
-  { Tech: "Justin Barak", "Total Promoters": "4", "Total Detractors": "0", "Total Responses": "4", "Final Year End Score": "100.00" },
-  { Tech: "Tyler Burton", "Total Promoters": "8", "Total Detractors": "0", "Total Responses": "10", "Final Year End Score": "80.00" }
-];
-
-const SAMPLE_DRIVER = [
-  { name: "Celeste Moore", scores: [null,null,91,92,91], ye: 91.3 },
-  { name: "Chris Grogis", scores: [92,91,91,89,null], ye: 90.8 },
-  { name: "Justin Barak", scores: [null,null,83,92,92], ye: 89.0 },
-  { name: "Tyler Burton", scores: [null,null,88,92,90], ye: 90.0 },
-  { name: "Eddie LaPointe", scores: [null,90,90,95,95], ye: 92.5 }
-];
+// Global data stores
+let pokerData = [];
+let npsData = [];
+let driverData = [];
 
 // ============================================
-// RENDER FUNCTIONS (using sample data for now)
+// CSV PARSING
 // ============================================
+async function fetchCSV(url) {
+  try {
+    const response = await fetch(url + '&t=' + Date.now());
+    const text = await response.text();
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    const rows = lines.slice(1).map(line => {
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') inQ = !inQ;
+        else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else cur += c;
+      }
+      cols.push(cur.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g, '').trim());
+      return obj;
+    }).filter(r => Object.values(r).some(v => v));
+    return rows;
+  } catch (error) {
+    console.error(`Error fetching ${url}:`, error);
+    return [];
+  }
+}
 
-function renderPoker() {
-  const rows = SAMPLE_POKER;
+// ============================================
+// POKER CHIPS RENDER
+// ============================================
+async function loadAndRenderPoker() {
+  const rows = await fetchCSV(POKER_URL);
+  if (rows.length === 0) {
+    document.getElementById('leaderboard').innerHTML = '<div class="loading-indicator">No data available</div>';
+    return;
+  }
+  
+  // Calculate totals per technician
   const totals = {};
   rows.forEach(r => {
-    const chips = parseInt(r.Chips) || 0;
-    if(chips && r.Technician) totals[r.Technician] = (totals[r.Technician] || 0) + chips;
+    const chips = parseInt(r['Manager Over-ride'] || r.Chips) || 0;
+    if (chips && r.Technician) {
+      r.Technician.split(',').map(n => n.trim()).filter(Boolean).forEach(name => {
+        totals[name] = (totals[name] || 0) + chips;
+      });
+    }
   });
-  const sorted = Object.entries(totals).sort((a,b) => b[1] - a[1]);
-  const totalChips = Object.values(totals).reduce((a,b) => a + b, 0);
+  
+  const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+  const totalChips = Object.values(totals).reduce((a, b) => a + b, 0);
+  
+  // Find current week
+  let maxWeek = 0;
+  rows.forEach(r => { const w = parseInt(r.Week); if (w > maxWeek) maxWeek = w; });
+  const weekRows = rows.filter(r => parseInt(r.Week) === maxWeek);
+  const weekDate = weekRows.find(r => r.Date)?.Date || '';
+  
   document.getElementById('total-chips').textContent = totalChips;
   document.getElementById('top-leader').textContent = sorted[0]?.[0] || '—';
-  document.getElementById('poker-week').textContent = `Week 5 · May 2026`;
+  document.getElementById('poker-week').textContent = `Week ${maxWeek}${weekDate ? ' · ' + weekDate : ''}`;
   
-  const leaderboardHtml = sorted.slice(0,10).map(([name, chips], i) => `
+  // Leaderboard
+  const leaderboardHtml = sorted.slice(0, 15).map(([name, chips], i) => `
     <div class="poker-leaderboard-item">
-      <div class="poker-rank">${i+1}</div>
+      <div class="poker-rank">${i + 1}</div>
       <div class="poker-name">${name}</div>
       <div class="poker-chips">${chips}</div>
     </div>
   `).join('');
   document.getElementById('leaderboard').innerHTML = leaderboardHtml;
   
-  const weekRows = rows.filter(r => parseInt(r.Week) === 5);
-  const winnersHtml = weekRows.map(r => `
-    <div class="poker-winner-card">
-      <div class="poker-winner-name">${r.Technician}</div>
-      <div class="poker-winner-chips">+${r.Chips}</div>
-      <div class="poker-winner-category">${r.Category}</div>
-    </div>
-  `).join('');
-  document.getElementById('winners-grid').innerHTML = winnersHtml;
-  document.getElementById('weekly-notes').innerHTML = weekRows.filter(r => r.Notes).map(r => `• ${r.Technician}: ${r.Notes}`).join('<br>') || 'No additional notes this week';
+  // Winners grid
+  const winnersHtml = weekRows.map(r => {
+    const chips = parseInt(r['Manager Over-ride'] || r.Chips) || 0;
+    return `
+      <div class="poker-winner-card">
+        <div class="poker-winner-name">${r.Technician || '—'}</div>
+        <div class="poker-winner-chips">+${chips}</div>
+        <div class="poker-winner-category">${r.Category || 'Recognition'}</div>
+        ${r.Notes ? `<div class="poker-winner-note">📝 ${r.Notes}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+  document.getElementById('winners-grid').innerHTML = winnersHtml || '<div class="loading-indicator">No winners this week</div>';
+  
+  // Notes
+  const notes = weekRows.filter(r => r.Notes).map(r => `• ${r.Technician}: ${r.Notes}`).join('<br>');
+  document.getElementById('weekly-notes').innerHTML = notes || 'No additional notes this week';
 }
 
-function renderNPS() {
-  const rows = SAMPLE_NPS;
+// ============================================
+// NPS RENDER
+// ============================================
+async function loadAndRenderNPS() {
+  const rows = await fetchCSV(NPS_URL);
+  if (rows.length === 0) {
+    document.getElementById('nps-table-body').innerHTML = '<tr><td colspan="5" class="loading-indicator">No NPS data available</td></tr>';
+    return;
+  }
+  
+  const keys = Object.keys(rows[0]);
+  const techKey = keys[0];
+  const proKey = keys[1];
+  const detKey = keys[2];
+  const respKey = keys[3];
+  const scoreKey = keys[4];
+  
+  const valid = rows.filter(r => r[techKey] && r[techKey] !== 'Tech' && r[techKey] !== '');
+  
   let totalPro = 0, totalDet = 0, totalResp = 0;
-  rows.forEach(r => {
-    totalPro += parseInt(r['Total Promoters']) || 0;
-    totalDet += parseInt(r['Total Detractors']) || 0;
-    totalResp += parseInt(r['Total Responses']) || 0;
+  valid.forEach(r => {
+    totalPro += parseInt(r[proKey]) || 0;
+    totalDet += parseInt(r[detKey]) || 0;
+    totalResp += parseInt(r[respKey]) || 0;
   });
+  
   const branchScore = totalResp > 0 ? ((totalPro - totalDet) / totalResp) * 100 : 0;
   document.getElementById('branch-nps').textContent = branchScore.toFixed(1);
   document.getElementById('total-responses').textContent = totalResp;
-  document.getElementById('attention-count').textContent = rows.filter(r => parseFloat(r['Final Year End Score']) < 70).length;
+  
+  const lowCount = valid.filter(r => {
+    const score = parseFloat(r[scoreKey]);
+    return !isNaN(score) && score < 70;
+  }).length;
+  document.getElementById('attention-count').textContent = lowCount;
   document.getElementById('nps-updated-badge').innerHTML = `Updated ${new Date().toLocaleDateString()}`;
   
   const tbody = document.getElementById('nps-table-body');
-  tbody.innerHTML = rows.map(r => {
-    const score = parseFloat(r['Final Year End Score']);
+  tbody.innerHTML = valid.map(r => {
+    const rawScore = r[scoreKey];
+    const isNone = !rawScore || rawScore === 'None' || rawScore === '';
+    const score = isNone ? null : parseFloat(rawScore);
     let chipClass = 'chip-none';
-    if(score >= 90) chipClass = 'chip-green';
-    else if(score >= 70) chipClass = 'chip-yellow';
-    else if(score > 0) chipClass = 'chip-red';
-    return `<tr>
-      <td class="col-name" style="text-align:left;padding-left:16px;">${r.Tech}</td>
-      <td>${r['Total Promoters']}</td>
-      <td>${r['Total Detractors']}</td>
-      <td>${r['Total Responses']}</td>
-      <td><span class="nps-score-chip ${chipClass}">${score.toFixed(1)}</span></td>
-    </tr>`;
-  }).join('');
-}
-
-function renderDriver() {
-  const rows = SAMPLE_DRIVER;
-  const avg = rows.reduce((sum, r) => sum + r.ye, 0) / rows.length;
-  document.getElementById('branch-avg').textContent = avg.toFixed(1);
-  const top = rows.sort((a,b) => b.ye - a.ye)[0];
-  document.getElementById('top-performer').textContent = `${top.name} (${top.ye.toFixed(1)})`;
-  document.getElementById('below-90').textContent = rows.filter(r => r.ye < 90).length;
-  
-  const tbody = document.getElementById('driver-table-body');
-  tbody.innerHTML = rows.map(p => {
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const cells = months.map((m, i) => {
-      const val = p.scores[i];
-      if(val === null || val === undefined) return '<td class="score-blank">—</td>';
-      let cls = 'score-hi';
-      if(val < 87) cls = 'score-lo';
-      else if(val < 90) cls = 'score-mid';
-      return `<td class="${cls}">${val}</td>`;
-    }).join('');
-    let yeCls = 'ye-hi';
-    if(p.ye < 87) yeCls = 'ye-lo';
-    else if(p.ye < 90) yeCls = 'ye-mid';
-    return `<tr>
-      <td class="driver-name-cell">${p.name}</td>
-      ${cells}
-      <td class="ye-cell ${yeCls}">${p.ye.toFixed(1)}</td>
-    </tr>`;
+    let displayScore = '—';
+    if (!isNone && score !== null) {
+      displayScore = score.toFixed(1);
+      if (score >= 90) chipClass = 'chip-green';
+      else if (score >= 70) chipClass = 'chip-yellow';
+      else chipClass = 'chip-red';
+    }
+    const pro = parseInt(r[proKey]) || 0;
+    const det = parseInt(r[detKey]) || 0;
+    const resp = parseInt(r[respKey]) || 0;
+    return `
+      <tr>
+        <td class="col-name" style="text-align:left;padding-left:16px;">${r[techKey]}</td>
+        <td>${pro}</td>
+        <td>${det}</td>
+        <td>${resp}</td>
+        <td><span class="nps-score-chip ${chipClass}">${displayScore}</span></td>
+      </tr>
+    `;
   }).join('');
 }
 
 // ============================================
-// LAST UPDATED TIMESTAMP
+// DRIVER SCORES RENDER
+// ============================================
+async function loadAndRenderDriver() {
+  const rows = await fetchCSV(DRIVER_URL);
+  if (rows.length === 0) {
+    document.getElementById('driver-table-body').innerHTML = '<tr><td colspan="14" class="loading-indicator">No driver data available</td></tr>';
+    return;
+  }
+  
+  const keys = Object.keys(rows[0]);
+  const nameKey = keys[0];
+  const yearKey = keys[keys.length - 1];
+  const monthKeys = keys.slice(1, 13);
+  
+  const valid = rows.filter(r => r[nameKey] && r[nameKey] !== 'Specialist Name' && r[nameKey] !== '');
+  
+  // Calculate branch average
+  let sum = 0, count = 0;
+  valid.forEach(r => {
+    const ye = parseFloat(r[yearKey]);
+    if (!isNaN(ye)) { sum += ye; count++; }
+  });
+  const avg = count > 0 ? sum / count : 0;
+  document.getElementById('branch-avg').textContent = avg.toFixed(1);
+  
+  // Find top performer
+  const sorted = [...valid].sort((a, b) => parseFloat(b[yearKey] || 0) - parseFloat(a[yearKey] || 0));
+  const top = sorted[0];
+  if (top) {
+    const topScore = parseFloat(top[yearKey]);
+    document.getElementById('top-performer').textContent = `${top[nameKey]} (${!isNaN(topScore) ? topScore.toFixed(1) : '—'})`;
+  }
+  
+  const belowCount = valid.filter(r => {
+    const ye = parseFloat(r[yearKey]);
+    return !isNaN(ye) && ye < 90;
+  }).length;
+  document.getElementById('below-90').textContent = belowCount;
+  
+  const tbody = document.getElementById('driver-table-body');
+  tbody.innerHTML = valid.map(r => {
+    const name = r[nameKey];
+    const monthCells = monthKeys.map(m => {
+      const val = r[m];
+      if (!val || val === '') return '<td class="score-blank">—</td>';
+      const num = parseFloat(val);
+      if (isNaN(num)) return '<td class="score-blank">—</td>';
+      let cls = 'score-hi';
+      if (num < 87) cls = 'score-lo';
+      else if (num < 90) cls = 'score-mid';
+      return `<td class="${cls}">${num}</td>`;
+    }).join('');
+    
+    const yeVal = parseFloat(r[yearKey]);
+    let yeCls = 'ye-hi';
+    if (isNaN(yeVal)) yeCls = 'ye-mid';
+    else if (yeVal < 87) yeCls = 'ye-lo';
+    else if (yeVal < 90) yeCls = 'ye-mid';
+    
+    return `
+      <tr>
+        <td class="driver-name-cell">${name}</td>
+        ${monthCells}
+        <td class="ye-cell ${yeCls}">${!isNaN(yeVal) ? yeVal.toFixed(1) : '—'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ============================================
+// UPDATE TIMESTAMP & REFRESH ALL
 // ============================================
 function updateTimestamp() {
   const now = new Date();
-  document.getElementById('updateTime').textContent = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  document.getElementById('updateTime').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
-setInterval(updateTimestamp, 1000);
-updateTimestamp();
+
+async function refreshAllData() {
+  updateTimestamp();
+  await Promise.all([
+    loadAndRenderPoker(),
+    loadAndRenderNPS(),
+    loadAndRenderDriver()
+  ]);
+}
 
 // ============================================
 // SCREEN ROTATION WITH PROGRESS BAR
@@ -679,14 +809,13 @@ updateTimestamp();
 const screens = ['screen-poker', 'screen-nps', 'screen-driver'];
 const screenNames = ['Poker Chips', 'NPS', 'Driver Scores'];
 let currentScreen = 0;
-let progressInterval;
 
 function startProgressBar(duration) {
   const bar = document.getElementById('progressBar');
   const text = document.getElementById('progressText');
   bar.style.transition = `width ${duration}ms linear`;
   bar.style.width = '100%';
-  text.textContent = `${screenNames[currentScreen]} · ${duration/1000}s`;
+  text.textContent = `${screenNames[currentScreen]} · ${duration / 1000}s`;
   
   setTimeout(() => {
     bar.style.transition = 'none';
@@ -701,23 +830,15 @@ function nextScreen() {
   startProgressBar(SCREEN_DURATION);
 }
 
+// ============================================
+// INITIALIZATION
+// ============================================
+refreshAllData();
+setInterval(refreshAllData, 300000); // Refresh every 5 minutes
 setInterval(nextScreen, SCREEN_DURATION);
 startProgressBar(SCREEN_DURATION);
-
-// ============================================
-// INITIAL RENDER
-// ============================================
-renderPoker();
-renderNPS();
-renderDriver();
-
-// Refresh every 5 minutes
-setInterval(() => {
-  renderPoker();
-  renderNPS();
-  renderDriver();
-  updateTimestamp();
-}, 300000);
+updateTimestamp();
+setInterval(updateTimestamp, 1000);
 </script>
 </body>
 </html>

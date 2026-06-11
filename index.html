@@ -2,701 +2,372 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1920">
-<title>NexGreen Sterling Heights</title>
+<meta name="viewport" content="width=1920, initial-scale=1.0">
+<title>NexGreen Sterling Heights — Live Dashboard</title>
+<!-- Google Fonts: consistent, modern typography -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1920px; height: 1080px; background: #0a0a0a; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
-  #app { width: 1920px; height: 1080px; display: flex; flex-direction: column; color: #fff; }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-  /* TOP BAR */
-  .top-bar {
-    background: #008a50; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 48px; height: 95px; flex-shrink: 0;
-  }
-  .top-bar-left { display: flex; align-items: center; gap: 20px; }
-  .chip-icon { width: 45px; height: 45px; border-radius: 50%; border: 5px solid rgba(255,255,255,0.6); background: #006e40; display: grid; place-items: center; }
-  .chip-icon::after { content: ''; width: 18px; height: 18px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.5); }
-  .top-titles { display: flex; flex-direction: column; gap: 2px; }
-  .top-title { font-size: 34px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; line-height: 1; }
-  .top-subtitle { font-size: 15px; color: rgba(255,255,255,0.75); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-  .top-section { font-size: 18px; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 12px; padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.3); align-self: center; }
-  .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-  .top-date { font-size: 18px; color: rgba(255,255,255,0.85); font-weight: 500; }
-  .top-time { font-size: 28px; color: #fff; font-weight: 800; letter-spacing: 0.05em; }
+  :root {
+    --brand: #008a50;
+    --brand-bright: #00c472;
+    --green-deep: #020d07;
+    --gray-dim: #6a9278;
+    --gold: #FFD166;
+    --amber: #F4A261;
+    --red-soft: #FF6B6B;
+    --white: #edf7f2;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(0, 138, 80, 0.18);
+  }
 
-  /* NAV DOTS */
-  .nav-dots { display: flex; gap: 10px; align-items: center; margin-left: 24px; }
-  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background 0.4s, transform 0.4s; }
-  .nav-dot.on { background: #fff; transform: scale(1.3); }
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--green-deep);
+    font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif;
+    background-image: radial-gradient(ellipse 80% 70% at 0% 50%, rgba(0, 80, 40, 0.75) 0%, transparent 65%),
+                      radial-gradient(ellipse 60% 60% at 100% 80%, rgba(0, 60, 30, 0.5) 0%, transparent 60%),
+                      radial-gradient(ellipse 100% 45% at 50% 0%, rgba(0, 138, 80, 0.12) 0%, transparent 55%);
+  }
 
-  /* BODY */
-  .body { flex: 1; min-height: 0; position: relative; }
-  .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
-  .screen.active { display: flex; animation: fadeUp 0.8s ease; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  /* ========= GLOBAL ROTATION & PROGRESS ========= */
+  .dashboard-container { position: relative; width: 1920px; height: 1080px; }
+  .screen {
+    position: absolute; top: 0; left: 0;
+    width: 1920px; height: 1080px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .screen.active { opacity: 1; visibility: visible; z-index: 10; }
 
-  /* POKER CHIPS LAYOUT */
-  .two-col { display: grid; grid-template-columns: 440px 1fr; height: 100%; }
-  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; }
-  .right-col { display: flex; flex-direction: column; background: #0a0a0a; }
-  .col-header { background: #006e40; padding: 10px 22px; font-size: 14px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.9); flex-shrink: 0; }
+  /* progress bar + bottom status */
+  .progress-container {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 4px;
+    background: rgba(0, 196, 114, 0.25); z-index: 200;
+  }
+  .progress-bar {
+    height: 100%; width: 0%;
+    background: var(--brand-bright);
+    transition: width linear;
+    box-shadow: 0 0 8px var(--brand-bright);
+  }
+  .progress-text {
+    position: fixed; bottom: 10px; right: 24px;
+    font-size: 12px; font-weight: 600;
+    color: var(--gray-dim);
+    font-family: 'DM Sans', monospace;
+    letter-spacing: 0.5px; z-index: 200;
+    background: rgba(0, 0, 0, 0.6); padding: 4px 14px;
+    border-radius: 40px; backdrop-filter: blur(4px);
+  }
+  .last-updated {
+    position: fixed; bottom: 10px; left: 24px;
+    font-size: 11px; color: var(--gray-dim);
+    font-family: 'DM Sans', monospace;
+    background: rgba(0, 0, 0, 0.5); padding: 4px 12px;
+    border-radius: 40px; backdrop-filter: blur(4px);
+    z-index: 200;
+  }
+  .last-updated span { color: var(--brand-bright); font-weight: 700; }
 
-  /* LEADERBOARD - CONDENSED LIKE DRIVER SCORES */
-  .leaderboard { flex: 1; overflow-y: auto; padding: 4px 0; min-height: 0; }
-  .lb-row { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #191919; }
-  .lb-row.top3 { padding: 6px 20px; background: rgba(0,138,80,0.07); }
-  .lb-row.other { padding: 3px 20px; }
-  .medal-wrap { position: relative; width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .medal-glow-gold   { position:absolute;inset:-4px;border-radius:50%;background:#FAC775;opacity:0.18;animation:pulse-gold 2s ease-in-out infinite; }
-  .medal-glow-silver { position:absolute;inset:-4px;border-radius:50%;background:#C8C8C8;opacity:0.15;animation:pulse-silver 2.4s ease-in-out infinite; }
-  .medal-glow-bronze { position:absolute;inset:-4px;border-radius:50%;background:#C87941;opacity:0.18;animation:pulse-bronze 2.8s ease-in-out infinite; }
-  @keyframes pulse-gold   { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.32} }
-  @keyframes pulse-silver { 0%,100%{transform:scale(1);opacity:0.15}50%{transform:scale(1.5);opacity:0.26} }
-  @keyframes pulse-bronze { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.28} }
-  .medal-rays-gold   { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #FAC775;opacity:0.4;animation:ray-gold 2s ease-in-out infinite; }
-  .medal-rays-silver { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C8C8C8;opacity:0.3;animation:ray-silver 2.4s ease-in-out infinite; }
-  .medal-rays-bronze { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C87941;opacity:0.35;animation:ray-bronze 2.8s ease-in-out infinite; }
-  @keyframes ray-gold   { 0%,100%{opacity:0.4}50%{opacity:0.75} }
-  @keyframes ray-silver { 0%,100%{opacity:0.3}50%{opacity:0.6} }
-  @keyframes ray-bronze { 0%,100%{opacity:0.35}50%{opacity:0.65} }
-  .medal { position:relative;z-index:2;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900; }
-  .m1 { background:#FAC775;color:#412402;border:2px solid #e8a830; }
-  .m2 { background:#C8C8C8;color:#1a1a1a;border:2px solid #a0a0a0; }
-  .m3 { background:#C87941;color:#1a1a1a;border:2px solid #a05a28; }
-  .mx { background:#1e1e1e;color:#666;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900; }
-  .lb-name { flex:1;font-size:16px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .lb-right { display:flex;flex-direction:column;align-items:flex-end;gap:2px; }
-  .lb-chips { font-size:20px;font-weight:900;color:#00c46a;line-height:1; }
-  .lb-bar-wrap { width:60px;height:3px;background:#222;border-radius:2px; }
-  .lb-bar { height:100%;background:#008a50;border-radius:2px; }
+  /* ========= TOP BAR ========= */
+  .top-bar {
+    background: #008a50; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 85px; flex-shrink: 0;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 24px; }
+  .logo-img { height: 52px; width: auto; object-fit: contain; }
+  .top-titles { display: flex; flex-direction: column; gap: 2px; }
+  .top-subtitle { font-size: 15px; color: rgba(255,255,255,0.85); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .top-week { font-size: 18px; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-transform: uppercase; border-left: 2px solid rgba(255,255,255,0.3); padding-left: 20px; margin-left: 8px; }
+  .nav-dots { display: flex; gap: 12px; margin-left: 16px; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.35); transition: all 0.2s; }
+  .nav-dot.on { background: #fff; transform: scale(1.3); box-shadow: 0 0 4px white; }
+  .top-right { text-align: right; }
+  .top-date { font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.9); }
+  .top-time { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: 1px; line-height: 1.2; }
 
-  /* RIGHT PANEL - ALTERNATING VIEWS */
-  .right-panel-view { flex: 1; overflow-y: auto; min-height: 0; padding: 12px; }
-  .view { display: none; height: 100%; }
-  .view.active { display: block; animation: fadeUp 0.5s ease; }
-  
-  /* WINNERS GRID */
-  .winners-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .wcard { background:#141414; border:1px solid #202020; border-radius:8px; padding: 8px 12px; }
-  .wcard.hot { border-color:#008a50; background:#0d1a14; }
-  .wcard-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
-  .wcard-names { font-size:15px; font-weight:700; color:#fff; }
-  .wcard-chips { font-size:20px; font-weight:900; color:#00c46a; }
-  .wcard-cat { font-size:10px; color:#008a50; font-weight:800; text-transform:uppercase; margin-bottom:3px; }
-  .wcard-note { font-size:10px; color:#f0a040; font-style:italic; }
+  /* ========= COMMON COLUMN STYLES ========= */
+  .two-col { display: grid; grid-template-columns: 440px 1fr; height: 100%; }
+  .col-header {
+    background: #006e40; padding: 8px 22px; font-size: 13px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.95);
+    flex-shrink: 0;
+  }
+  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; }
 
-  /* REDEMPTION BOARD */
-  .redemption-board svg { width: 100%; height: auto; display: block; }
+  /* ========= POKER LEADERBOARD (CONDENSED) ========= */
+  .leaderboard { flex: 1; overflow-y: auto; padding: 4px 0; }
+  .lb-row { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #191919; }
+  .lb-row.top3 { padding: 6px 20px; background: rgba(0,138,80,0.07); }
+  .lb-row.other { padding: 3px 20px; }
+  .medal-wrap { position: relative; width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .medal-glow-gold, .medal-glow-silver, .medal-glow-bronze { position: absolute; inset: -4px; border-radius: 50%; opacity: 0.2; animation: pulse 2s infinite; }
+  .medal-glow-gold { background: #FAC775; }
+  .medal-glow-silver { background: #C8C8C8; }
+  .medal-glow-bronze { background: #C87941; }
+  .medal-rays-gold, .medal-rays-silver, .medal-rays-bronze { position: absolute; inset: -8px; border-radius: 50%; opacity: 0.3; animation: rayPulse 2s infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:0.2}50%{transform:scale(1.4);opacity:0.4} }
+  @keyframes rayPulse { 0%,100%{opacity:0.2}50%{opacity:0.6} }
+  .medal { position: relative; z-index: 2; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: 18px; font-weight: 900; }
+  .m1 { background: #FAC775; color: #412402; border: 2px solid #e8a830; }
+  .m2 { background: #C8C8C8; color: #1a1a1a; border: 2px solid #a0a0a0; }
+  .m3 { background: #C87941; color: #1a1a1a; border: 2px solid #a05a28; }
+  .mx { background: #1e1e1e; color: #aaa; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: 16px; }
+  .lb-name { flex: 1; font-size: 15px; font-weight: 600; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'DM Sans', sans-serif; }
+  .lb-chips { font-size: 20px; font-weight: 900; color: #00c46a; font-family: 'Bebas Neue', cursive; }
+  .lb-bar-wrap { width: 60px; height: 3px; background: #222; border-radius: 2px; }
+  .lb-bar { height: 100%; background: #008a50; border-radius: 2px; }
 
-  /* NPS LAYOUT */
-  .nps-layout { display: grid; grid-template-columns: 280px 1fr; height: 100%; }
-  .nps-left-panel { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; padding: 20px; }
-  .nps-stats { margin-bottom: 25px; }
-  .nps-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6a9278; margin-bottom: 4px; }
-  .nps-stat-value { font-size: 48px; font-weight: 900; color: #00c46a; font-family: 'Bebas Neue', cursive; }
-  .nps-stat-value.gold { color: #FFD166; }
-  .nps-stat-value.red { color: #e05555; }
-  .nps-right { overflow-y: auto; padding: 12px 18px; }
-  .nps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .nps-card { background:#141414; border:1px solid #202020; border-radius:6px; padding: 6px 10px; }
-  .nps-card.nps-subcard { background:rgba(0,138,80,0.05); border:1px dashed rgba(0,138,80,0.3); }
-  .nps-name { font-size:14px; font-weight:700; color:#fff; margin-bottom:3px; }
-  .nps-score-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:3px; }
-  .nps-score { font-size:26px; font-weight:900; line-height:1; }
-  .nps-score.green { color:#00c46a; }
-  .nps-score.yellow { color:#f0c040; }
-  .nps-score.red { color:#e05555; }
-  .nps-score.none { color:#555; font-size:16px; }
-  .nps-meta { display:flex; gap:5px; }
-  .nps-pill { font-size:9px; font-weight:700; padding:2px 5px; border-radius:20px; }
-  .nps-pill.pro { background:rgba(0,196,106,0.15); color:#00c46a; }
-  .nps-pill.det { background:rgba(224,85,85,0.15); color:#e05555; }
-  .nps-pill.resp { background:rgba(255,255,255,0.07); color:#888; }
-  .nps-bar-wrap { height:2px; background:#222; border-radius:2px; margin-top:5px; }
-  .nps-bar { height:100%; border-radius:2px; background:#008a50; }
-  
-  /* FULL WIDTH DIVIDER */
-  .nps-divider { margin: 10px 0 6px 0; padding: 3px 0; background: rgba(0,138,80,0.15); border-radius: 3px; font-size: 11px; font-weight: 700; color: #008a50; text-align: center; letter-spacing: 1px; grid-column: 1 / -1; }
+  /* right panel (alternating) */
+  .right-panel-view { flex: 1; overflow-y: auto; padding: 12px; }
+  .view { display: none; animation: fadeUp 0.4s; }
+  .view.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* DRIVER SCORES - WITH MEDALS */
-  .driver-layout { display: grid; grid-template-columns: 280px 1fr; height: 100%; }
-  .driver-left-panel { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; padding: 20px; }
-  .driver-stats { margin-bottom: 25px; }
-  .driver-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6a9278; margin-bottom: 4px; }
-  .driver-stat-value { font-size: 48px; font-weight: 900; color: #00c46a; font-family: 'Bebas Neue', cursive; }
-  .driver-podium { margin-top: 20px; }
-  .podium-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid #1c1c1c; }
-  .podium-medal { position: relative; width: 38px; height: 38px; flex-shrink: 0; }
-  .podium-medal .medal { width: 34px; height: 34px; font-size: 14px; }
-  .podium-name { flex: 1; font-size: 14px; font-weight: 600; color: #fff; }
-  .podium-score { font-size: 18px; font-weight: 900; color: #00c46a; }
-  .driver-right { overflow-y: auto; padding: 10px 15px; }
-  .ds-list { display: flex; flex-direction: column; gap: 3px; }
-  .ds-row { display: flex; align-items: center; gap: 8px; background: #141414; border: 1px solid #1e1e1e; border-radius: 5px; padding: 3px 8px; }
-  .ds-name { width: 150px; font-size: 12px; font-weight: 600; color: #eee; flex-shrink: 0; }
-  .ds-months { display: flex; gap: 3px; flex: 1; align-items: center; }
-  .ds-month { display: flex; flex-direction: column; align-items: center; gap: 0px; min-width: 28px; }
-  .ds-month-label { font-size: 5px; color: #444; font-weight: 700; text-transform: uppercase; }
-  .ds-month-val { font-size: 10px; font-weight: 800; }
-  .ds-month-val.green  { color: #00c46a; }
-  .ds-month-val.yellow { color: #f0c040; }
-  .ds-month-val.red    { color: #e05555; }
-  .ds-month-val.empty  { color: #333; }
-  .ds-yearend { font-size: 14px; font-weight: 900; min-width: 42px; text-align: right; flex-shrink: 0; }
-  .ds-yearend.green  { color: #00c46a; }
-  .ds-yearend.yellow { color: #f0c040; }
-  .ds-yearend.red    { color: #e05555; }
-  .ds-yearend-label { font-size: 5px; color: #444; font-weight: 700; text-transform: uppercase; text-align: center; }
-  .ds-yearend-wrap { display: flex; flex-direction: column; align-items: center; gap: 0px; flex-shrink: 0; min-width: 45px; }
+  /* winners grid */
+  .winners-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wcard { background: #141414; border: 1px solid #202020; border-radius: 10px; padding: 8px 12px; }
+  .wcard.hot { border-color: #008a50; background: #0d1a14; }
+  .wcard-names { font-size: 15px; font-weight: 700; color: #fff; font-family: 'DM Sans', sans-serif; }
+  .wcard-chips { font-size: 20px; font-weight: 900; color: #00c46a; font-family: 'Bebas Neue', cursive; }
+  .wcard-cat { font-size: 10px; color: #008a50; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .wcard-note { font-size: 10px; color: #f0a040; font-style: italic; margin-top: 3px; }
 
-  /* BOTTOM BAR */
-  .bottom-bar { background:#0d1a14;border-top:2px solid #008a50;height:40px;display:flex;align-items:center;padding:0 25px;gap:16px;flex-shrink:0; }
-  .ticker-label { font-size:11px;font-weight:800;color:#008a50;letter-spacing:0.12em;text-transform:uppercase;flex-shrink:0; }
-  .ticker-divider { width:2px;height:18px;background:#008a50;opacity:0.4;flex-shrink:0; }
-  .ticker-wrap { flex:1;overflow:hidden; }
-  .ticker { font-size:16px;font-weight:700;color:#00c46a;white-space:nowrap;display:inline-block;animation:scroll 45s linear infinite; }
-  @keyframes scroll { 0%{transform:translateX(1920px)}100%{transform:translateX(-100%)} }
+  /* dynamic prize board */
+  .prize-board-container { background: linear-gradient(135deg, #006a3e 0%, #004d2e 100%); border-radius: 16px; padding: 12px; height: 100%; overflow-y: auto; }
+  .prize-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+  .prize-card { background: white; border-radius: 14px; padding: 12px 6px; text-align: center; box-shadow: 0 6px 12px rgba(0,0,0,0.2); transition: transform 0.1s; }
+  .prize-name { font-size: 16px; font-weight: 800; color: #1e3a2f; font-family: 'DM Sans', sans-serif; margin-bottom: 8px; }
+  .prize-chips { font-family: 'Bebas Neue', cursive; font-size: 28px; font-weight: 900; color: #008a50; background: rgba(0,138,80,0.1); display: inline-block; padding: 4px 12px; border-radius: 40px; }
+  .prize-chips-label { font-size: 11px; font-weight: 600; color: #2c5a45; margin-top: 4px; }
 
-  .loading { display:flex; align-items:center; justify-content:center; height:100%; font-size:18px; color:#444; }
+  /* NPS LAYOUT */
+  .nps-layout { display: grid; grid-template-columns: 280px 1fr; height: 100%; }
+  .nps-left-panel { background: #0f0f0f; border-right: 2px solid #1c1c1c; padding: 20px; display: flex; flex-direction: column; }
+  .nps-stat-block { margin-bottom: 24px; }
+  .nps-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6a9278; margin-bottom: 4px; }
+  .nps-stat-value { font-family: 'Bebas Neue', cursive; font-size: 48px; font-weight: 900; color: #00c46a; }
+  .nps-stat-value.gold { color: #FFD166; }
+  .nps-stat-value.red { color: #FF6B6B; }
+  .nps-right { overflow-y: auto; padding: 12px 18px; }
+  .nps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .nps-card { background: #141414; border: 1px solid #202020; border-radius: 10px; padding: 8px 12px; }
+  .nps-card.terminated { opacity: 0.75; border-color: #e05555; background: rgba(224,85,85,0.1); }
+  .nps-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; font-family: 'DM Sans', sans-serif; }
+  .terminated .nps-name { color: #e05555; text-decoration: line-through; }
+  .nps-score-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .nps-score { font-family: 'Bebas Neue', cursive; font-size: 28px; font-weight: 900; line-height: 1; }
+  .nps-score.green { color: #00c46a; } .nps-score.yellow { color: #f0c040; } .nps-score.red { color: #e05555; } .nps-score.none { color: #555; font-size: 18px; }
+  .nps-pill { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 20px; }
+  .nps-pill.pro { background: rgba(0,196,106,0.15); color: #00c46a; }
+  .nps-pill.det { background: rgba(224,85,85,0.15); color: #e05555; }
+  .nps-pill.resp { background: rgba(255,255,255,0.07); color: #aaa; }
+  .nps-divider { margin: 14px 0 8px; padding: 4px; background: rgba(0,138,80,0.15); text-align: center; font-size: 11px; font-weight: 700; color: #008a50; letter-spacing: 1px; grid-column: 1/-1; border-radius: 6px; }
+
+  /* DRIVER SCORES */
+  .driver-layout { display: grid; grid-template-columns: 280px 1fr; height: 100%; }
+  .driver-left-panel { background: #0f0f0f; border-right: 2px solid #1c1c1c; padding: 20px; }
+  .driver-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6a9278; margin-bottom: 4px; }
+  .driver-stat-value { font-family: 'Bebas Neue', cursive; font-size: 48px; color: #00c46a; }
+  .podium-item { display: flex; align-items: center; gap: 12px; padding: 6px 0; border-bottom: 1px solid #1c1c1c; }
+  .podium-medal { width: 38px; }
+  .podium-name { flex: 1; font-size: 14px; font-weight: 600; color: #fff; }
+  .podium-score { font-family: 'Bebas Neue', cursive; font-size: 20px; color: #00c46a; }
+  .driver-right { overflow-y: auto; padding: 10px 16px; }
+  .ds-list { display: flex; flex-direction: column; gap: 4px; }
+  .ds-row { display: flex; align-items: center; gap: 8px; background: #141414; border-radius: 6px; padding: 3px 10px; border: 1px solid #1e1e1e; }
+  .ds-name { width: 150px; font-size: 12px; font-weight: 600; color: #eee; flex-shrink: 0; }
+  .ds-months { display: flex; gap: 3px; flex-wrap: wrap; }
+  .ds-month { text-align: center; min-width: 32px; }
+  .ds-month-label { font-size: 6px; color: #666; text-transform: uppercase; }
+  .ds-month-val { font-size: 10px; font-weight: 800; }
+  .ds-month-val.green { color: #00c46a; } .ds-month-val.yellow { color: #f0c040; } .ds-month-val.red { color: #e05555; }
+  .ds-yearend-wrap { text-align: center; min-width: 50px; }
+  .ds-yearend-label { font-size: 6px; color: #666; }
+  .ds-yearend { font-size: 14px; font-weight: 900; font-family: 'Bebas Neue', cursive; }
+  .ds-yearend.green { color: #00c46a; } .ds-yearend.yellow { color: #f0c040; } .ds-yearend.red { color: #e05555; }
+
+  /* bottom ticker */
+  .bottom-bar { background: #0d1a14; border-top: 2px solid #008a50; height: 44px; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0; }
+  .ticker-label { font-size: 11px; font-weight: 800; color: #008a50; letter-spacing: 2px; text-transform: uppercase; }
+  .ticker-wrap { flex: 1; overflow: hidden; white-space: nowrap; }
+  .ticker { display: inline-block; white-space: nowrap; font-size: 15px; font-weight: 600; color: #00c46a; animation: scrollTicker 40s linear infinite; }
+  @keyframes scrollTicker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+  .loading { text-align: center; padding: 30px; color: #aaa; font-size: 18px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <div class="chip-icon"></div>
-      <div class="top-titles">
-        <div class="top-title">NexGreen Sterling Heights</div>
-        <div class="top-subtitle" id="top-section-label">Team Dashboard 2026</div>
-      </div>
-      <div class="top-section" id="top-week"></div>
-      <div class="nav-dots">
-        <div class="nav-dot on" id="nd0" title="Poker Chips"></div>
-        <div class="nav-dot" id="nd1" title="NPS"></div>
-        <div class="nav-dot" id="nd2" title="Driver Scores"></div>
-      </div>
-    </div>
-    <div class="top-right">
-      <div class="top-date" id="top-date">—</div>
-      <div class="top-time" id="top-time">—</div>
-    </div>
-  </div>
+<div class="dashboard-container">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img class="logo-img" src="https://nexgreen.com/wp-content/uploads/2023/11/logo-c35c53c3d80b07c4427a965f36f1a450-768x219.png" alt="NexGreen Logo">
+      <div class="top-subtitle" id="top-section-label">Team Dashboard 2026</div>
+      <div class="top-week" id="top-week"></div>
+      <div class="nav-dots" id="navDots"><div class="nav-dot on"></div><div class="nav-dot"></div><div class="nav-dot"></div></div>
+    </div>
+    <div class="top-right"><div class="top-date" id="top-date">—</div><div class="top-time" id="top-time">—</div></div>
+  </div>
 
-  <div class="body">
-    <!-- SCREEN 1: POKER CHIPS -->
-    <div class="screen active" id="screen-chips">
-      <div class="two-col">
-        <div class="left-col">
-          <div class="col-header">🏆 All-Time Leaderboard</div>
-          <div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div>
-        </div>
-        <div class="right-col">
-          <div class="col-header">🎁 Prize & Recognition</div>
-          <div class="right-panel-view">
-            <div class="view" id="view-redemption">
-              <div class="redemption-board" id="redemption-board"></div>
-            </div>
-            <div class="view" id="view-winners">
-              <div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="body">
+    <!-- POKER SCREEN -->
+    <div class="screen active" id="screen-poker"><div class="two-col"><div class="left-col"><div class="col-header">🏆 All-Time Leaderboard</div><div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div></div><div class="right-col"><div class="col-header">🎁 Prize & Recognition</div><div class="right-panel-view"><div class="view" id="view-redemption"><div id="prize-board-container" class="prize-board-container"><div class="loading">Loading prizes...</div></div></div><div class="view" id="view-winners"><div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div></div></div></div></div></div>
 
-    <!-- SCREEN 2: NPS -->
-    <div class="screen" id="screen-nps">
-      <div class="nps-layout">
-        <div class="nps-left-panel">
-          <div class="nps-stats">
-            <div class="nps-stat-label">Year End Total</div>
-            <div class="nps-stat-value gold" id="branch-nps">—</div>
-          </div>
-          <div class="nps-stats">
-            <div class="nps-stat-label">Total Responses</div>
-            <div class="nps-stat-value" id="total-responses">—</div>
-          </div>
-          <div class="nps-stats">
-            <div class="nps-stat-label">Below 70 — Attention</div>
-            <div class="nps-stat-value red" id="attention-count">—</div>
-          </div>
-        </div>
-        <div class="nps-right">
-          <div class="nps-grid" id="nps-grid"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-    </div>
+    <!-- NPS SCREEN -->
+    <div class="screen" id="screen-nps"><div class="nps-layout"><div class="nps-left-panel"><div class="nps-stat-block"><div class="nps-stat-label">Year End Total</div><div class="nps-stat-value gold" id="branch-nps">—</div></div><div class="nps-stat-block"><div class="nps-stat-label">Updated to</div><div class="nps-stat-value" id="nps-updated-date" style="font-size:24px;">—</div></div><div class="nps-stat-block"><div class="nps-stat-label">Total Responses</div><div class="nps-stat-value" id="total-responses">—</div></div><div class="nps-stat-block"><div class="nps-stat-label">Below 70 — Attention</div><div class="nps-stat-value red" id="attention-count">—</div></div></div><div class="nps-right"><div class="nps-grid" id="nps-grid"><div class="loading">Loading NPS...</div></div></div></div></div>
 
-    <!-- SCREEN 3: DRIVER SCORES -->
-    <div class="screen" id="screen-drivers">
-      <div class="driver-layout">
-        <div class="driver-left-panel">
-          <div class="driver-stats">
-            <div class="driver-stat-label">Branch Average YTD</div>
-            <div class="driver-stat-value" id="branch-avg">—</div>
-          </div>
-          <div class="driver-stats">
-            <div class="driver-stat-label">Total Drivers Tracked</div>
-            <div class="driver-stat-value" id="total-drivers">—</div>
-          </div>
-          <div class="driver-podium">
-            <div class="driver-stat-label" style="margin-bottom: 10px;">🏆 Top 3 Performers</div>
-            <div id="driver-podium-list"><div class="loading">Loading...</div></div>
-          </div>
-        </div>
-        <div class="driver-right">
-          <div class="ds-list" id="ds-list"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <!-- DRIVER SCREEN -->
+    <div class="screen" id="screen-driver"><div class="driver-layout"><div class="driver-left-panel"><div class="driver-stat-block"><div class="driver-stat-label">Branch Average YTD</div><div class="driver-stat-value" id="branch-avg">—</div></div><div class="driver-stat-block"><div class="driver-stat-label">Total Drivers Tracked</div><div class="driver-stat-value" id="total-drivers">—</div></div><div class="driver-podium"><div class="driver-stat-label" style="margin-bottom: 12px;">🏆 Top 3 Performers</div><div id="driver-podium-list"><div class="loading">Loading...</div></div></div></div><div class="driver-right"><div class="ds-list" id="ds-list"><div class="loading">Loading driver scores...</div></div></div></div></div>
+  </div>
 
-  <div class="bottom-bar">
-    <div class="ticker-label" id="ticker-label">Poker Chips</div>
-    <div class="ticker-divider"></div>
-    <div class="ticker-wrap"><div class="ticker" id="ticker">Loading...</div></div>
-  </div>
+  <div class="bottom-bar"><div class="ticker-label" id="ticker-label">Poker Chips</div><div class="ticker-wrap"><div class="ticker" id="ticker">Loading latest updates...</div></div></div>
+  <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-text" id="progressText">Poker Chips · 30s</div>
+  <div class="last-updated">Data refresh: <span id="updateTime">--:--:--</span></div>
 </div>
 
 <script>
-const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
-const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
-const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
+  // -------- GOOGLE SHEETS URLS ----------
+  const POKER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
+  const NPS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
+  const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
+  const PRIZE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?gid=1043164795&output=csv';
 
-const SCREEN_MS = 30000;
-const REFRESH_MS = 5 * 60 * 1000;
-const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
-const SECTION_LABELS = ['Poker Chips 2026', 'Net Promoter Score', 'Driver Safety Scores'];
-const TICKER_LABELS  = ['Poker Chips', 'NPS', 'Driver Scores'];
+  const SCREEN_DURATION = 30000;
+  const REFRESH_MS = 5 * 60 * 1000;
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
+  const SCREEN_IDS = ['screen-poker', 'screen-nps', 'screen-driver'];
+  const SCREEN_NAMES = ['Poker Chips', 'NPS', 'Driver Scores'];
+  let currentScreen = 0;
+  let rightPanelIndex = 0;  // 0:prize board, 1:winners
+  let progressInterval = null;
 
-const REDEMPTION_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="0 0 1920 1080" style="background: transparent;">
-  <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#006a3e;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#004d2e;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#f0f5f2;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#008a50;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#00b36b;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <rect width="1920" height="1080" fill="url(#bgGrad)"/>
-  <g opacity="0.04">
-    <circle cx="100" cy="100" r="2" fill="white"/><circle cx="300" cy="150" r="2" fill="white"/>
-    <circle cx="500" cy="80" r="2" fill="white"/><circle cx="700" cy="200" r="2" fill="white"/>
-    <circle cx="900" cy="120" r="2" fill="white"/><circle cx="1100" cy="180" r="2" fill="white"/>
-    <circle cx="1300" cy="90" r="2" fill="white"/><circle cx="1500" cy="160" r="2" fill="white"/>
-    <circle cx="1700" cy="110" r="2" fill="white"/><circle cx="1800" cy="250" r="2" fill="white"/>
-  </g>
-  <rect x="0" y="0" width="1920" height="70" fill="url(#headerGrad)"/>
-  <rect x="0" y="65" width="1920" height="5" fill="#006a3e" opacity="0.5"/>
-  <text x="960" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="white" letter-spacing="3">🏆  POKER CHIP PRIZE REDEMPTION BOARD  🏆</text>
-  <text x="960" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#c8ffdd">Earn chips through great performance — redeem them for awesome prizes below!</text>
-  <!-- Card 1 -->
-  <g transform="translate(120, 135)">
-    <rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/>
-    <rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/>
-    <text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">🍱 Lunch/Delivery</text>
-    <text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text>
-    <circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/>
-    <text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">8</text>
-    <text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text>
-    <rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/>
-    <text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text>
-  </g>
-  <!-- Cards 2-10 and 11 continue with same scaling... -->
-  <g transform="translate(460, 135)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">⛽ $10 Gas Card</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">12</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(800, 135)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">🧢 Hat / Hoodie</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">12</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(1140, 135)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">💳 $50 Visa</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">25</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(1480, 135)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">🔊 Bluetooth Speaker</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">35</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(120, 355)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">❄️ Yeti Cooler</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">45</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(460, 355)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">😎 Paid Day Off</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">80</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(800, 355)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">🔧 Tool of Choice</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">90</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(1140, 355)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">📺 55" TV</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">100</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(1480, 355)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">🏈 Sports Tickets</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">100</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <g transform="translate(800, 575)"><rect width="320" height="190" rx="12" fill="url(#cardGrad)" filter="drop-shadow(0px 5px 15px rgba(0,0,0,0.2))"/><rect width="320" height="44" rx="12" fill="#008a50"/><rect y="32" width="320" height="12" fill="#008a50"/><text x="160" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">🎮 PlayStation / Xbox</text><text x="160" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#333">Prize</text><circle cx="160" cy="128" r="28" fill="#008a50" opacity="0.15"/><text x="160" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#008a50">130</text><text x="160" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">CHIPS</text><rect x="90" y="155" width="140" height="22" rx="11" fill="#008a50" opacity="0.9"/><text x="160" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">REDEEM</text></g>
-  <text x="960" y="840" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#55996f">Keep earning chips to unlock these prizes! Ask your manager about bonus chip opportunities.</text>
-</svg>`;
+  async function fetchCSV(url) { const r = await fetch(url+'&t='+Date.now()); const txt = await r.text(); return parseCSV(txt); }
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+    return lines.slice(1).map(line => {
+      const cols = []; let cur='', inQ=false;
+      for(let c of line) { if(c==='"') inQ=!inQ; else if(c===',' && !inQ) { cols.push(cur.trim()); cur=''; } else cur+=c; }
+      cols.push(cur.trim());
+      const obj = {};
+      headers.forEach((h,i)=> obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim());
+      return obj;
+    }).filter(r=>Object.values(r).some(v=>v));
+  }
 
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
-  return lines.slice(1).map(line => {
-    const cols = []; let cur = '', inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c==='"'){inQ=!inQ;}
-      else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
-      else{cur+=c;}
-    }
-    cols.push(cur.trim());
-    const obj = {};
-    headers.forEach((h,i) => obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim());
-    return obj;
-  }).filter(r => Object.values(r).some(v=>v));
-}
+  // -------- POKER CHIPS ----------------
+  function buildAllTime(rows) { const t={}; rows.forEach(r=>{ let chips=parseInt(r['Manager Over-ride']||r.Chips)||0; if(chips && r.Technician) r.Technician.split(',').map(n=>n.trim()).forEach(name=>t[name]=(t[name]||0)+chips); }); return Object.entries(t).sort((a,b)=>b[1]-a[1]); }
+  function getCurrentWeek(rows) { let max=0; rows.forEach(r=>{let w=parseInt(r.Week);if(w>max)max=w;}); return {weekRows:rows.filter(r=>parseInt(r.Week)===max),maxWeek:max}; }
+  async function loadPrizeBoard() {
+    try {
+      const rows = await fetchCSV(PRIZE_SHEET_URL);
+      if(rows.length) {
+        const prizes = rows.map(row => ({ name: row.Prize || row[Object.keys(row)[0]], cost: row['Chip cost'] || row[Object.keys(row)[1]] }));
+        const grid = document.getElementById('prize-board-container');
+        let html = `<div class="prize-grid">`;
+        prizes.slice(0,10).forEach(p => { html += `<div class="prize-card"><div class="prize-name">${p.name}</div><div class="prize-chips">${p.cost}</div><div class="prize-chips-label">chips</div></div>`; });
+        html += `</div>`;
+        if(prizes.length > 10) { html += `<div class="prize-grid" style="justify-content:center;">${prizes.slice(10).map(p=>`<div class="prize-card"><div class="prize-name">${p.name}</div><div class="prize-chips">${p.cost}</div><div class="prize-chips-label">chips</div></div>`).join('')}</div>`; }
+        grid.innerHTML = html;
+      } else throw new Error();
+    } catch(e) { document.getElementById('prize-board-container').innerHTML = '<div class="loading">Prize board unavailable</div>'; }
+  }
+  async function renderPoker() {
+    const rows = await fetchCSV(POKER_URL);
+    const allTime = buildAllTime(rows);
+    const {weekRows, maxWeek} = getCurrentWeek(rows);
+    const weekDate = weekRows.find(r=>r.Date)?.Date||'';
+    document.getElementById('top-week').innerHTML = `Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
+    const maxC = allTime[0]?.[1]||1;
+    document.getElementById('lb-list').innerHTML = allTime.map(([name,chips],i)=>`<div class="lb-row ${i<3?'top3':'other'}">${medalHtml(i)}<div class="lb-name">${name}</div><div class="lb-right"><div class="lb-chips">${chips}</div><div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div></div></div>`).join('');
+    const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
+    document.getElementById('winners-grid').innerHTML = weekRows.map(r=>{let chips=parseInt(r['Manager Over-ride']||r.Chips)||0; return `<div class="wcard ${hotCats.includes(r.Category)||chips>=3?'hot':''}"><div class="wcard-top"><div class="wcard-names">${r.Technician||'—'}</div><div class="wcard-chips">+${chips}</div></div><div class="wcard-cat">${r.Category}</div>${r.Notes?`<div class="wcard-note">📝 ${r.Notes}</div>`:''}</div>`;}).join('');
+    await loadPrizeBoard();
+    const notable = weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
+    window._tickerPoker = notable.length ? notable.map(r=>`${r.Technician}  —  ${r.Category}${r.Notes?': '+r.Notes:''}`).join('     •     ') : 'Great work team!';
+  }
 
-function npsColor(val) {
-  if (val === null || val === undefined || isNaN(val)) return 'none';
-  if (val >= 9)  return 'green';
-  if (val >= 7)  return 'yellow';
-  return 'red';
-}
+  // ---------- NPS with special rows & terminated -------------
+  async function renderNPS() {
+    const rows = await fetchCSV(NPS_URL);
+    const techKey=Object.keys(rows[0])[0], proKey=Object.keys(rows[0])[1], detKey=Object.keys(rows[0])[2], respKey=Object.keys(rows[0])[3], scoreKey=Object.keys(rows[0])[4];
+    let regular=[], unassigned=[], managers=[], terminated=[];
+    rows.forEach(r=>{
+      let name=r[techKey];
+      if(!name || name==='Tech') return;
+      if(name === '0' || name === ')' || name === 'Unassigned') unassigned.push(r);
+      else if(name.toLowerCase().includes('michael riley') || name.toLowerCase().includes('raymond knox')) terminated.push(r);
+      else if(name.toLowerCase().includes('joe') || name.toLowerCase().includes('troy') || name.toLowerCase().includes('eddie') || name.toLowerCase().includes('manager')) managers.push(r);
+      else regular.push(r);
+    });
+    // find year total from row with 'Year Total' or read cell C29:E29 via fallback
+    let yearTotal = 52.78;
+    for(let r of rows) if(r[techKey] && r[techKey].includes('Year Total')) { yearTotal = parseFloat(r[scoreKey]); break; }
+    document.getElementById('branch-nps').innerHTML = isNaN(yearTotal)?'52.78':yearTotal.toFixed(1);
+    let updatedDate = '5/31/26';
+    for(let r of rows) if(r[techKey] && r[techKey].includes('Updated')) { updatedDate = r[Object.keys(r)[1]] || r[techKey]; break; }
+    document.getElementById('nps-updated-date').innerHTML = updatedDate;
+    let totalResp = [...regular,...managers,...unassigned,...terminated].reduce((s,r)=>s+(parseInt(r[respKey])||0),0);
+    document.getElementById('total-responses').innerHTML = totalResp;
+    let lowCount = [...regular,...managers].filter(r=>{let sc=parseFloat(r[scoreKey]); return !isNaN(sc) && sc<70; }).length;
+    document.getElementById('attention-count').innerHTML = lowCount;
+    const maxResp = Math.max(...[...regular,...managers,...unassigned,...terminated].map(r=>parseInt(r[respKey])||0),1);
+    let html='';
+    html += regular.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp)).join('');
+    if(managers.length || unassigned.length) { html += `<div class="nps-divider">👔 Management Team & Unassigned</div>`; html += managers.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, true)).join(''); html += unassigned.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, true, true)).join(''); }
+    if(terminated.length) { html += `<div class="nps-divider" style="background:#2a1a1a; color:#e05555;">⚠️ Terminated (data included in totals)</div>`; html += terminated.map(r=>npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, false, false, true)).join(''); }
+    document.getElementById('nps-grid').innerHTML = html;
+    window._tickerNPS = regular.filter(r=>parseFloat(r[scoreKey])>=9).length ? 'Top NPS: '+regular.filter(r=>parseFloat(r[scoreKey])>=9).map(r=>r[techKey]).join(', ') : 'NPS scores updated';
+  }
+  function npsCardHtml(r, proKey, detKey, respKey, scoreKey, maxResp, isSub=false, isUnassigned=false, isTerm=false) {
+    let raw = r[scoreKey]; let isNone=!raw || raw==='None'||raw===''; let score=isNone?null:parseFloat(raw);
+    let cls = isNone?'none':(score>=9?'green':(score>=7?'yellow':'red'));
+    let pro=parseInt(r[proKey])||0, det=parseInt(r[detKey])||0, resp=parseInt(r[respKey])||0, pct=Math.round(resp/maxResp*100);
+    let name = isUnassigned ? 'Unassigned' : r[Object.keys(r)[0]];
+    if(isTerm) name = name.replace(' (Terminated)','');
+    let termClass = isTerm ? 'terminated' : '';
+    return `<div class="nps-card ${termClass} ${isSub?'nps-subcard':''}"><div class="nps-name">${name}</div><div class="nps-score-row"><div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div><div class="nps-meta"><div class="nps-pill pro">👍 ${pro}</div><div class="nps-pill det">👎 ${det}</div><div class="nps-pill resp">${resp}</div></div></div><div class="nps-bar-wrap"><div class="nps-bar" style="width:${pct}%"></div></div>${isTerm?'<div style="font-size:8px; color:#e05555; margin-top:4px;">🔴 Terminated</div>':''}</div>`;
+  }
 
-function medalHTML(i) {
-  if (i===0) return `<div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div>`;
-  if (i===1) return `<div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div>`;
-  if (i===2) return `<div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div>`;
-  return `<div class="medal-wrap"><div class="mx">${i+1}</div></div>`;
-}
+  // ---------- DRIVER SCORES (medals top3) ----------
+  async function renderDrivers() {
+    const res = await fetch(DRIVER_URL+'&t='+Date.now()); const text = await res.text();
+    const lines = text.trim().split('\n').map(l=>l.split(',').map(c=>c.trim().replace(/^"|"$/g,'')));
+    let hidx=-1; for(let i=0;i<lines.length;i++) if(lines[i].some(c=>c.toLowerCase().includes('specialist'))) { hidx=i; break; }
+    if(hidx===-1) return;
+    const headers=lines[hidx]; const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist')); const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
+    const monthIdx = MONTHS.map(m=>headers.findIndex(h=>h===m)).filter(i=>i!==-1);
+    let data=[];
+    for(let i=hidx+1;i<lines.length;i++) { let name=lines[i][nameIdx]||''; if(!name) continue; if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')) break; data.push(lines[i]); }
+    let scores = data.map(row=>({ name:row[nameIdx], ye:parseFloat(row[yearIdx]), row })).filter(s=>!isNaN(s.ye));
+    let avg = scores.length ? scores.reduce((a,b)=>a+b.ye,0)/scores.length:0;
+    document.getElementById('branch-avg').innerHTML = avg.toFixed(1);
+    document.getElementById('total-drivers').innerHTML = data.length;
+    const top3 = [...scores].sort((a,b)=>b.ye-a.ye).slice(0,3);
+    document.getElementById('driver-podium-list').innerHTML = top3.map((d,i)=>`<div class="podium-item">${medalSmall(i)}<div class="podium-name">${d.name}</div><div class="podium-score">${d.ye.toFixed(1)}</div></div>`).join('');
+    document.getElementById('ds-list').innerHTML = data.map(row=>{ let name=row[nameIdx]; let monthCells=monthIdx.map(idx=>{ let val=row[idx]; let num=parseFloat(val); if(!val||isNaN(num)) return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val empty">—</div></div>`; let c=num>=90?'green':(num>=75?'yellow':'red'); return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val ${c}">${num}</div></div>`; }).join(''); let ye=row[yearIdx]; let yeNum=parseFloat(ye); let yeCls=!ye||isNaN(yeNum)?'empty':(yeNum>=90?'green':(yeNum>=75?'yellow':'red')); return `<div class="ds-row"><div class="ds-name">${name}</div><div class="ds-months">${monthCells}</div><div class="ds-yearend-wrap"><div class="ds-yearend-label">Year End</div><div class="ds-yearend ${yeCls}">${isNaN(yeNum)?'—':yeNum.toFixed(1)}</div></div></div>`; }).join('');
+    window._tickerDrivers = top3.length ? `Top drivers: ${top3.map(d=>`${d.name} (${d.ye.toFixed(1)})`).join('  •  ')}` : 'Driver scores updated';
+  }
+  function medalSmall(i) { if(i===0) return `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div></div>`; if(i===1) return `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div></div>`; return `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div></div>`; }
+  function medalHtml(i) { if(i===0) return `<div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div>`; if(i===1) return `<div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div>`; if(i===2) return `<div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div>`; return `<div class="medal-wrap"><div class="mx">${i+1}</div></div>`; }
 
-function buildAllTime(rows) {
-  const totals = {};
-  rows.forEach(r => {
-    const chips = parseInt(r['Manager Over-ride']||r.Chips)||0;
-    if (!chips) return;
-    r.Technician.split(',').map(n=>n.trim()).filter(Boolean).forEach(name=>{
-      totals[name]=(totals[name]||0)+chips;
-    });
-  });
-  return Object.entries(totals).sort((a,b)=>b[1]-a[1]);
-}
+  async function refreshAll() { await Promise.all([renderPoker(), renderNPS(), renderDrivers()]); updateTimestamp(); }
+  function updateTimestamp() { document.getElementById('updateTime').innerHTML = new Date().toLocaleTimeString(); }
+  function updateClock() { const d = new Date(); document.getElementById('top-date').innerHTML = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); document.getElementById('top-time').innerHTML = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+  function startProgressBar(dur) { let bar=document.getElementById('progressBar'), txt=document.getElementById('progressText'); bar.style.transition=`width ${dur}ms linear`; bar.style.width='100%'; txt.innerHTML=`${SCREEN_NAMES[currentScreen]} · ${dur/1000}s`; setTimeout(()=>{ bar.style.transition='none'; bar.style.width='0%'; },dur); }
+  function nextScreen() { document.getElementById(SCREEN_IDS[currentScreen]).classList.remove('active'); document.querySelectorAll('.nav-dot')[currentScreen].classList.remove('on'); currentScreen = (currentScreen+1)%SCREEN_IDS.length; document.getElementById(SCREEN_IDS[currentScreen]).classList.add('active'); document.querySelectorAll('.nav-dot')[currentScreen].classList.add('on'); document.getElementById('top-section-label').innerHTML = ['Poker Chips 2026','Net Promoter Score','Driver Safety Scores'][currentScreen]; if(currentScreen!==0) document.getElementById('top-week').innerHTML=''; setTicker(currentScreen); startProgressBar(SCREEN_DURATION); }
+  function setTicker(idx) { const tickerTexts = [window._tickerPoker||'Loading...', window._tickerNPS||'Loading...', window._tickerDrivers||'Loading...']; document.getElementById('ticker').innerHTML = tickerTexts[idx]; }
+  function flipRightPanel() { if(currentScreen!==0) return; const views=['view-redemption','view-winners']; document.getElementById(views[rightPanelIndex]).classList.remove('active'); rightPanelIndex = (rightPanelIndex+1)%2; document.getElementById(views[rightPanelIndex]).classList.add('active'); }
 
-function getCurrentWeekRows(rows) {
-  let maxWeek=0;
-  rows.forEach(r=>{const w=parseInt(r.Week);if(w>maxWeek)maxWeek=w;});
-  return {weekRows:rows.filter(r=>parseInt(r.Week)===maxWeek),maxWeek};
-}
-
-function renderPoker(rows) {
-  const allTime = buildAllTime(rows);
-  const {weekRows,maxWeek} = getCurrentWeekRows(rows);
-  const weekDate = weekRows.find(r=>r.Date)?.Date||'';
-  document.getElementById('top-week').textContent = `Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
-
-  const maxC = allTime[0]?.[1]||1;
-  document.getElementById('lb-list').innerHTML = allTime.map(([name,chips],i)=>`
-    <div class="lb-row ${i<3?'top3':'other'}">
-      ${medalHTML(i)}
-      <div class="lb-name">${name}</div>
-      <div class="lb-right">
-        <div class="lb-chips">${chips}</div>
-        <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
-      </div>
-    </div>`).join('');
-
-  const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
-  document.getElementById('winners-grid').innerHTML = weekRows.map(r=>{
-    const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
-    return `<div class="wcard${(hotCats.includes(r.Category)||chips>=3)?' hot':''}">
-      <div class="wcard-top">
-        <div class="wcard-names">${r.Technician||'—'}</div>
-        <div class="wcard-chips">+${chips}</div>
-      </div>
-      <div class="wcard-cat">${r.Category}</div>
-      ${r.Notes?`<div class="wcard-note">📝 ${r.Notes}</div>`:''}
-    </div>`;
-  }).join('');
-
-  document.getElementById('redemption-board').innerHTML = REDEMPTION_SVG;
-
-  const notable=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
-  const items=notable.map(r=>`${r.Technician||'Team'}  —  ${r.Category}${r.Notes?':  '+r.Notes:''}`);
-  window._tickerPoker = items.length ? items.join('     •     ') : 'Great work team!';
-}
-
-function renderNPS(rows) {
-  const techKey  = Object.keys(rows[0]||{})[0];
-  const proKey   = Object.keys(rows[0]||{})[1];
-  const detKey   = Object.keys(rows[0]||{})[2];
-  const respKey  = Object.keys(rows[0]||{})[3];
-  const scoreKey = Object.keys(rows[0]||{})[4];
-
-  const regularTechs = [];
-  const unassignedList = [];
-  const managers = [];
-  
-  rows.forEach(r => {
-    const name = r[techKey];
-    if (!name || name === 'Tech') return;
-    
-    if (name === '0' || name === ')' || name === 'Unassigned') {
-      unassignedList.push(r);
-    } else if (name.toLowerCase().includes('joe') || name.toLowerCase().includes('troy') || 
-               name.toLowerCase().includes('eddie') || name.toLowerCase().includes('manager')) {
-      managers.push(r);
-    } else {
-      regularTechs.push(r);
-    }
-  });
-  
-  // Year End Total from cell C29:E29 = 52.78
-  document.getElementById('branch-nps').textContent = '52.78';
-  
-  let totalResp = 0;
-  [...regularTechs, ...managers, ...unassignedList].forEach(r => {
-    totalResp += parseInt(r[respKey]) || 0;
-  });
-  document.getElementById('total-responses').textContent = totalResp;
-  
-  const lowCount = [...regularTechs, ...managers].filter(r => {
-    const s = parseFloat(r[scoreKey]); return !isNaN(s) && s < 70;
-  }).length;
-  document.getElementById('attention-count').textContent = lowCount;
-  
-  const maxResp = Math.max(...[...regularTechs, ...unassignedList, ...managers].map(r=>parseInt(r[respKey])||0), 1);
-  
-  let html = '';
-  
-  html += regularTechs.map(r => {
-    const raw = r[scoreKey];
-    const isNone = !raw || raw==='None' || raw==='' || raw==='#DIV/0!';
-    const score = isNone ? null : parseFloat(raw);
-    const cls = npsColor(score);
-    const pro = parseInt(r[proKey])||0;
-    const det = parseInt(r[detKey])||0;
-    const resp = parseInt(r[respKey])||0;
-    const pct = Math.round(resp/maxResp*100);
-    return `<div class="nps-card">
-      <div class="nps-name">${r[techKey]}</div>
-      <div class="nps-score-row">
-        <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
-        <div class="nps-meta">
-          <div class="nps-pill pro">👍 ${pro}</div>
-          <div class="nps-pill det">👎 ${det}</div>
-          <div class="nps-pill resp">${resp}</div>
-        </div>
-      </div>
-      <div class="nps-bar-wrap"><div class="nps-bar" style="width:${pct}%"></div></div>
-    </div>`;
-  }).join('');
-  
-  if (managers.length || unassignedList.length) {
-    html += `<div class="nps-divider">👔 Management Team & Unassigned</div>`;
-    
-    html += managers.map(r => {
-      const raw = r[scoreKey];
-      const isNone = !raw || raw==='None' || raw==='' || raw==='#DIV/0!';
-      const score = isNone ? null : parseFloat(raw);
-      const cls = npsColor(score);
-      const pro = parseInt(r[proKey])||0;
-      const det = parseInt(r[detKey])||0;
-      const resp = parseInt(r[respKey])||0;
-      const pct = Math.round(resp/maxResp*100);
-      return `<div class="nps-card nps-subcard">
-        <div class="nps-name">${r[techKey]}</div>
-        <div class="nps-score-row">
-          <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
-          <div class="nps-meta">
-            <div class="nps-pill pro">👍 ${pro}</div>
-            <div class="nps-pill det">👎 ${det}</div>
-            <div class="nps-pill resp">${resp}</div>
-          </div>
-        </div>
-        <div class="nps-bar-wrap"><div class="nps-bar" style="width:${pct}%"></div></div>
-      </div>`;
-    }).join('');
-    
-    html += unassignedList.map(r => {
-      const raw = r[scoreKey];
-      const isNone = !raw || raw==='None' || raw==='' || raw==='#DIV/0!';
-      const score = isNone ? null : parseFloat(raw);
-      const cls = npsColor(score);
-      const pro = parseInt(r[proKey])||0;
-      const det = parseInt(r[detKey])||0;
-      const resp = parseInt(r[respKey])||0;
-      const pct = Math.round(resp/maxResp*100);
-      return `<div class="nps-card nps-subcard">
-        <div class="nps-name">Unassigned</div>
-        <div class="nps-score-row">
-          <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
-          <div class="nps-meta">
-            <div class="nps-pill pro">👍 ${pro}</div>
-            <div class="nps-pill det">👎 ${det}</div>
-            <div class="nps-pill resp">${resp}</div>
-          </div>
-        </div>
-        <div class="nps-bar-wrap"><div class="nps-bar" style="width:${pct}%"></div></div>
-      </div>`;
-    }).join('');
-  }
-  
-  document.getElementById('nps-grid').innerHTML = html || '<div class="loading">No NPS data available</div>';
-
-  const top = regularTechs.filter(r=>{
-    const raw=r[scoreKey]; if(!raw||raw==='None'||raw==='')return false;
-    return parseFloat(raw)>=9;
-  });
-  window._tickerNPS = top.length
-    ? 'Top NPS: ' + top.map(r=>`${r[techKey]} (${parseFloat(r[scoreKey]).toFixed(1)})`).join('  •  ')
-    : 'NPS scores updated — keep earning great reviews!';
-}
-
-async function renderDrivers() {
-  const res = await fetch(DRIVER_URL+'&t='+Date.now());
-  const text = await res.text();
-  const lines = text.trim().split('\n').map(l => l.split(',').map(c => c.trim().replace(/^"|"$/g, '')));
-  
-  let headerIdx = -1;
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].some(cell => cell.toLowerCase().includes('specialist'))) {
-      headerIdx = i;
-      break;
-    }
-  }
-  
-  if (headerIdx === -1) {
-    document.getElementById('ds-list').innerHTML = '<div class="loading">Could not find driver data</div>';
-    return;
-  }
-  
-  const headers = lines[headerIdx];
-  const nameIdx = headers.findIndex(h => h.toLowerCase().includes('specialist'));
-  const yearIdx = headers.findIndex(h => h.toLowerCase().includes('year'));
-  
-  const monthIndices = [];
-  MONTHS.forEach(m => {
-    const idx = headers.findIndex(h => h === m);
-    if (idx !== -1) monthIndices.push(idx);
-  });
-  
-  const dataRows = [];
-  for (let i = headerIdx + 1; i < lines.length; i++) {
-    const name = lines[i][nameIdx] || '';
-    if (!name) continue;
-    if (name.toLowerCase().includes('branch') || name.toLowerCase().includes('average')) break;
-    dataRows.push(lines[i]);
-  }
-  
-  const validScores = [];
-  dataRows.forEach(row => {
-    const ye = row[yearIdx];
-    if (ye && !isNaN(parseFloat(ye))) {
-      validScores.push({ name: row[nameIdx], score: parseFloat(ye), row: row });
-    }
-  });
-  
-  const avgScore = validScores.length > 0 ? validScores.reduce((s, v) => s + v.score, 0) / validScores.length : 0;
-  const topDrivers = [...validScores].sort((a,b) => b.score - a.score).slice(0, 3);
-  
-  document.getElementById('branch-avg').textContent = avgScore.toFixed(1);
-  document.getElementById('total-drivers').textContent = dataRows.length;
-  
-  // Driver podium with same medal style as poker chips
-  document.getElementById('driver-podium-list').innerHTML = topDrivers.map((d, i) => {
-    let medalHtml = '';
-    if (i === 0) medalHtml = `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1" style="width:34px;height:34px;font-size:14px;">1</div></div></div>`;
-    else if (i === 1) medalHtml = `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2" style="width:34px;height:34px;font-size:14px;">2</div></div></div>`;
-    else medalHtml = `<div class="podium-medal"><div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3" style="width:34px;height:34px;font-size:14px;">3</div></div></div>`;
-    return `
-      <div class="podium-item">
-        ${medalHtml}
-        <div class="podium-name">${d.name}</div>
-        <div class="podium-score">${d.score.toFixed(1)}</div>
-      </div>
-    `;
-  }).join('');
-  
-  document.getElementById('ds-list').innerHTML = dataRows.map(row => {
-    const name = row[nameIdx] || '—';
-    const monthCells = monthIndices.map(idx => {
-      const val = row[idx];
-      if (!val || val === '') return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIndices.indexOf(idx)]}</div><div class="ds-month-val empty">—</div></div>`;
-      const num = parseFloat(val);
-      if (isNaN(num)) return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIndices.indexOf(idx)]}</div><div class="ds-month-val empty">—</div></div>`;
-      let cls = 'green';
-      if (num < 75) cls = 'red';
-      else if (num < 90) cls = 'yellow';
-      return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIndices.indexOf(idx)]}</div><div class="ds-month-val ${cls}">${num}</div></div>`;
-    }).join('');
-    
-    const yeVal = yearIdx !== -1 ? row[yearIdx] : '';
-    const yeNum = parseFloat(yeVal);
-    let yeCls = 'empty';
-    let yeDisplay = '—';
-    if (!isNaN(yeNum) && yeVal !== '') {
-      yeDisplay = yeNum.toFixed(1);
-      if (yeNum >= 90) yeCls = 'green';
-      else if (yeNum >= 75) yeCls = 'yellow';
-      else yeCls = 'red';
-    }
-    
-    return `<div class="ds-row">
-      <div class="ds-name">${name}</div>
-      <div class="ds-months">${monthCells}</div>
-      <div class="ds-yearend-wrap">
-        <div class="ds-yearend-label">Year End</div>
-        <div class="ds-yearend ${yeCls}">${yeDisplay}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  window._tickerDrivers = validScores.length
-    ? 'Top drivers: ' + topDrivers.map(d => `${d.name} (${d.score.toFixed(1)})`).join('  •  ')
-    : 'Driver scores updated — stay safe out there!';
-}
-
-async function fetchCSV(url) {
-  const res = await fetch(url+'&t='+Date.now());
-  return parseCSV(await res.text());
-}
-
-async function loadAll() {
-  try { const pokerRows = await fetchCSV(POKER_URL); renderPoker(pokerRows); } catch(e){ console.error('Poker failed',e);}
-  try { const npsRows = await fetchCSV(NPS_URL); renderNPS(npsRows); } catch(e){ console.error('NPS failed',e);}
-  try { await renderDrivers(); } catch(e){ console.error('Driver failed',e);}
-}
-
-function updateClock() {
-  const now = new Date();
-  document.getElementById('top-date').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('top-time').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-}
-updateClock();
-setInterval(updateClock,10000);
-
-const screens = ['screen-chips','screen-nps','screen-drivers'];
-let screenIdx = 0;
-let rightPanelIdx = 0;
-
-function setTicker(idx) {
-  document.getElementById('ticker-label').textContent = TICKER_LABELS[idx];
-  const texts = [window._tickerPoker||'Loading...', window._tickerNPS||'Loading...', window._tickerDrivers||'Loading...'];
-  const t = document.getElementById('ticker');
-  t.textContent = texts[idx];
-  t.style.animation='none'; t.offsetHeight; t.style.animation='';
-}
-
-function nextScreen() {
-  document.getElementById(screens[screenIdx]).classList.remove('active');
-  document.getElementById('nd'+screenIdx).classList.remove('on');
-  screenIdx = (screenIdx+1)%screens.length;
-  document.getElementById(screens[screenIdx]).classList.add('active');
-  document.getElementById('nd'+screenIdx).classList.add('on');
-  document.getElementById('top-section-label').textContent = SECTION_LABELS[screenIdx];
-  if(screenIdx!==0) document.getElementById('top-week').textContent='';
-  setTicker(screenIdx);
-}
-
-function flipRightPanel() {
-  if (screenIdx !== 0) return;
-  const views = ['view-redemption', 'view-winners'];
-  document.getElementById(views[rightPanelIdx]).classList.remove('active');
-  rightPanelIdx = (rightPanelIdx + 1) % 2;
-  document.getElementById(views[rightPanelIdx]).classList.add('active');
-}
-
-loadAll();
-setInterval(loadAll, REFRESH_MS);
-setInterval(nextScreen, SCREEN_MS);
-setInterval(flipRightPanel, 12000);
-setTicker(0);
-document.getElementById('view-redemption').classList.add('active');
+  setInterval(updateClock,1000); updateClock(); setInterval(nextScreen, SCREEN_DURATION); setInterval(flipRightPanel, 12000); setInterval(refreshAll, REFRESH_MS); refreshAll(); startProgressBar(SCREEN_DURATION); updateTimestamp(); setInterval(updateTimestamp, 10000); document.getElementById('view-redemption').classList.add('active');
 </script>
 </body>
 </html>

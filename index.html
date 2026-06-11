@@ -3,542 +3,721 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1920">
-<title>NexGreen Sterling Heights</title>
+<title>NexGreen Sterling Heights — Live Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1920px; height: 1080px; background: #0a0a0a; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
-  #app { width: 1920px; height: 1080px; display: flex; flex-direction: column; color: #fff; }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --brand:        #008a50;
+    --brand-bright: #00c472;
+    --green-deep:   #020d07;
+    --gray-dim:     #6a9278;
+    --gold:         #FFD166;
+    --amber:        #F4A261;
+    --red-soft:     #FF6B6B;
+    --white:        #edf7f2;
+    --card-bg:      rgba(255,255,255,0.03);
+    --card-border:  rgba(0,138,80,0.18);
+  }
+  html, body {
+    width:1920px; height:1080px;
+    overflow:hidden;
+    background:var(--green-deep);
+    font-family:'DM Sans',sans-serif;
+    background-image:
+      radial-gradient(ellipse 80% 70% at 0% 50%,  rgba(0,80,40,0.75) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 100% 80%, rgba(0,60,30,0.5)  0%, transparent 60%),
+      radial-gradient(ellipse 100% 45% at 50% 0%,  rgba(0,138,80,0.12) 0%, transparent 55%);
+  }
 
-  /* TOP BAR */
-  .top-bar { background: #008a50; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 100px; flex-shrink: 0; }
-  .top-bar-left { display: flex; align-items: center; gap: 20px; }
-  .top-titles { display: flex; flex-direction: column; gap: 3px; }
-  .top-title { font-size: 38px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; line-height: 1; }
-  .top-subtitle { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.9; }
-  .top-week { font-size: 18px; color: rgba(255,255,255,0.65); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 12px; padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.3); align-self: center; }
-  .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .top-date { font-size: 20px; color: rgba(255,255,255,0.85); font-weight: 500; }
-  .top-time { font-size: 32px; color: #fff; font-weight: 800; letter-spacing: 0.05em; }
-  .nav-dots { display: flex; gap: 10px; align-items: center; margin-left: 24px; }
-  .nav-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background 0.4s, transform 0.4s; }
-  .nav-dot.on { background: #fff; transform: scale(1.3); }
+  /* ROTATING CONTAINER */
+  .dashboard-container {
+    position:relative;
+    width:1920px;
+    height:1080px;
+  }
+  .screen {
+    position:absolute;
+    top:0; left:0;
+    width:1920px; height:1080px;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.6s ease-in-out;
+  }
+  .screen.active {
+    opacity:1;
+    visibility:visible;
+    z-index:10;
+  }
 
-  /* BODY */
-  .body { flex: 1; min-height: 0; position: relative; }
-  .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
-  .screen.active { display: flex; animation: fadeUp 0.8s ease; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  /* PROGRESS BAR */
+  .progress-container {
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:3px;
+    background:rgba(0,196,114,0.2);
+    z-index:100;
+  }
+  .progress-bar {
+    height:100%;
+    width:0%;
+    background:var(--brand-bright);
+    transition:width linear;
+    box-shadow:0 0 8px var(--brand-bright);
+  }
+  .progress-text {
+    position:fixed;
+    bottom:8px;
+    right:20px;
+    font-size:10px;
+    color:var(--gray-dim);
+    font-family:'DM Sans',sans-serif;
+    letter-spacing:1px;
+    z-index:100;
+    background:rgba(0,0,0,0.5);
+    padding:4px 12px;
+    border-radius:20px;
+    backdrop-filter:blur(4px);
+  }
 
-  /* SECTION HEADER */
-  .section-header { background: #005c35; padding: 10px 36px; font-size: 26px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; flex-shrink: 0; border-bottom: 3px solid #00c46a; display: flex; align-items: center; gap: 14px; }
+  /* LAST UPDATED BADGE */
+  .last-updated {
+    position:fixed;
+    bottom:12px;
+    left:20px;
+    font-size:10px;
+    color:var(--gray-dim);
+    font-family:'DM Sans',sans-serif;
+    letter-spacing:1px;
+    z-index:100;
+    background:rgba(0,0,0,0.5);
+    padding:4px 12px;
+    border-radius:20px;
+    backdrop-filter:blur(4px);
+  }
+  .last-updated span {
+    color:var(--brand-bright);
+    font-weight:600;
+  }
 
-  /* SHARED */
-  .two-col { display: grid; grid-template-columns: 400px 1fr; flex: 1; min-height: 0; overflow: hidden; }
-  .three-col { display: grid; grid-template-columns: 340px 1fr; flex: 1; min-height: 0; overflow: hidden; }
-  .left-col { background: #0f0f0f; border-right: 2px solid #1c1c1c; display: flex; flex-direction: column; overflow: hidden; }
-  .right-col { display: flex; flex-direction: column; overflow: hidden; }
-  .col-header { background: #006e40; padding: 10px 24px; font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.9); flex-shrink: 0; }
+  /* ============================================ */
+  /* POKER CHIPS SCREEN (matching NPS/Driver style) */
+  /* ============================================ */
+  .poker-dashboard {
+    width:1920px; height:1080px;
+    display:grid;
+    grid-template-columns:340px 1fr;
+  }
+  .poker-left {
+    background:rgba(0,138,80,0.05);
+    border-right:1px solid var(--card-border);
+    display:flex; flex-direction:column;
+    padding:42px 36px 36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .poker-left::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--brand-bright), transparent);
+  }
+  .poker-brand {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px; letter-spacing:5px;
+    color:var(--brand-bright); line-height:1;
+    text-shadow:0 0 50px rgba(0,196,114,0.35);
+    margin-bottom:2px;
+  }
+  .poker-sub {
+    font-size:11px; letter-spacing:4px;
+    text-transform:uppercase; color:var(--gray-dim);
+    font-weight:300; margin-bottom:22px;
+  }
+  .poker-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(0,138,80,0.1);
+    border:1px solid rgba(0,138,80,0.3);
+    border-radius:100px; padding:7px 14px;
+    margin-bottom:22px; width:fit-content;
+  }
+  .pulse-dot {
+    width:7px; height:7px; border-radius:50%;
+    background:var(--brand-bright);
+    box-shadow:0 0 8px var(--brand-bright);
+    animation:pulse 2s infinite; flex-shrink:0;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .poker-stat-block { margin-bottom:20px; }
+  .poker-stat-label {
+    font-size:10px; letter-spacing:3px;
+    text-transform:uppercase; color:var(--gray-dim); margin-bottom:2px;
+  }
+  .poker-stat-value {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:44px; color:var(--gold);
+    letter-spacing:1px; line-height:1;
+  }
+  .poker-divider {
+    width:36px; height:2px; background:var(--brand);
+    margin-bottom:22px;
+    box-shadow:0 0 12px rgba(0,138,80,0.6);
+  }
+  .poker-leaderboard {
+    flex:1;
+    overflow-y:auto;
+    margin-top:10px;
+  }
+  .poker-leaderboard-item {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 0;
+    border-bottom:1px solid rgba(0,138,80,0.1);
+  }
+  .poker-rank {
+    width:36px;
+    font-family:'Bebas Neue',sans-serif;
+    font-size:28px;
+    color:var(--gold);
+    text-align:center;
+  }
+  .poker-name {
+    flex:1;
+    font-size:15px;
+    font-weight:500;
+    color:var(--white);
+  }
+  .poker-chips {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:24px;
+    color:var(--brand-bright);
+  }
+  .poker-right {
+    padding:28px 44px 24px;
+    display:flex;
+    flex-direction:column;
+    overflow:auto;
+  }
+  .poker-section-hdr {
+    font-size:10px; letter-spacing:3px;
+    text-transform:uppercase; color:var(--gray-dim);
+    font-weight:600; margin-bottom:15px;
+  }
+  .poker-winners-grid {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-bottom:30px;
+  }
+  .poker-winner-card {
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--card-border);
+    border-radius:12px;
+    padding:14px 18px;
+  }
+  .poker-winner-name {
+    font-size:16px;
+    font-weight:600;
+    color:var(--white);
+    margin-bottom:6px;
+  }
+  .poker-winner-chips {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:28px;
+    color:var(--brand-bright);
+  }
+  .poker-winner-category {
+    font-size:10px;
+    color:var(--gray-dim);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-top:5px;
+  }
 
-  /* MEDALS */
-  .medal-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .medal-glow-gold   { position:absolute;inset:-4px;border-radius:50%;background:#FAC775;opacity:0.18;animation:pulse-gold 2s ease-in-out infinite; }
-  .medal-glow-silver { position:absolute;inset:-4px;border-radius:50%;background:#C8C8C8;opacity:0.15;animation:pulse-silver 2.4s ease-in-out infinite; }
-  .medal-glow-bronze { position:absolute;inset:-4px;border-radius:50%;background:#C87941;opacity:0.18;animation:pulse-bronze 2.8s ease-in-out infinite; }
-  @keyframes pulse-gold   { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.32} }
-  @keyframes pulse-silver { 0%,100%{transform:scale(1);opacity:0.15}50%{transform:scale(1.5);opacity:0.26} }
-  @keyframes pulse-bronze { 0%,100%{transform:scale(1);opacity:0.18}50%{transform:scale(1.5);opacity:0.28} }
-  .medal-rays-gold   { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #FAC775;opacity:0.4;animation:ray-gold 2s ease-in-out infinite; }
-  .medal-rays-silver { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C8C8C8;opacity:0.3;animation:ray-silver 2.4s ease-in-out infinite; }
-  .medal-rays-bronze { position:absolute;inset:-7px;border-radius:50%;box-shadow:0 0 10px 3px #C87941;opacity:0.35;animation:ray-bronze 2.8s ease-in-out infinite; }
-  @keyframes ray-gold   { 0%,100%{opacity:0.4}50%{opacity:0.75} }
-  @keyframes ray-silver { 0%,100%{opacity:0.3}50%{opacity:0.6} }
-  @keyframes ray-bronze { 0%,100%{opacity:0.35}50%{opacity:0.65} }
-  .medal { position:relative;z-index:2;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900; }
-  .m1 { background:#FAC775;color:#412402;border:2px solid #e8a830; }
-  .m2 { background:#C8C8C8;color:#1a1a1a;border:2px solid #a0a0a0; }
-  .m3 { background:#C87941;color:#1a1a1a;border:2px solid #a05a28; }
-  .mx { background:#1e1e1e;color:#666;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900; }
+  /* ============================================ */
+  /* NPS SCREEN (from your working file) */
+  /* ============================================ */
+  .nps-dashboard {
+    width:1920px; height:1080px;
+    display:grid;
+    grid-template-columns:310px 1fr;
+  }
+  .nps-left {
+    background:rgba(0,138,80,0.05);
+    border-right:1px solid var(--card-border);
+    display:flex; flex-direction:column;
+    padding:42px 36px 36px;
+    position:relative; overflow:hidden;
+  }
+  .nps-left::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--brand-bright), transparent);
+  }
+  .nps-brand {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px; letter-spacing:5px;
+    color:var(--brand-bright); line-height:1;
+    text-shadow:0 0 50px rgba(0,196,114,0.35);
+    margin-bottom:2px;
+  }
+  .nps-sub {
+    font-size:11px; letter-spacing:4px;
+    text-transform:uppercase; color:var(--gray-dim);
+    font-weight:300; margin-bottom:22px;
+  }
+  .nps-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(0,138,80,0.1);
+    border:1px solid rgba(0,138,80,0.3);
+    border-radius:100px; padding:7px 14px;
+    margin-bottom:22px; width:fit-content;
+  }
+  .nps-stat-block { margin-bottom:18px; }
+  .nps-stat-label {
+    font-size:10px; letter-spacing:3px;
+    text-transform:uppercase; color:var(--gray-dim); margin-bottom:2px;
+  }
+  .nps-stat-value {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:44px; color:var(--brand-bright);
+    letter-spacing:1px; line-height:1;
+  }
+  .nps-stat-value.gold { color:var(--gold); }
+  .nps-stat-value.red { color:var(--red-soft); }
+  .nps-legend { margin-top:auto; }
+  .legend-item {
+    display:flex; align-items:center; gap:9px;
+    margin-bottom:9px; font-size:12px; color:var(--gray-dim);
+  }
+  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .nps-right {
+    padding:28px 44px 24px;
+    display:flex; flex-direction:column;
+    overflow:auto;
+  }
+  .nps-grid-table {
+    width:100%;
+    border-collapse:collapse;
+  }
+  .nps-grid-table thead th {
+    font-size:11px; letter-spacing:2.5px;
+    text-transform:uppercase; color:var(--gray-dim);
+    font-weight:500; padding:6px 10px;
+    border-bottom:2px solid rgba(0,138,80,0.25);
+    text-align:center;
+  }
+  .nps-grid-table thead th.col-name { text-align:left; padding-left:16px; }
+  .nps-grid-table tbody td {
+    padding:0 10px; height:50px;
+    text-align:center;
+    border-bottom:1px solid rgba(0,138,80,0.08);
+    vertical-align:middle;
+    font-size:16px;
+  }
+  .nps-score-chip {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:90px; height:34px; border-radius:8px;
+    font-family:'Bebas Neue',sans-serif;
+    font-size:22px; letter-spacing:1px;
+  }
+  .chip-green  { background:rgba(0,196,114,0.18); color:#00c472; border:1px solid rgba(0,196,114,0.35); }
+  .chip-yellow { background:rgba(255,209,102,0.15); color:#FFD166; border:1px solid rgba(255,209,102,0.3); }
+  .chip-red    { background:rgba(255,107,107,0.15); color:#FF6B6B; border:1px solid rgba(255,107,107,0.3); }
+  .chip-none   { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.08); }
 
-  /* POKER LEADERBOARD — auto-sizes rows to fill available height */
-  .leaderboard { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 4px 0; }
-  .lb-row { display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #181818; flex: 1; min-height: 0; }
-  .lb-row.podium { background: rgba(0,138,80,0.07); }
-  .lb-name { flex:1;font-size:17px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .lb-right { display:flex;flex-direction:column;align-items:flex-end;gap:3px; }
-  .lb-chips { font-size:22px;font-weight:900;color:#00c46a;line-height:1; }
-  .lb-bar-wrap { width:60px;height:3px;background:#222;border-radius:2px; }
-  .lb-bar { height:100%;background:#008a50;border-radius:2px; }
-
-  /* POKER INNER VIEWS */
-  .inner-view { flex:1;display:none;flex-direction:column;min-height:0;overflow:hidden; }
-  .inner-view.active { display:flex;animation:fadeUp 0.7s ease; }
-
-  /* WINNERS GRID — auto column count */
-  .winners-grid { flex:1;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;overflow:hidden;align-content:start; }
-  .wcard { background:#141414;border:1px solid #202020;border-radius:9px;padding:9px 12px;display:flex;flex-direction:column;gap:3px; }
-  .wcard.hot { border-color:#008a50;background:#0d1a14; }
-  .wcard-top { display:flex;align-items:flex-start;justify-content:space-between;gap:6px; }
-  .wcard-names { font-size:16px;font-weight:700;color:#fff;line-height:1.3; }
-  .wcard-chips { font-size:22px;font-weight:900;color:#00c46a;flex-shrink:0;line-height:1; }
-  .wcard-cat { font-size:11px;color:#008a50;font-weight:800;text-transform:uppercase;letter-spacing:0.05em; }
-  .wcard-note { font-size:11px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-
-  /* ALL-TIME LIST */
-  .alltime-list { flex:1;padding:8px 14px;display:flex;flex-direction:column;gap:5px;overflow:hidden; }
-  .at-row { display:flex;align-items:center;gap:12px;background:#141414;border:1px solid #1e1e1e;border-radius:7px;flex:1;min-height:0;padding:0 14px; }
-  .at-rank { width:26px;font-size:14px;color:#555;font-weight:900;text-align:center;flex-shrink:0; }
-  .at-rank.top3 { color:#00c46a; }
-  .at-name { flex:1;font-size:18px;font-weight:600;color:#ddd; }
-  .at-bar-wrap { width:180px;height:4px;background:#222;border-radius:3px;flex-shrink:0; }
-  .at-bar { height:100%;background:#008a50;border-radius:3px; }
-  .at-chips { font-size:20px;font-weight:900;color:#00c46a;min-width:42px;text-align:right;flex-shrink:0; }
-
-  /* NPS SIDE PANEL */
-  .nps-side { background:#0f0f0f;border-right:2px solid #1c1c1c;display:flex;flex-direction:column; }
-  .nps-side-section { padding:14px 18px;border-bottom:1px solid #1c1c1c; }
-  .nps-side-label { font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#008a50;margin-bottom:6px; }
-  .nps-side-score { font-size:60px;font-weight:900;line-height:1; }
-  .nps-side-score.green  { color:#00c46a; }
-  .nps-side-score.yellow { color:#f0c040; }
-  .nps-side-score.red    { color:#e05555; }
-  .nps-side-score.none   { color:#444;font-size:30px; }
-  .nps-side-stat { display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #181818; }
-  .nps-side-stat:last-child { border-bottom:none; }
-  .nps-side-stat-label { font-size:14px;color:#888;font-weight:600; }
-  .nps-side-stat-val { font-size:22px;font-weight:800;color:#fff; }
-  .nps-side-stat-val.green { color:#00c46a; }
-  .nps-side-stat-val.red   { color:#e05555; }
-  .nps-updated { margin-top:auto;padding:14px 18px;border-top:1px solid #1c1c1c; }
-  .nps-updated-label { font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:4px; }
-  .nps-updated-val { font-size:17px;font-weight:700;color:#008a50; }
-
-  /* NPS GRID — auto-sizes to fit all techs */
-  .nps-grid { flex:1;padding:8px 12px;display:grid;gap:6px;overflow:hidden;align-content:start; }
-  .nps-card { background:#141414;border:1px solid #202020;border-radius:9px;padding:8px 12px;display:flex;flex-direction:column;gap:4px; }
-  .nps-name { font-size:16px;font-weight:700;color:#fff; }
-  .nps-score-row { display:flex;align-items:center;justify-content:space-between;gap:6px; }
-  .nps-score { font-size:32px;font-weight:900;line-height:1; }
-  .nps-score.green  { color:#00c46a; }
-  .nps-score.yellow { color:#f0c040; }
-  .nps-score.red    { color:#e05555; }
-  .nps-score.none   { color:#444;font-size:20px; }
-  .nps-meta { display:flex;gap:6px;flex-wrap:wrap;align-items:center; }
-  .nps-pill { font-size:14px;font-weight:800;padding:2px 8px;border-radius:14px; }
-  .nps-pill.pro  { background:rgba(0,196,106,0.15);color:#00c46a; }
-  .nps-pill.det  { background:rgba(224,85,85,0.15);color:#e05555; }
-  .nps-pill.resp { background:rgba(255,255,255,0.07);color:#888; }
-  .nps-bar-wrap { height:3px;background:#222;border-radius:3px; }
-  .nps-bar { height:100%;border-radius:3px;background:#008a50; }
-
-  /* DRIVER SIDE PANEL */
-  .ds-side { background:#0f0f0f;border-right:2px solid #1c1c1c;display:flex;flex-direction:column;overflow:hidden; }
-  .ds-podium { flex:1;overflow:hidden;display:flex;flex-direction:column;padding:4px 0; }
-  .ds-lb-row { display:flex;align-items:center;gap:10px;flex:1;min-height:0;padding:0 16px;border-bottom:1px solid #181818; }
-  .ds-lb-row.podium { background:rgba(0,138,80,0.07); }
-  .ds-lb-name { flex:1;font-size:17px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .ds-lb-score { font-size:22px;font-weight:900; }
-  .ds-lb-score.green  { color:#00c46a; }
-  .ds-lb-score.yellow { color:#f0c040; }
-  .ds-lb-score.red    { color:#e05555; }
-  .ds-lb-score.empty  { color:#444; }
-
-  /* DRIVER MAIN LIST — auto-sizes rows */
-  .ds-full { flex:1;padding:6px 16px;display:flex;flex-direction:column;gap:4px;overflow:hidden; }
-  .ds-row { display:flex;align-items:center;gap:8px;background:#141414;border:1px solid #1e1e1e;border-radius:7px;flex:1;min-height:0;padding:0 12px; }
-  .ds-name { width:165px;font-size:16px;font-weight:600;color:#eee;flex-shrink:0; }
-  .ds-months { display:flex;gap:2px;flex:1;align-items:center; }
-  .ds-month { display:flex;flex-direction:column;align-items:center;gap:1px;min-width:42px; }
-  .ds-month-label { font-size:8px;color:#444;font-weight:700;text-transform:uppercase; }
-  .ds-month-val { font-size:13px;font-weight:800; }
-  .ds-month-val.green  { color:#00c46a; }
-  .ds-month-val.yellow { color:#f0c040; }
-  .ds-month-val.red    { color:#e05555; }
-  .ds-month-val.empty  { color:#242424; }
-  .ds-yearend-wrap { display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;min-width:58px; }
-  .ds-yearend-label { font-size:8px;color:#444;font-weight:700;text-transform:uppercase; }
-  .ds-yearend { font-size:18px;font-weight:900; }
-  .ds-yearend.green  { color:#00c46a; }
-  .ds-yearend.yellow { color:#f0c040; }
-  .ds-yearend.red    { color:#e05555; }
-  .ds-yearend.empty  { color:#333; }
-
-  /* BOTTOM BAR */
-  .bottom-bar { background:#0d1a14;border-top:2px solid #008a50;height:44px;display:flex;align-items:center;padding:0 28px;gap:16px;flex-shrink:0; }
-  .ticker-label { font-size:13px;font-weight:800;color:#008a50;letter-spacing:0.12em;text-transform:uppercase;flex-shrink:0; }
-  .ticker-divider { width:2px;height:22px;background:#008a50;opacity:0.4;flex-shrink:0; }
-  .ticker-wrap { flex:1;overflow:hidden; }
-  .ticker { font-size:20px;font-weight:700;color:#00c46a;white-space:nowrap;display:inline-block;animation:scroll 55s linear infinite; }
-  @keyframes scroll { 0%{transform:translateX(1920px)}100%{transform:translateX(-100%)} }
-  .loading { display:flex;align-items:center;justify-content:center;height:100%;font-size:22px;color:#444; }
+  /* ============================================ */
+  /* DRIVER SCORES SCREEN (from your working file) */
+  /* ============================================ */
+  .driver-dashboard {
+    width:1920px; height:1080px;
+    display:grid;
+    grid-template-columns:310px 1fr;
+  }
+  .driver-left {
+    background:rgba(0,138,80,0.05);
+    border-right:1px solid var(--card-border);
+    display:flex; flex-direction:column;
+    padding:42px 36px 36px;
+    position:relative; overflow:hidden;
+  }
+  .driver-left::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--brand-bright), transparent);
+  }
+  .driver-brand {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px; letter-spacing:5px;
+    color:var(--brand-bright); line-height:1;
+    text-shadow:0 0 50px rgba(0,196,114,0.35);
+    margin-bottom:2px;
+  }
+  .driver-sub {
+    font-size:11px; letter-spacing:4px;
+    text-transform:uppercase; color:var(--gray-dim);
+    font-weight:300; margin-bottom:22px;
+  }
+  .driver-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(0,138,80,0.1);
+    border:1px solid rgba(0,138,80,0.3);
+    border-radius:100px; padding:7px 14px;
+    margin-bottom:22px; width:fit-content;
+  }
+  .driver-right {
+    padding:28px 44px 24px;
+    display:flex; flex-direction:column;
+    overflow:auto;
+  }
+  .driver-table {
+    width:100%;
+    border-collapse:collapse;
+  }
+  .driver-table thead th {
+    font-size:10px; letter-spacing:2px;
+    text-transform:uppercase; color:var(--gray-dim);
+    font-weight:400; text-align:center;
+    padding:0 4px 10px;
+    border-bottom:1px solid var(--card-border);
+  }
+  .driver-table thead th.name-col { text-align:left; padding-left:16px; }
+  .driver-table thead th.ye-col { color:var(--gold); }
+  .driver-table tbody td {
+    padding:0 4px; height:45px;
+    text-align:center;
+    border-bottom:1px solid rgba(0,138,80,0.07);
+    font-family:'Bebas Neue',sans-serif;
+    font-size:20px;
+    vertical-align:middle;
+  }
+  .driver-name-cell {
+    text-align:left; padding-left:16px;
+    font-family:'DM Sans',sans-serif;
+    font-size:15px; font-weight:500;
+    color:var(--white);
+  }
+  .score-hi    { color:var(--brand-bright); }
+  .score-mid   { color:var(--amber); }
+  .score-lo    { color:var(--red-soft); }
+  .score-blank { color:rgba(255,255,255,0.1); font-size:14px; }
+  .ye-cell.ye-hi  { color:var(--brand-bright); font-size:22px; }
+  .ye-cell.ye-mid { color:var(--amber); font-size:22px; }
+  .ye-cell.ye-lo  { color:var(--red-soft); font-size:22px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <div class="top-titles">
-        <div class="top-title">Team Dashboard 2026</div>
-        <div class="top-subtitle">NexGreen Sterling Heights</div>
+<div class="dashboard-container">
+  
+  <!-- PROGRESS BAR -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="progress-text" id="progressText">Poker Chips · 30s</div>
+  <div class="last-updated" id="lastUpdated">Last updated: <span id="updateTime">--:--:--</span></div>
+
+  <!-- SCREEN 1: POKER CHIPS -->
+  <div class="screen active" id="screen-poker">
+    <div class="poker-dashboard">
+      <div class="poker-left">
+        <div class="poker-brand">NexGreen</div>
+        <div class="poker-sub">Sterling Heights · Poker Chips</div>
+        <div class="poker-badge">
+          <div class="pulse-dot"></div>
+          <div class="badge-text" id="poker-week">Week --</div>
+        </div>
+        <div class="poker-divider"></div>
+        <div class="poker-stat-block">
+          <div class="poker-stat-label">Total Chips Awarded</div>
+          <div class="poker-stat-value" id="total-chips">—</div>
+        </div>
+        <div class="poker-stat-block">
+          <div class="poker-stat-label">Current Leader</div>
+          <div class="poker-stat-value" id="top-leader">—</div>
+        </div>
+        <div class="poker-stat-label" style="margin-bottom:10px;">All-Time Leaderboard</div>
+        <div class="poker-leaderboard" id="leaderboard"></div>
       </div>
-      <div class="top-week" id="top-week"></div>
-      <div class="nav-dots">
-        <div class="nav-dot on" id="nd0"></div>
-        <div class="nav-dot" id="nd1"></div>
-        <div class="nav-dot" id="nd2"></div>
+      <div class="poker-right">
+        <div class="poker-section-hdr">🏆 This Week's Winners</div>
+        <div class="poker-winners-grid" id="winners-grid"></div>
+        <div class="poker-section-hdr" style="margin-top:20px;">📊 Weekly Recognition</div>
+        <div id="weekly-notes" style="color:var(--gray-dim); font-size:14px;"></div>
       </div>
-    </div>
-    <div class="top-right">
-      <div class="top-date" id="top-date">—</div>
-      <div class="top-time" id="top-time">—</div>
     </div>
   </div>
 
-  <div class="body">
-
-    <!-- SCREEN 1: POKER CHIPS -->
-    <div class="screen active" id="screen-chips">
-      <div class="section-header">🏆 Poker Chips — Employee Recognition</div>
-      <div class="two-col">
-        <div class="left-col">
-          <div class="col-header">All-Time Leaderboard</div>
-          <div class="leaderboard" id="lb-list"><div class="loading">Loading...</div></div>
+  <!-- SCREEN 2: NPS (your working layout) -->
+  <div class="screen" id="screen-nps">
+    <div class="nps-dashboard">
+      <div class="nps-left">
+        <div class="nps-brand">NexGreen</div>
+        <div class="nps-sub">Sterling Heights · Net Promoter Score</div>
+        <div class="nps-badge">
+          <div class="pulse-dot"></div>
+          <div class="badge-text" id="nps-updated-badge">Updated --/--/----</div>
         </div>
-        <div class="right-col">
-          <div class="inner-view active" id="view-week">
-            <div class="col-header">This Week's Winners</div>
-            <div class="winners-grid" id="winners-grid"><div class="loading">Loading...</div></div>
-          </div>
-          <div class="inner-view" id="view-alltime">
-            <div class="col-header">All-Time Chip Totals</div>
-            <div class="alltime-list" id="alltime-list"><div class="loading">Loading...</div></div>
-          </div>
+        <div class="poker-divider"></div>
+        <div class="nps-stat-block">
+          <div class="nps-stat-label">Branch Year-End Score</div>
+          <div class="nps-stat-value gold" id="branch-nps">—</div>
         </div>
-      </div>
-    </div>
-
-    <!-- SCREEN 2: NPS -->
-    <div class="screen" id="screen-nps">
-      <div class="section-header">⭐ Net Promoter Scores — Year to Date</div>
-      <div class="three-col">
-        <div class="nps-side">
-          <div class="col-header">Team Summary</div>
-          <div class="nps-side-section">
-            <div class="nps-side-label">Team Year-End Score</div>
-            <div class="nps-side-score none" id="nps-team-score">—</div>
-          </div>
-          <div class="nps-side-section" style="flex:1;">
-            <div class="nps-side-label">Totals</div>
-            <div class="nps-side-stat">
-              <div class="nps-side-stat-label">👍 Total Promoters</div>
-              <div class="nps-side-stat-val green" id="nps-total-pro">—</div>
-            </div>
-            <div class="nps-side-stat">
-              <div class="nps-side-stat-label">👎 Total Detractors</div>
-              <div class="nps-side-stat-val red" id="nps-total-det">—</div>
-            </div>
-            <div class="nps-side-stat">
-              <div class="nps-side-stat-label">📋 Total Responses</div>
-              <div class="nps-side-stat-val" id="nps-total-resp">—</div>
-            </div>
-          </div>
-          <div class="nps-updated">
-            <div class="nps-updated-label">Data Updated Through</div>
-            <div class="nps-updated-val" id="nps-updated-val">—</div>
-          </div>
+        <div class="nps-stat-block">
+          <div class="nps-stat-label">Total Responses</div>
+          <div class="nps-stat-value" id="total-responses">—</div>
         </div>
-        <div class="right-col">
-          <div class="col-header">Individual Scores</div>
-          <div class="nps-grid" id="nps-grid"><div class="loading">Loading...</div></div>
+        <div class="nps-stat-block">
+          <div class="nps-stat-label">Below 70 — Attention</div>
+          <div class="nps-stat-value red" id="attention-count">—</div>
+        </div>
+        <div class="nps-legend">
+          <div class="nps-stat-label" style="margin-bottom:10px;">Score Key</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--brand-bright)"></div><span>90+ — Excellent</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div><span>70–89 — Good</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red-soft)"></div><span>Below 70 — Attention</span></div>
         </div>
       </div>
-    </div>
-
-    <!-- SCREEN 3: DRIVER SCORES -->
-    <div class="screen" id="screen-drivers">
-      <div class="section-header">🚗 Driver Safety Scores — 2026</div>
-      <div class="three-col">
-        <div class="ds-side">
-          <div class="col-header">Top Drivers</div>
-          <div class="ds-podium" id="ds-podium"><div class="loading">Loading...</div></div>
-        </div>
-        <div class="right-col">
-          <div class="col-header">Full Team — Monthly Scores</div>
-          <div class="ds-full" id="ds-list"><div class="loading">Loading...</div></div>
-        </div>
+      <div class="nps-right">
+        <table class="nps-grid-table">
+          <thead><tr><th class="col-name">Technician</th><th>Promoters</th><th>Detractors</th><th>Responses</th><th>NPS Score</th></tr></thead>
+          <tbody id="nps-table-body"></tbody>
+        </table>
       </div>
     </div>
-
   </div>
 
-  <div class="bottom-bar">
-    <div class="ticker-label" id="ticker-label">Poker Chips</div>
-    <div class="ticker-divider"></div>
-    <div class="ticker-wrap"><div class="ticker" id="ticker">Loading...</div></div>
+  <!-- SCREEN 3: DRIVER SCORES (your working layout) -->
+  <div class="screen" id="screen-driver">
+    <div class="driver-dashboard">
+      <div class="driver-left">
+        <div class="driver-brand">NexGreen</div>
+        <div class="driver-sub">Sterling Heights · Driving Scores</div>
+        <div class="driver-badge">
+          <div class="pulse-dot"></div>
+          <div class="badge-text">2026 Season · Fleetio</div>
+        </div>
+        <div class="poker-divider"></div>
+        <div class="nps-stat-block">
+          <div class="nps-stat-label">Branch Average — YTD</div>
+          <div class="nps-stat-value gold" id="branch-avg">—</div>
+        </div>
+        <div class="nps-stat-block">
+          <div class="nps-stat-label">Top Performer (May)</div>
+          <div class="nps-stat-value" id="top-performer">—</div>
+        </div>
+        <div class="nps-stat-block">
+          <div class="nps-stat-label">Below 90 Year-End</div>
+          <div class="nps-stat-value amber" id="below-90">—</div>
+        </div>
+        <div class="nps-legend">
+          <div class="nps-stat-label" style="margin-bottom:10px;">Score Key</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--brand-bright)"></div><span>90+ — Good Standing</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><span>87–89 — Monitor</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red-soft)"></div><span>Below 87 — Attention</span></div>
+        </div>
+      </div>
+      <div class="driver-right">
+        <table class="driver-table">
+          <thead>
+            <tr><th class="name-col">Specialist</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th><th class="ye-col">Year End</th></tr>
+          </thead>
+          <tbody id="driver-table-body"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
-const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
+// ============================================
+// CONFIGURATION
+// ============================================
+const SCREEN_DURATION = 30000; // 30 seconds per screen (change to 45000 for 45s, 60000 for 60s)
+
+// Google Sheet URLs
+const POKER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
+const NPS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
 const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
 
-const SCREEN_MS  = 30000;
-const REFRESH_MS = 5 * 60 * 1000;
-const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
-const TICKER_LABELS = ['Poker Chips','NPS','Driver Scores'];
+// ============================================
+// SAMPLE DATA (REMOVE THIS AND UNCOMMENT FETCH SECTION WHEN YOUR SHEETS ARE READY)
+// ============================================
+const SAMPLE_POKER = [
+  { Technician: "Celeste Moore", Week: "5", Chips: "8", Category: "Intangible Impact", Notes: "Excellent customer feedback" },
+  { Technician: "Chris Grogis", Week: "5", Chips: "5", Category: "New Sale", Notes: "Closed major account" },
+  { Technician: "Justin Barak", Week: "5", Chips: "4", Category: "Perfect Attendance", Notes: "" },
+  { Technician: "Tyler Burton", Week: "5", Chips: "3", Category: "Accident-Free Month", Notes: "" },
+  { Technician: "Eddie LaPointe", Week: "4", Chips: "6", Category: "Intangible Impact", Notes: "Leadership award" }
+];
 
-function parseCSVRaw(text) {
-  return text.trim().split('\n').map(line => {
-    const cols=[]; let cur='',inQ=false;
-    for(let i=0;i<line.length;i++){
-      const c=line[i];
-      if(c==='"'){inQ=!inQ;}
-      else if(c===','&&!inQ){cols.push(cur.trim().replace(/^"|"$/g,''));cur='';}
-      else{cur+=c;}
-    }
-    cols.push(cur.trim().replace(/^"|"$/g,''));
-    return cols;
+const SAMPLE_NPS = [
+  { Tech: "Celeste Moore", "Total Promoters": "5", "Total Detractors": "0", "Total Responses": "7", "Final Year End Score": "71.43" },
+  { Tech: "Chris Grogis", "Total Promoters": "9", "Total Detractors": "1", "Total Responses": "13", "Final Year End Score": "61.54" },
+  { Tech: "Justin Barak", "Total Promoters": "4", "Total Detractors": "0", "Total Responses": "4", "Final Year End Score": "100.00" },
+  { Tech: "Tyler Burton", "Total Promoters": "8", "Total Detractors": "0", "Total Responses": "10", "Final Year End Score": "80.00" }
+];
+
+const SAMPLE_DRIVER = [
+  { name: "Celeste Moore", scores: [null,null,91,92,91], ye: 91.3 },
+  { name: "Chris Grogis", scores: [92,91,91,89,null], ye: 90.8 },
+  { name: "Justin Barak", scores: [null,null,83,92,92], ye: 89.0 },
+  { name: "Tyler Burton", scores: [null,null,88,92,90], ye: 90.0 },
+  { name: "Eddie LaPointe", scores: [null,90,90,95,95], ye: 92.5 }
+];
+
+// ============================================
+// RENDER FUNCTIONS (using sample data for now)
+// ============================================
+
+function renderPoker() {
+  const rows = SAMPLE_POKER;
+  const totals = {};
+  rows.forEach(r => {
+    const chips = parseInt(r.Chips) || 0;
+    if(chips && r.Technician) totals[r.Technician] = (totals[r.Technician] || 0) + chips;
   });
-}
-function parseCSV(text) {
-  const raw=parseCSVRaw(text);
-  if(!raw.length)return{rows:[],raw};
-  const headers=raw[0];
-  const rows=raw.slice(1).map(cols=>{
-    const obj={};
-    headers.forEach((h,i)=>obj[h]=(cols[i]||'').trim());
-    return obj;
-  }).filter(r=>Object.values(r).some(v=>v));
-  return{rows,raw};
-}
-function npsColor(val){
-  if(val===null||isNaN(val))return'none';
-  if(val>=9)return'green'; if(val>=7)return'yellow'; return'red';
-}
-function dsColor(val){
-  const n=parseFloat(val);
-  if(isNaN(n)||val===''||val==null)return'empty';
-  if(n>=90)return'green'; if(n>=75)return'yellow'; return'red';
-}
-function medalHTML(i){
-  if(i===0)return`<div class="medal-wrap"><div class="medal-glow-gold"></div><div class="medal-rays-gold"></div><div class="medal m1">1</div></div>`;
-  if(i===1)return`<div class="medal-wrap"><div class="medal-glow-silver"></div><div class="medal-rays-silver"></div><div class="medal m2">2</div></div>`;
-  if(i===2)return`<div class="medal-wrap"><div class="medal-glow-bronze"></div><div class="medal-rays-bronze"></div><div class="medal m3">3</div></div>`;
-  return`<div class="medal-wrap"><div class="mx">${i+1}</div></div>`;
+  const sorted = Object.entries(totals).sort((a,b) => b[1] - a[1]);
+  const totalChips = Object.values(totals).reduce((a,b) => a + b, 0);
+  document.getElementById('total-chips').textContent = totalChips;
+  document.getElementById('top-leader').textContent = sorted[0]?.[0] || '—';
+  document.getElementById('poker-week').textContent = `Week 5 · May 2026`;
+  
+  const leaderboardHtml = sorted.slice(0,10).map(([name, chips], i) => `
+    <div class="poker-leaderboard-item">
+      <div class="poker-rank">${i+1}</div>
+      <div class="poker-name">${name}</div>
+      <div class="poker-chips">${chips}</div>
+    </div>
+  `).join('');
+  document.getElementById('leaderboard').innerHTML = leaderboardHtml;
+  
+  const weekRows = rows.filter(r => parseInt(r.Week) === 5);
+  const winnersHtml = weekRows.map(r => `
+    <div class="poker-winner-card">
+      <div class="poker-winner-name">${r.Technician}</div>
+      <div class="poker-winner-chips">+${r.Chips}</div>
+      <div class="poker-winner-category">${r.Category}</div>
+    </div>
+  `).join('');
+  document.getElementById('winners-grid').innerHTML = winnersHtml;
+  document.getElementById('weekly-notes').innerHTML = weekRows.filter(r => r.Notes).map(r => `• ${r.Technician}: ${r.Notes}`).join('<br>') || 'No additional notes this week';
 }
 
-// ---- POKER ----
-function buildAllTime(rows){
-  const totals={};
-  rows.forEach(r=>{
-    const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
-    if(!chips)return;
-    (r.Technician||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(name=>{totals[name]=(totals[name]||0)+chips;});
+function renderNPS() {
+  const rows = SAMPLE_NPS;
+  let totalPro = 0, totalDet = 0, totalResp = 0;
+  rows.forEach(r => {
+    totalPro += parseInt(r['Total Promoters']) || 0;
+    totalDet += parseInt(r['Total Detractors']) || 0;
+    totalResp += parseInt(r['Total Responses']) || 0;
   });
-  return Object.entries(totals).sort((a,b)=>b[1]-a[1]);
-}
-function getCurrentWeekRows(rows){
-  let maxWeek=0;
-  rows.forEach(r=>{const w=parseInt(r.Week);if(w>maxWeek)maxWeek=w;});
-  return{weekRows:rows.filter(r=>parseInt(r.Week)===maxWeek),maxWeek};
-}
-function renderPoker(rows){
-  const allTime=buildAllTime(rows);
-  const{weekRows,maxWeek}=getCurrentWeekRows(rows);
-  const weekDate=weekRows.find(r=>r.Date)?.Date||'';
-  document.getElementById('top-week').textContent=`Week ${maxWeek}${weekDate?' · '+weekDate:''}`;
-
-  // Leaderboard — all techs, rows flex to fill height
-  const maxC=allTime[0]?.[1]||1;
-  document.getElementById('lb-list').innerHTML=allTime.map(([name,chips],i)=>`
-    <div class="lb-row${i<3?' podium':''}">${medalHTML(i)}
-      <div class="lb-name">${name}</div>
-      <div class="lb-right">
-        <div class="lb-chips">${chips}</div>
-        <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
-      </div>
-    </div>`).join('');
-
-  const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
-  document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{
-    const chips=parseInt(r['Manager Over-ride']||r.Chips)||0;
-    return`<div class="wcard${(hotCats.includes(r.Category)||chips>=3)?' hot':''}">
-      <div class="wcard-top"><div class="wcard-names">${r.Technician||'—'}</div><div class="wcard-chips">+${chips}</div></div>
-      <div class="wcard-cat">${r.Category}</div>
-      ${r.Notes?`<div class="wcard-note">${r.Notes}</div>`:''}</div>`;
+  const branchScore = totalResp > 0 ? ((totalPro - totalDet) / totalResp) * 100 : 0;
+  document.getElementById('branch-nps').textContent = branchScore.toFixed(1);
+  document.getElementById('total-responses').textContent = totalResp;
+  document.getElementById('attention-count').textContent = rows.filter(r => parseFloat(r['Final Year End Score']) < 70).length;
+  document.getElementById('nps-updated-badge').innerHTML = `Updated ${new Date().toLocaleDateString()}`;
+  
+  const tbody = document.getElementById('nps-table-body');
+  tbody.innerHTML = rows.map(r => {
+    const score = parseFloat(r['Final Year End Score']);
+    let chipClass = 'chip-none';
+    if(score >= 90) chipClass = 'chip-green';
+    else if(score >= 70) chipClass = 'chip-yellow';
+    else if(score > 0) chipClass = 'chip-red';
+    return `<tr>
+      <td class="col-name" style="text-align:left;padding-left:16px;">${r.Tech}</td>
+      <td>${r['Total Promoters']}</td>
+      <td>${r['Total Detractors']}</td>
+      <td>${r['Total Responses']}</td>
+      <td><span class="nps-score-chip ${chipClass}">${score.toFixed(1)}</span></td>
+    </tr>`;
   }).join('');
-
-  // All-time list — all techs, rows flex to fill height
-  const maxAt=allTime[0]?.[1]||1;
-  document.getElementById('alltime-list').innerHTML=allTime.map(([name,chips],i)=>`
-    <div class="at-row">
-      <div class="at-rank${i<3?' top3':''}">${i+1}</div>
-      <div class="at-name">${name}</div>
-      <div class="at-bar-wrap"><div class="at-bar" style="width:${Math.round(chips/maxAt*100)}%"></div></div>
-      <div class="at-chips">${chips}</div>
-    </div>`).join('');
-
-  const notable=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2);
-  window._tickerPoker=notable.length?notable.map(r=>`${r.Technician||'Team'}  —  ${r.Category}${r.Notes?':  '+r.Notes:''}`).join('     •     '):'Great work team!';
 }
 
-// ---- NPS ----
-function renderNPS(text){
-  const{rows,raw}=parseCSV(text);
-  const keys=Object.keys(rows[0]||{});
-  const techKey=keys[0],proKey=keys[1],detKey=keys[2],respKey=keys[3],scoreKey=keys[4];
-
-  // B28 = raw row 28 (0-based), col 1
-  let updatedVal='—';
-  if(raw.length>28&&raw[28]&&raw[28][1])updatedVal=raw[28][1].trim();
-  document.getElementById('nps-updated-val').textContent=updatedVal;
-
-  const valid=rows.filter(r=>r[techKey]&&r[techKey]!=='Tech'&&r[techKey]!=='');
-  let totalPro=0,totalDet=0,totalResp=0;
-  valid.forEach(r=>{totalPro+=parseInt(r[proKey])||0;totalDet+=parseInt(r[detKey])||0;totalResp+=parseInt(r[respKey])||0;});
-  const teamScore=totalResp>0?((totalPro-totalDet)/totalResp)*100:null;
-  const teamCls=npsColor(teamScore);
-  document.getElementById('nps-team-score').className=`nps-side-score ${teamCls}`;
-  document.getElementById('nps-team-score').textContent=teamScore!==null?teamScore.toFixed(1):'—';
-  document.getElementById('nps-total-pro').textContent=totalPro;
-  document.getElementById('nps-total-det').textContent=totalDet;
-  document.getElementById('nps-total-resp').textContent=totalResp;
-
-  const count=valid.length;
-  // Choose columns: up to 10 techs = 2 cols, 11-18 = 3 cols, 19+ = 4 cols
-  const cols=count<=10?2:count<=18?3:4;
-  const gridEl=document.getElementById('nps-grid');
-  gridEl.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;
-
-  const maxResp=Math.max(...valid.map(r=>parseInt(r[respKey])||0),1);
-  gridEl.innerHTML=valid.map(r=>{
-    const name=(!r[techKey]||r[techKey]==='0')?'Unassigned':r[techKey];
-    const raw2=r[scoreKey],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!';
-    const score=isNone?null:parseFloat(raw2),cls=npsColor(score);
-    const pro=parseInt(r[proKey])||0,det=parseInt(r[detKey])||0,resp=parseInt(r[respKey])||0;
-    return`<div class="nps-card">
-      <div class="nps-name">${name}</div>
-      <div class="nps-score-row">
-        <div class="nps-score ${cls}">${isNone?'—':score.toFixed(1)}</div>
-        <div class="nps-meta">
-          <div class="nps-pill pro">👍 ${pro}</div>
-          <div class="nps-pill det">👎 ${det}</div>
-          <div class="nps-pill resp">${resp} Reviews</div>
-        </div>
-      </div>
-      <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxResp*100)}%"></div></div>
-    </div>`;
-  }).join('');
-
-  const top=valid.filter(r=>{const v=r[scoreKey];return v&&v!=='None'&&v!==''&&parseFloat(v)>=9;});
-  window._tickerNPS=top.length?'Top NPS: '+top.map(r=>`${r[techKey]==='0'?'Unassigned':r[techKey]} (${parseFloat(r[scoreKey]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
-}
-
-// ---- DRIVER SCORES ----
-function renderDrivers(text){
-  const raw=parseCSVRaw(text);
-  let headerRowIdx=-1;
-  for(let i=0;i<raw.length;i++){if(raw[i].some(c=>c.trim().toLowerCase().includes('specialist'))){headerRowIdx=i;break;}}
-  if(headerRowIdx===-1){
-    document.getElementById('ds-list').innerHTML='<div class="loading">Could not find headers</div>';
-    document.getElementById('ds-podium').innerHTML='<div class="loading">—</div>';
-    return;
-  }
-  const headers=raw[headerRowIdx].map(h=>h.trim());
-  const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist'));
-  const dataRows=[];
-  for(let i=headerRowIdx+1;i<raw.length;i++){
-    const row=raw[i],name=(row[nameIdx]||'').trim();
-    if(!name)continue;
-    if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')||name.toLowerCase().includes('avg'))break;
-    dataRows.push(row);
-  }
-  const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
-
-  // Side panel: all techs sorted by year-end, flex rows to fill height
-  const sorted=[...dataRows].filter(r=>!isNaN(parseFloat((r[yearIdx]||'').trim())))
-    .sort((a,b)=>parseFloat(b[yearIdx]||0)-parseFloat(a[yearIdx]||0));
-  document.getElementById('ds-podium').innerHTML=sorted.map((row,i)=>{
-    const name=(row[nameIdx]||'').trim();
-    const yeVal=(row[yearIdx]||'').trim(),yeN=parseFloat(yeVal),yeCls=dsColor(yeVal);
-    return`<div class="ds-lb-row${i<3?' podium':''}">${medalHTML(i)}
-      <div class="ds-lb-name">${name}</div>
-      <div class="ds-lb-score ${yeCls}">${isNaN(yeN)?'—':yeN}</div>
-    </div>`;
-  }).join('');
-
-  // Main list: all techs, flex rows
-  document.getElementById('ds-list').innerHTML=dataRows.map(row=>{
-    const name=(row[nameIdx]||'Unassigned').trim();
-    const monthCells=MONTHS.map(m=>{
-      const idx=headers.findIndex(h=>h.trim()===m);
-      const val=idx>=0?(row[idx]||'').trim():'';
-      const n=parseFloat(val),cls=dsColor(val);
-      return`<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${cls}">${isNaN(n)||val===''?'—':n}</div></div>`;
+function renderDriver() {
+  const rows = SAMPLE_DRIVER;
+  const avg = rows.reduce((sum, r) => sum + r.ye, 0) / rows.length;
+  document.getElementById('branch-avg').textContent = avg.toFixed(1);
+  const top = rows.sort((a,b) => b.ye - a.ye)[0];
+  document.getElementById('top-performer').textContent = `${top.name} (${top.ye.toFixed(1)})`;
+  document.getElementById('below-90').textContent = rows.filter(r => r.ye < 90).length;
+  
+  const tbody = document.getElementById('driver-table-body');
+  tbody.innerHTML = rows.map(p => {
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const cells = months.map((m, i) => {
+      const val = p.scores[i];
+      if(val === null || val === undefined) return '<td class="score-blank">—</td>';
+      let cls = 'score-hi';
+      if(val < 87) cls = 'score-lo';
+      else if(val < 90) cls = 'score-mid';
+      return `<td class="${cls}">${val}</td>`;
     }).join('');
-    const yeVal=yearIdx>=0?(row[yearIdx]||'').trim():'',yeN=parseFloat(yeVal),yeCls=dsColor(yeVal);
-    return`<div class="ds-row">
-      <div class="ds-name">${name}</div>
-      <div class="ds-months">${monthCells}</div>
-      <div class="ds-yearend-wrap"><div class="ds-yearend-label">Year End</div><div class="ds-yearend ${yeCls}">${isNaN(yeN)||yeVal===''?'—':yeN}</div></div>
-    </div>`;
+    let yeCls = 'ye-hi';
+    if(p.ye < 87) yeCls = 'ye-lo';
+    else if(p.ye < 90) yeCls = 'ye-mid';
+    return `<tr>
+      <td class="driver-name-cell">${p.name}</td>
+      ${cells}
+      <td class="ye-cell ${yeCls}">${p.ye.toFixed(1)}</td>
+    </tr>`;
   }).join('');
-
-  window._tickerDrivers=sorted.length?'Top driver scores: '+sorted.slice(0,3).map(row=>`${(row[nameIdx]||'').trim()} (${parseFloat(row[yearIdx]||0)})`).join('  •  '):'Driver scores updated — stay safe!';
 }
 
-// ---- FETCH ----
-async function fetchText(url){const res=await fetch(url+'&t='+Date.now());return res.text();}
-async function loadAll(){
-  try{const{rows}=parseCSV(await fetchText(POKER_URL));renderPoker(rows);}catch(e){console.error('Poker',e);}
-  try{renderNPS(await fetchText(NPS_URL));}catch(e){console.error('NPS',e);}
-  try{renderDrivers(await fetchText(DRIVER_URL));}catch(e){console.error('Drivers',e);}
+// ============================================
+// LAST UPDATED TIMESTAMP
+// ============================================
+function updateTimestamp() {
+  const now = new Date();
+  document.getElementById('updateTime').textContent = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+setInterval(updateTimestamp, 1000);
+updateTimestamp();
+
+// ============================================
+// SCREEN ROTATION WITH PROGRESS BAR
+// ============================================
+const screens = ['screen-poker', 'screen-nps', 'screen-driver'];
+const screenNames = ['Poker Chips', 'NPS', 'Driver Scores'];
+let currentScreen = 0;
+let progressInterval;
+
+function startProgressBar(duration) {
+  const bar = document.getElementById('progressBar');
+  const text = document.getElementById('progressText');
+  bar.style.transition = `width ${duration}ms linear`;
+  bar.style.width = '100%';
+  text.textContent = `${screenNames[currentScreen]} · ${duration/1000}s`;
+  
+  setTimeout(() => {
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+  }, duration);
 }
 
-// ---- CLOCK ----
-function updateClock(){
-  const now=new Date();
-  document.getElementById('top-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('top-time').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+function nextScreen() {
+  document.getElementById(screens[currentScreen]).classList.remove('active');
+  currentScreen = (currentScreen + 1) % screens.length;
+  document.getElementById(screens[currentScreen]).classList.add('active');
+  startProgressBar(SCREEN_DURATION);
 }
-updateClock();setInterval(updateClock,10000);
 
-// ---- SCREEN ROTATION ----
-const screens=['screen-chips','screen-nps','screen-drivers'];
-let screenIdx=0;
-function setTicker(idx){
-  document.getElementById('ticker-label').textContent=TICKER_LABELS[idx];
-  const texts=[window._tickerPoker||'Loading...',window._tickerNPS||'Loading...',window._tickerDrivers||'Loading...'];
-  const t=document.getElementById('ticker');
-  t.textContent=texts[idx];t.style.animation='none';t.offsetHeight;t.style.animation='';
-}
-function nextScreen(){
-  document.getElementById(screens[screenIdx]).classList.remove('active');
-  document.getElementById('nd'+screenIdx).classList.remove('on');
-  screenIdx=(screenIdx+1)%screens.length;
-  document.getElementById(screens[screenIdx]).classList.add('active');
-  document.getElementById('nd'+screenIdx).classList.add('on');
-  if(screenIdx!==0)document.getElementById('top-week').textContent='';
-  setTicker(screenIdx);
-}
-setInterval(nextScreen,SCREEN_MS);
+setInterval(nextScreen, SCREEN_DURATION);
+startProgressBar(SCREEN_DURATION);
 
-// ---- POKER INNER FLIP ----
-let innerIdx=0;
-setInterval(()=>{
-  if(screenIdx!==0)return;
-  const views=['view-week','view-alltime'];
-  document.getElementById(views[innerIdx]).classList.remove('active');
-  innerIdx=(innerIdx+1)%2;
-  document.getElementById(views[innerIdx]).classList.add('active');
-},12000);
+// ============================================
+// INITIAL RENDER
+// ============================================
+renderPoker();
+renderNPS();
+renderDriver();
 
-loadAll();
-setInterval(loadAll,REFRESH_MS);
-setTicker(0);
+// Refresh every 5 minutes
+setInterval(() => {
+  renderPoker();
+  renderNPS();
+  renderDriver();
+  updateTimestamp();
+}, 300000);
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done"
-Output

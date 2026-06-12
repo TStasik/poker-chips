@@ -24,22 +24,13 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
   display:flex; flex-direction:column;
 }
 
-/* SCREEN ROTATION */
 .screen { position:absolute; top:85px; left:0; width:1920px; bottom:44px; opacity:0; visibility:hidden; transition:opacity 0.5s ease-in-out; }
 .screen.active { opacity:1; visibility:visible; z-index:10; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-/* TOP BAR */
-.top-bar { background:#008a50; display:flex; align-items:center; justify-content:space-between; padding:0 44px; height:85px; flex-shrink:0; position:relative; z-index:20; }
+.top-bar { background:#008a50; display:flex; align-items:center; justify-content:space-between; padding:0 44px; height:85px; flex-shrink:0; z-index:20; }
 .top-left { display:flex; align-items:center; gap:20px; }
-.logo { 
-  height: 38px; 
-  width: auto; 
-  max-width: 160px; 
-  object-fit: contain; 
-  display: block;
-  filter: brightness(0) invert(1);
-}
+.logo { height:38px; width:auto; max-width:160px; object-fit:contain; display:block; filter:brightness(0) invert(1); }
 .top-divider { width:1px; height:38px; background:rgba(255,255,255,0.3); }
 .top-section { font-size:18px; color:rgba(255,255,255,0.75); letter-spacing:0.1em; text-transform:uppercase; padding-left:20px; border-left:2px solid rgba(255,255,255,0.3); }
 .top-week { font-size:14px; color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase; margin-left:20px; }
@@ -50,8 +41,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .top-date { font-size:14px; color:rgba(255,255,255,0.85); font-weight:500; }
 .top-time { font-size:28px; font-weight:800; color:#fff; letter-spacing:1px; line-height:1.2; }
 
-/* BOTTOM BAR */
-.bottom-bar { background:#0d1a14; border-top:2px solid #008a50; height:44px; display:flex; align-items:center; padding:0 20px; gap:14px; flex-shrink:0; position:relative; z-index:20; }
+.bottom-bar { background:#0d1a14; border-top:2px solid #008a50; height:44px; display:flex; align-items:center; padding:0 20px; gap:14px; flex-shrink:0; z-index:20; }
 .ticker-label { font-size:11px; font-weight:800; color:#008a50; letter-spacing:2px; text-transform:uppercase; flex-shrink:0; }
 .ticker-div { width:1px; height:20px; background:#008a50; opacity:0.4; flex-shrink:0; }
 .ticker-wrap { flex:1; overflow:hidden; white-space:nowrap; }
@@ -60,7 +50,6 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .progress-wrap { width:100%; height:3px; background:rgba(0,196,114,0.2); position:absolute; bottom:44px; left:0; z-index:30; }
 .progress-bar { height:100%; width:0%; background:var(--brand-bright); box-shadow:0 0 8px var(--brand-bright); }
 
-/* SHARED LAYOUT */
 .two-col { display:grid; grid-template-columns:400px 1fr; height:100%; }
 .left-panel { background:rgba(0,138,80,0.04); border-right:1px solid var(--card-border); display:flex; flex-direction:column; position:relative; overflow:hidden; }
 .left-panel::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--brand-bright),transparent); }
@@ -68,7 +57,6 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .panel-hdr { background:#005c35; padding:9px 24px; font-size:13px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.9); flex-shrink:0; border-bottom:2px solid var(--brand-bright); }
 .panel-body { flex:1; overflow:hidden; display:flex; flex-direction:column; }
 
-/* LEFT STATS (shared) */
 .left-inner { padding:28px 28px 20px; display:flex; flex-direction:column; flex:1; overflow:hidden; }
 .stat-divider { width:32px; height:2px; background:var(--brand); margin-bottom:18px; box-shadow:0 0 10px rgba(0,138,80,0.6); }
 .stat-block { margin-bottom:14px; }
@@ -87,7 +75,6 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 .badge-text { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--brand-bright); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-/* MEDALS */
 .medal-wrap { position:relative; width:42px; height:42px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
 .mg { position:absolute; inset:-4px; border-radius:50%; opacity:0.2; animation:pulse 2s infinite; }
 .mr { position:absolute; inset:-7px; border-radius:50%; opacity:0.3; animation:ray 2s infinite; }
@@ -101,7 +88,6 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .m3{background:#C87941;color:#1a1a1a;border:2px solid #a05a28}
 .mx{background:#1e1e1e;color:#888;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px}
 
-/* ===== POKER SCREEN ===== */
 .poker-lb { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:4px 0; }
 .lb-row { display:flex; align-items:center; gap:10px; border-bottom:1px solid #181818; flex:1; min-height:0; padding:0 16px; }
 .lb-row.podium { background:rgba(0,138,80,0.06); }
@@ -110,70 +96,55 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .lb-chips { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#00c46a; line-height:1; }
 .lb-bar-wrap { width:56px; height:3px; background:#222; border-radius:2px; }
 .lb-bar { height:100%; background:#008a50; border-radius:2px; }
-
-/* poker right view flip */
 .pview { flex:1; overflow:hidden; display:none; flex-direction:column; }
 .pview.active { display:flex; animation:fadeUp 0.5s; }
-
-/* winners grid */
 .winners-wrap { flex:1; padding:10px 14px; display:grid; grid-template-columns:1fr 1fr; gap:8px; overflow-y:auto; align-content:start; }
-.wcard { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; display:flex; flex-direction:column; gap:3px; }
+.wcard { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; }
 .wcard.hot { border-color:#008a50; background:#0d1a14; }
-.wcard-top { display:flex; align-items:flex-start; justify-content:space-between; gap:6px; }
-.wcard-name { font-size:15px; font-weight:700; color:#fff; line-height:1.3; }
-.wcard-chips { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#00c46a; flex-shrink:0; line-height:1; }
-.wcard-cat { font-size:10px; color:#008a50; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; }
-.wcard-note { font-size:10px; color:var(--amber); font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-/* prize board */
+.wcard-name { font-size:15px; font-weight:700; color:#fff; }
+.wcard-chips { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#00c46a; }
+.wcard-cat { font-size:10px; color:#008a50; font-weight:800; text-transform:uppercase; margin-top:4px; }
+.wcard-note { font-size:10px; color:var(--amber); font-style:italic; margin-top:3px; }
 .prize-wrap { flex:1; padding:14px 18px; overflow-y:auto; }
 .prize-title { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:12px; font-weight:700; }
 .prize-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
-.prize-card { background:#141414; border:1px solid #202020; border-radius:12px; padding:14px 8px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; }
-.prize-name { font-size:13px; font-weight:700; color:#eee; font-family:'DM Sans',sans-serif; line-height:1.25; min-height:32px; display:flex; align-items:center; justify-content:center; }
-.prize-cost { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#00c46a; background:rgba(0,196,114,0.12); border:1px solid rgba(0,196,114,0.3); display:inline-block; padding:3px 14px; border-radius:30px; }
-.prize-unit { font-size:10px; font-weight:700; color:var(--gray-dim); text-transform:uppercase; letter-spacing:0.05em; }
+.prize-card { background:#141414; border:1px solid #202020; border-radius:12px; padding:14px 8px; text-align:center; }
+.prize-name { font-size:13px; font-weight:700; color:#eee; margin-bottom:6px; }
+.prize-cost { font-family:'Bebas Neue',sans-serif; font-size:28px; color:#00c46a; background:rgba(0,196,114,0.12); display:inline-block; padding:3px 12px; border-radius:30px; }
+.prize-unit { font-size:9px; color:var(--gray-dim); margin-top:4px; }
 
-/* ===== NPS SCREEN ===== */
 .nps-grid { flex:1; padding:8px 14px; display:grid; gap:7px; overflow-y:auto; align-content:start; }
-.nps-card { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; display:flex; flex-direction:column; gap:4px; }
-.nps-name { font-size:14px; font-weight:700; color:#fff; line-height:1.2; }
-.nps-score-row { display:flex; align-items:center; justify-content:space-between; gap:6px; }
-.nps-score { font-family:'Bebas Neue',sans-serif; font-size:30px; font-weight:900; line-height:1; }
+.nps-card { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; }
+.nps-name { font-size:14px; font-weight:700; color:#fff; margin-bottom:4px; }
+.nps-score-row { display:flex; justify-content:space-between; align-items:center; gap:6px; }
+.nps-score { font-family:'Bebas Neue',sans-serif; font-size:28px; font-weight:900; }
 .nps-score.green{color:#00c46a} .nps-score.yellow{color:#f0c040} .nps-score.red{color:#e05555} .nps-score.none{color:#444;font-size:18px}
-.nps-pills { display:flex; gap:5px; flex-wrap:wrap; }
-.nps-pill { font-size:13px; font-weight:800; padding:2px 7px; border-radius:14px; }
+.nps-pills { display:flex; gap:5px; }
+.nps-pill { font-size:11px; font-weight:800; padding:2px 6px; border-radius:14px; }
 .nps-pill.pro{background:rgba(0,196,106,0.15);color:#00c46a}
-.nps-pill.passive{background:rgba(240,192,64,0.15);color:#f0c040}
 .nps-pill.det{background:rgba(224,85,85,0.15);color:#e05555}
 .nps-pill.resp{background:rgba(255,255,255,0.07);color:#999}
-.nps-bar-wrap { height:3px; background:#222; border-radius:2px; }
+.nps-bar-wrap { height:2px; background:#222; border-radius:2px; margin-top:5px; }
 .nps-bar { height:100%; background:#008a50; border-radius:2px; }
-.nps-divider { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); font-weight:700; padding:6px 4px 2px; grid-column:1/-1; border-top:1px solid rgba(0,138,80,0.15); margin-top:2px; }
-.nps-card.manager .nps-name { color:rgba(0,196,114,0.7); font-size:13px; }
+.nps-divider { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); padding:6px 0 2px; grid-column:1/-1; border-top:1px solid rgba(0,138,80,0.15); margin-top:4px; }
 
-/* ===== DRIVER SCREEN ===== */
 .ds-podium { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:2px 0; gap:2px; }
 .ds-pod-row { display:flex; align-items:center; gap:10px; padding:6px 14px; border-bottom:1px solid #181818; min-height:44px; }
 .ds-pod-row.podium { background:rgba(0,138,80,0.06); }
-.ds-pod-name { flex:1; font-size:14px; font-weight:600; color:#eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ds-pod-name { flex:1; font-size:14px; font-weight:600; color:#eee; }
 .ds-pod-score { font-family:'Bebas Neue',sans-serif; font-size:20px; }
-.ds-pod-score.excellent { color:#00c46a; text-shadow:0 0 8px #00c46a; animation:pulse-glow 1.5s ease-in-out infinite; }
-@keyframes pulse-glow { 0%,100%{text-shadow:0 0 4px #00c46a;} 50%{text-shadow:0 0 16px #00c46a;} }
 .ds-pod-score.green{color:#00c46a} .ds-pod-score.yellow{color:#f0c040} .ds-pod-score.red{color:#e05555}
 .ds-list { flex:1; padding:6px 18px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; }
-.ds-row { display:flex; align-items:center; gap:8px; background:#141414; border:1px solid #1e1e1e; border-radius:7px; flex:1; min-height:0; padding:0 12px; }
-.ds-name { width:170px; font-size:15px; font-weight:600; color:#eee; flex-shrink:0; }
+.ds-row { display:flex; align-items:center; gap:8px; background:#141414; border:1px solid #1e1e1e; border-radius:7px; padding:0 12px; min-height:44px; }
+.ds-name { width:170px; font-size:14px; font-weight:600; color:#eee; flex-shrink:0; }
 .ds-months { display:flex; gap:3px; flex:1; align-items:center; }
-.ds-month { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:44px; }
-.ds-month-label { font-size:8px; color:#444; font-weight:700; text-transform:uppercase; }
-.ds-month-val { font-size:13px; font-weight:800; }
-.ds-month-val.excellent { color:#00c46a; text-shadow:0 0 6px #00c46a; }
-.ds-month-val.green{color:#00c46a} .ds-month-val.yellow{color:#f0c040} .ds-month-val.red{color:#e05555} .ds-month-val.empty{color:#242424}
-.ds-ye-wrap { display:flex; flex-direction:column; align-items:center; gap:1px; flex-shrink:0; min-width:56px; }
-.ds-ye-label { font-size:8px; color:#444; font-weight:700; text-transform:uppercase; }
-.ds-ye { font-family:'Bebas Neue',sans-serif; font-size:18px; }
-.ds-ye.excellent { color:#00c46a; text-shadow:0 0 8px #00c46a; animation:pulse-glow 1.5s ease-in-out infinite; }
+.ds-month { text-align:center; min-width:44px; }
+.ds-month-label { font-size:7px; color:#666; text-transform:uppercase; }
+.ds-month-val { font-size:12px; font-weight:800; }
+.ds-month-val.green{color:#00c46a} .ds-month-val.yellow{color:#f0c040} .ds-month-val.red{color:#e05555} .ds-month-val.empty{color:#333}
+.ds-ye-wrap { text-align:center; min-width:55px; }
+.ds-ye-label { font-size:7px; color:#666; text-transform:uppercase; }
+.ds-ye { font-family:'Bebas Neue',sans-serif; font-size:17px; }
 .ds-ye.green{color:#00c46a} .ds-ye.yellow{color:#f0c040} .ds-ye.red{color:#e05555} .ds-ye.empty{color:#333}
 
 .loading { display:flex; align-items:center; justify-content:center; height:100%; font-size:20px; color:var(--gray-dim); }
@@ -185,9 +156,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
   <!-- TOP BAR -->
   <div class="top-bar">
     <div class="top-left">
-      <div class="logo-wrapper">
-        <img class="logo" src="logo.webp" alt="NexGreen" onerror="this.style.display='none'">
-      </div>
+      <img class="logo" src="logo.webp" alt="NexGreen" onerror="this.style.display='none'">
       <div class="top-divider"></div>
       <div class="top-section" id="top-section">Poker Chips</div>
       <div class="top-week" id="top-week"></div>
@@ -195,6 +164,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
         <div class="nav-dot on" id="nd0"></div>
         <div class="nav-dot" id="nd1"></div>
         <div class="nav-dot" id="nd2"></div>
+        <div class="nav-dot" id="nd3"></div>
       </div>
     </div>
     <div class="top-right">
@@ -209,32 +179,15 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
       <div class="left-panel">
         <div class="left-inner">
           <div class="stat-divider"></div>
-          <div class="stat-block">
-            <div class="stat-label">Total Chips Awarded</div>
-            <div class="stat-value gold" id="total-chips">—</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-label">Current Leader</div>
-            <div class="stat-value" id="current-leader">—</div>
-            <div class="stat-note" id="leader-chips">—</div>
-          </div>
+          <div class="stat-block"><div class="stat-label">Total Chips Awarded</div><div class="stat-value gold" id="total-chips">—</div></div>
+          <div class="stat-block"><div class="stat-label">Current Leader</div><div class="stat-value" id="current-leader">—</div><div class="stat-note" id="leader-chips">—</div></div>
           <div class="stat-label" style="margin-bottom:8px;">All-Time Leaderboard</div>
           <div class="poker-lb" id="lb-list"><div class="loading">Loading...</div></div>
         </div>
       </div>
       <div class="right-panel">
-        <div class="pview active" id="pview-prize">
-          <div class="panel-hdr">🎁 Prize Board — What Can You Win?</div>
-          <div class="panel-body">
-            <div class="prize-wrap" id="prize-wrap"><div class="loading">Loading prizes...</div></div>
-          </div>
-        </div>
-        <div class="pview" id="pview-winners">
-          <div class="panel-hdr">🏆 This Week's Winners</div>
-          <div class="panel-body">
-            <div class="winners-wrap" id="winners-grid"><div class="loading">Loading...</div></div>
-          </div>
-        </div>
+        <div class="pview active" id="pview-prize"><div class="panel-hdr">🎁 Prize Board — What Can You Win?</div><div class="panel-body"><div class="prize-wrap" id="prize-wrap"><div class="loading">Loading prizes...</div></div></div></div>
+        <div class="pview" id="pview-winners"><div class="panel-hdr">🏆 This Week's Winners</div><div class="panel-body"><div class="winners-wrap" id="winners-grid"><div class="loading">Loading...</div></div></div></div>
       </div>
     </div>
   </div>
@@ -245,40 +198,19 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
       <div class="left-panel">
         <div class="left-inner">
           <div class="stat-divider"></div>
-          <div class="stat-block">
-            <div class="stat-label">Team Year-End Score</div>
-            <div class="stat-value gold" id="nps-team-score">—</div>
+          <div class="stat-block"><div class="stat-label">Team Year-End Score</div><div class="stat-value gold" id="nps-team-score">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Responses</div><div class="stat-value" id="nps-total-resp">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Promoters</div><div class="stat-value" style="color:#00c46a" id="nps-total-pro">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Detractors</div><div class="stat-value red" id="nps-total-det">—</div></div>
+          <div class="legend"><div class="legend-label">Score Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>Promoters — 9+</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>Passive — 7–8.9</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Detractors — 6-</span></div>
           </div>
-          <div class="stat-block">
-            <div class="stat-label">Total Responses</div>
-            <div class="stat-value" id="nps-total-resp">—</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-label">Total Promoters</div>
-            <div class="stat-value" style="color:#00c46a" id="nps-total-pro">—</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-label">Total Detractors</div>
-            <div class="stat-value red" id="nps-total-det">—</div>
-          </div>
-          <div class="legend">
-            <div class="legend-label">Score Key</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>Promoters — 9 and above</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>Passive — 7 – 8.9</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Detractors — 6 and below</span></div>
-          </div>
-          <div class="bottom-badge" style="margin-top:12px;">
-            <div class="pulse-dot"></div>
-            <div class="badge-text" id="nps-updated">Loading...</div>
-          </div>
+          <div class="bottom-badge"><div class="pulse-dot"></div><div class="badge-text" id="nps-updated">Loading...</div></div>
         </div>
       </div>
-      <div class="right-panel">
-        <div class="panel-hdr">⭐ Net Promoter Scores — Year to Date</div>
-        <div class="panel-body">
-          <div class="nps-grid" id="nps-grid"><div class="loading">Loading NPS data...</div></div>
-        </div>
-      </div>
+      <div class="right-panel"><div class="panel-hdr">⭐ Net Promoter Scores — Year to Date</div><div class="panel-body"><div class="nps-grid" id="nps-grid"><div class="loading">Loading NPS...</div></div></div></div>
     </div>
   </div>
 
@@ -288,36 +220,44 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
       <div class="left-panel">
         <div class="left-inner">
           <div class="stat-divider"></div>
-          <div class="stat-block">
-            <div class="stat-label">Branch Average YTD</div>
-            <div class="stat-value gold" id="ds-avg">—</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-label">Total Drivers</div>
-            <div class="stat-value" id="ds-total">—</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-label">Below 90 Year-End</div>
-            <div class="stat-value amber" id="ds-below90">—</div>
-            <div class="stat-note">Drivers needing attention</div>
-          </div>
-          <div class="legend">
-            <div class="legend-label">Score Key</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>93+ — Excellent (pulsing glow)</span></div>
+          <div class="stat-block"><div class="stat-label">Branch Average YTD</div><div class="stat-value gold" id="ds-avg">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Drivers</div><div class="stat-value" id="ds-total">—</div></div>
+          <div class="stat-block"><div class="stat-label">Below 90 Year-End</div><div class="stat-value amber" id="ds-below90">—</div></div>
+          <div class="legend"><div class="legend-label">Score Key</div>
             <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90+ — Good Standing</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>86 – 89.9 — Monitor</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>85 and below — Needs Immediate Correction</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>86–89.9 — Monitor</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>85- — Needs Attention</span></div>
           </div>
+          <div class="bottom-badge"><div class="pulse-dot"></div><div class="badge-text" id="driver-updated">Loading...</div></div>
         </div>
         <div class="panel-hdr">🏅 Top 5 Performers</div>
         <div class="ds-podium" id="ds-podium"><div class="loading">Loading...</div></div>
       </div>
-      <div class="right-panel">
-        <div class="panel-hdr">🚗 Driver Safety Scores — Full Team</div>
-        <div class="panel-body">
-          <div class="ds-list" id="ds-list"><div class="loading">Loading driver scores...</div></div>
+      <div class="right-panel"><div class="panel-hdr">🚗 Driver Safety Scores — Full Team</div><div class="panel-body"><div class="ds-list" id="ds-list"><div class="loading">Loading...</div></div></div></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: SALES BOARD -->
+  <div class="screen" id="screen-sales">
+    <div class="two-col" style="grid-template-columns:320px 1fr">
+      <div class="left-panel">
+        <div class="left-inner">
+          <div class="stat-divider"></div>
+          <div class="stat-block"><div class="stat-label">Team Total — Latest Month</div><div class="stat-value gold" id="sales-monthly-total">—</div><div class="stat-note" id="sales-month-name">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Truck Sales — YTD</div><div class="stat-value gold" id="sales-ytd">—</div><div class="stat-note">Excludes hybrid &amp; field-only</div></div>
+          <div class="stat-block"><div class="stat-label">Top Performer</div><div class="stat-value" id="sales-top-performer">—</div><div class="stat-note" id="sales-top-amount">—</div></div>
+          <div class="stat-block"><div class="stat-label">Active This Month</div><div class="stat-value" id="sales-active-count">—</div><div class="stat-note">Technicians with sales</div></div>
+          <div class="stat-block"><div class="stat-label">Needs Attention</div><div class="stat-value red" id="sales-cold-count">—</div><div class="stat-note">No sales past 2 months</div></div>
+          <div class="legend"><div class="legend-label">Sales Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>No Sales This Month — Monitor</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>2+ Months No Sales — Attention</span></div>
+          </div>
+          <div class="bottom-badge"><div class="pulse-dot"></div><div class="badge-text" id="sales-updated">Loading...</div></div>
         </div>
+        <div class="panel-hdr">🏆 Top Performers</div>
+        <div class="ds-podium" id="sales-podium"><div class="loading">Loading...</div></div>
       </div>
+      <div class="right-panel"><div class="panel-hdr">📈 Sales Performance — Full Team</div><div class="panel-body"><div class="ds-list" id="sales-list"><div class="loading">Loading sales data...</div></div></div></div>
     </div>
   </div>
 
@@ -337,30 +277,22 @@ const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFk
 const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
 const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
 const PRIZE_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?gid=1598119986&single=true&output=csv';
-const SCREEN_MS  = 30000;
+const SALES_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnbEoBgTOVZADbhlicgR3m4bL3mkAod9i_QrNH666QlMr5A05iQxPg_hbcW3QTAfWCx--2MkAG-ojb/pub?gid=461733134&single=true&output=csv';
+
+const SCREEN_MS = 30000;
 const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
 
-// ============ CSV ============
-function parseCSVRaw(txt) {
-  return txt.trim().split('\n').map(line => {
+// ============ HELPERS ============
+async function fetchTxt(url){ const r=await fetch(url+'&t='+Date.now()); return r.text(); }
+function parseCSVRaw(txt){
+  return txt.trim().split('\n').map(line=>{
     const cols=[]; let cur='',inQ=false;
     for(const c of line){ if(c==='"'){inQ=!inQ;} else if(c===','&&!inQ){cols.push(cur.trim().replace(/^"|"$/g,''));cur='';} else cur+=c; }
     cols.push(cur.trim().replace(/^"|"$/g,''));
     return cols;
   });
 }
-async function fetchTxt(url){ const r=await fetch(url+'&t='+Date.now()); return r.text(); }
-
-// ============ HELPERS ============
-function dsColorScore(v){ 
-  const n=parseFloat(v); 
-  if(isNaN(n)||v==='') return 'empty'; 
-  if(n >= 93) return 'excellent';
-  if(n >= 90) return 'green'; 
-  if(n >= 86) return 'yellow'; 
-  return 'red'; 
-}
-function npsColor(v){ if(v===null||isNaN(v))return'none'; if(v>=9)return'green'; if(v>=7)return'yellow'; return'red'; }
+function dsColor(v){ const n=parseFloat(v); if(isNaN(n)||v==='')return'empty'; if(n>=90)return'green'; if(n>=75)return'yellow'; return'red'; }
 function medalHtml(i){
   if(i===0) return `<div class="medal-wrap"><div class="mg mg-gold"></div><div class="mr mr-gold"></div><div class="medal m1">1</div></div>`;
   if(i===1) return `<div class="medal-wrap"><div class="mg mg-silver"></div><div class="mr mr-silver"></div><div class="medal m2">2</div></div>`;
@@ -371,7 +303,7 @@ function medalHtml(i){
 // ============ POKER ============
 function buildAllTime(rows){
   const t={};
-  rows.forEach(r=>{ const c=parseInt(r['Manager Over-ride']||r.Chips)||0; if(!c)return; (r.Technician||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>{t[n]=(t[n]||0)+c;}); });
+  rows.forEach(r=>{ const c=parseInt(r['Manager Over-ride']||r.Chips)||0; if(!c)return; (r.Technician||'').split(',').map(n=>n.trim()).forEach(name=>{t[name]=(t[name]||0)+c;}); });
   return Object.entries(t).sort((a,b)=>b[1]-a[1]);
 }
 function getWeek(rows){ let m=0; rows.forEach(r=>{const w=parseInt(r.Week);if(w>m)m=w;}); return{weekRows:rows.filter(r=>parseInt(r.Week)===m),maxWeek:m}; }
@@ -398,40 +330,21 @@ async function renderPoker(){
     document.getElementById('leader-chips').textContent=allTime[0]?allTime[0][1]+' chips':'—';
     const maxC=allTime[0]?.[1]||1;
     document.getElementById('lb-list').innerHTML=allTime.map(([name,chips],i)=>`
-      <div class="lb-row${i<3?' podium':''}">${medalHtml(i)}
-        <div class="lb-name">${name}</div>
-        <div class="lb-right"><div class="lb-chips">${chips}</div>
-          <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div>
-        </div></div>`).join('');
+      <div class="lb-row${i<3?' podium':''}">${medalHtml(i)}<div class="lb-name">${name}</div>
+      <div class="lb-right"><div class="lb-chips">${chips}</div><div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(chips/maxC*100)}%"></div></div></div></div>`).join('');
     const hotCats=['Intangible Impact','New Sale/ Gross Add','Accident-Free Month','Perfect Attendance'];
-    document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{
-      const c=parseInt(r['Manager Over-ride']||r.Chips)||0;
-      return`<div class="wcard${(hotCats.includes(r.Category)||c>=3)?' hot':''}">
-        <div class="wcard-top"><div class="wcard-name">${r.Technician||'—'}</div><div class="wcard-chips">+${c}</div></div>
-        <div class="wcard-cat">${r.Category}</div>
-        ${r.Notes?`<div class="wcard-note">📝 ${r.Notes}</div>`:''}</div>`;
-    }).join('');
+    document.getElementById('winners-grid').innerHTML=weekRows.map(r=>{const c=parseInt(r['Manager Over-ride']||r.Chips)||0; return `<div class="wcard${(hotCats.includes(r.Category)||c>=3)?' hot':''}"><div class="wcard-name">${r.Technician||'—'}</div><div class="wcard-chips">+${c}</div><div class="wcard-cat">${r.Category}</div>${r.Notes?`<div class="wcard-note">📝 ${r.Notes}</div>`:''}</div>`;}).join('');
     window._tickerPoker=weekRows.filter(r=>r.Notes||parseInt(r['Manager Over-ride']||r.Chips)>=2).map(r=>`${r.Technician} — ${r.Category}${r.Notes?': '+r.Notes:''}`).join('     •     ')||'Great work team!';
   }catch(e){console.error('Poker',e);}
 }
-
 async function renderPrizes(){
   try{
     const txt=await fetchTxt(PRIZE_URL);
     const raw=parseCSVRaw(txt);
     const dataRows=raw.slice(1).filter(row=>row[0]&&row[0].trim()!=='');
     if(!dataRows.length) throw new Error();
-    document.getElementById('prize-wrap').innerHTML=`
-      <div class="prize-title">Redeem Your Chips — Available Prizes</div>
-      <div class="prize-grid">${dataRows.slice(0,10).map(row=>`
-        <div class="prize-card">
-          <div class="prize-name">${(row[0]||'Prize').trim()}</div>
-          <div class="prize-cost">${(row[1]||'?').trim()}</div>
-          <div class="prize-unit">chips</div>
-        </div>`).join('')}</div>`;
-  }catch(e){
-    document.getElementById('prize-wrap').innerHTML='<div class="loading" style="color:var(--gray-dim);font-size:14px;">Prize board coming soon</div>';
-  }
+    document.getElementById('prize-wrap').innerHTML=`<div class="prize-title">Redeem Your Chips — Available Prizes</div><div class="prize-grid">${dataRows.slice(0,10).map(row=>`<div class="prize-card"><div class="prize-name">${(row[0]||'Prize').trim()}</div><div class="prize-cost">${(row[1]||'?').trim()}</div><div class="prize-unit">chips</div></div>`).join('')}</div>`;
+  }catch(e){ document.getElementById('prize-wrap').innerHTML='<div class="loading">Prize board unavailable</div>'; }
 }
 
 // ============ NPS ============
@@ -439,71 +352,40 @@ async function renderNPS(){
   try{
     const txt=await fetchTxt(NPS_URL);
     const raw=parseCSVRaw(txt);
-    const dataRows = raw.slice(1, 27).filter(row => row[0] && row[0].trim()!=='' && row[0].trim()!=='Tech');
+    const dataRows = raw.slice(1, 27).filter(row=>row[0]&&row[0].trim()!==''&&row[0].trim()!=='Tech');
     const updatedVal = (raw[27] && raw[27][1]) ? raw[27][1].trim() : '';
     document.getElementById('nps-updated').textContent = updatedVal ? `Updated through ${updatedVal}` : 'NPS · Year to Date';
     const yearEndRaw = (raw[28] && raw[28][3]) ? raw[28][3].trim() : '';
-    const yearEnd = (!yearEndRaw || yearEndRaw==='None' || yearEndRaw==='#DIV/0!' || yearEndRaw==='#VALUE!') ? null : parseFloat(yearEndRaw);
+    const yearEnd = (!yearEndRaw || yearEndRaw==='None' || yearEndRaw==='#DIV/0!') ? null : parseFloat(yearEndRaw);
     const el = document.getElementById('nps-team-score');
     el.textContent = yearEnd!==null ? yearEnd.toFixed(1) : '—';
     if(yearEnd!==null){
       if(yearEnd >= 9) el.style.color = '#00c46a';
       else if(yearEnd >= 7) el.style.color = '#f0c040';
       else el.style.color = '#e05555';
-    } else { el.style.color = 'var(--gray-dim)'; }
+    }
     let tPro=0,tDet=0,tResp=0;
-    dataRows.forEach(row=>{
-      tPro += parseInt(row[1])||0;
-      tDet += parseInt(row[2])||0;
-      tResp += parseInt(row[3])||0;
-    });
+    dataRows.forEach(row=>{ tPro += parseInt(row[1])||0; tDet += parseInt(row[2])||0; tResp += parseInt(row[3])||0; });
     document.getElementById('nps-total-resp').textContent=tResp;
     document.getElementById('nps-total-pro').textContent=tPro;
     document.getElementById('nps-total-det').textContent=tDet;
     const maxR=Math.max(...dataRows.map(row=>parseInt(row[3])||0),1);
     const cols=dataRows.length<=8?2:dataRows.length<=15?3:4;
-    const grid=document.getElementById('nps-grid');
-    grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+    document.getElementById('nps-grid').style.gridTemplateColumns=`repeat(${cols},1fr)`;
     const managerNames=['troy stasik','eddie lapointe','joe sepesi','joe herrera'];
     const regular=[], managers=[];
-    dataRows.forEach(row=>{
-      const name=(row[0]||'').trim().toLowerCase();
-      if(managerNames.includes(name)) managers.push(row);
-      else regular.push(row);
-    });
-    function cardHtml(row, isManager){
+    dataRows.forEach(row=>{ const name=(row[0]||'').trim().toLowerCase(); if(managerNames.includes(name)) managers.push(row); else regular.push(row); });
+    function cardHtml(row,isManager){
       const name=(!row[0]||row[0]==='0')?'Unassigned':row[0];
-      const raw2=row[4],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!'||raw2==='#VALUE!';
-      const sc=isNone?null:parseFloat(raw2);
-      let cls='none';
-      if(!isNone && sc!==null){
-        if(sc >= 9) cls='green';
-        else if(sc >= 7) cls='yellow';
-        else cls='red';
-      }
+      const raw2=row[4],isNone=!raw2||raw2==='None'||raw2===''; const sc=isNone?null:parseFloat(raw2);
+      let cls='none'; if(!isNone&&sc!==null){ if(sc>=9) cls='green'; else if(sc>=7) cls='yellow'; else cls='red'; }
       const pro=parseInt(row[1])||0,det=parseInt(row[2])||0,resp=parseInt(row[3])||0;
-      const displayScore = isNone ? '—' : (sc >= 0 ? '+' : '') + sc.toFixed(1);
-      return`<div class="nps-card${isManager?' manager':''}">
-        <div class="nps-name">${name}</div>
-        <div class="nps-score-row">
-          <div class="nps-score ${cls}">${displayScore}</div>
-          <div class="nps-pills">
-            <div class="nps-pill pro">👍 ${pro}</div>
-            <div class="nps-pill det">👎 ${det}</div>
-            <div class="nps-pill resp">${resp} rev</div>
-          </div>
-        </div>
-        <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxR*100)}%"></div></div>
-      </div>`;
+      return `<div class="nps-card${isManager?' manager':''}"><div class="nps-name">${name}</div><div class="nps-score-row"><div class="nps-score ${cls}">${isNone?'—':sc.toFixed(1)}</div><div class="nps-pills"><div class="nps-pill pro">👍 ${pro}</div><div class="nps-pill det">👎 ${det}</div><div class="nps-pill resp">${resp}</div></div></div><div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxR*100)}%"></div></div></div>`;
     }
     let html = regular.map(row=>cardHtml(row,false)).join('');
-    if(managers.length){
-      html += `<div class="nps-divider">👔 Management Team</div>`;
-      html += managers.map(row=>cardHtml(row,true)).join('');
-    }
-    grid.innerHTML = html;
-    const top=dataRows.filter(row=>{const v=row[4];return v&&v!=='None'&&!isNaN(parseFloat(v))&&parseFloat(v)>=9;});
-    window._tickerNPS=top.length?'Top NPS: '+top.map(row=>`${row[0]==='0'?'Unassigned':row[0]} (${parseFloat(row[4]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
+    if(managers.length) html += `<div class="nps-divider">👔 Management Team</div>` + managers.map(row=>cardHtml(row,true)).join('');
+    document.getElementById('nps-grid').innerHTML = html;
+    window._tickerNPS = regular.filter(r=>{const v=r[4];return v&&v!=='None'&&parseFloat(v)>=9;}).length ? 'Top NPS performers active' : 'NPS scores updated';
   }catch(e){console.error('NPS',e);}
 }
 
@@ -511,90 +393,125 @@ async function renderNPS(){
 async function renderDrivers(){
   try{
     const txt=await fetchTxt(DRIVER_URL);
-    const raw=parseCSVRaw(txt);
-    let hidx=-1;
-    for(let i=0;i<raw.length;i++){if(raw[i].some(c=>c.toLowerCase().includes('specialist'))){hidx=i;break;}}
-    if(hidx===-1){console.error('Driver header not found');return;}
-    const headers=raw[hidx].map(h=>h.trim());
-    const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist'));
-    const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
-    const dataRows=[];
-    for(let i=hidx+1;i<raw.length;i++){
-      const row=raw[i],name=(row[nameIdx]||'').trim();
-      if(!name)continue;
-      if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')||name.toLowerCase().includes('avg'))break;
-      dataRows.push(row);
+    const lines=txt.trim().split('\n').map(l=>l.split(',').map(c=>c.trim().replace(/^"|"$/g,'')));
+    // Get updated date from cell A1 (first row, first column)
+    let driverUpdated = '';
+    if(lines[0] && lines[0][0]){
+      driverUpdated = lines[0][0].trim();
     }
-    const withYE=dataRows.filter(r=>!isNaN(parseFloat((r[yearIdx]||'').trim())));
+    document.getElementById('driver-updated').textContent = driverUpdated ? `Updated: ${driverUpdated}` : 'Driver scores · 2026';
+    
+    let hidx=-1; for(let i=0;i<lines.length;i++) if(lines[i].some(c=>c.toLowerCase().includes('specialist'))){ hidx=i; break; }
+    if(hidx===-1) return;
+    const headers=lines[hidx]; const nameIdx=headers.findIndex(h=>h.toLowerCase().includes('specialist')); const yearIdx=headers.findIndex(h=>h.toLowerCase().includes('year'));
+    const monthIdx = MONTHS.map(m=>headers.findIndex(h=>h===m)).filter(i=>i!==-1);
+    let data=[];
+    for(let i=hidx+1;i<lines.length;i++){ const name=lines[i][nameIdx]||''; if(!name) continue; if(name.toLowerCase().includes('branch')) break; data.push(lines[i]); }
+    const withYE=data.filter(r=>!isNaN(parseFloat(r[yearIdx])));
     const avg=withYE.length?withYE.reduce((s,r)=>s+parseFloat(r[yearIdx]),0)/withYE.length:0;
     document.getElementById('ds-avg').textContent=avg?avg.toFixed(1):'—';
-    document.getElementById('ds-total').textContent=dataRows.length;
+    document.getElementById('ds-total').textContent=data.length;
     const below90=withYE.filter(r=>parseFloat(r[yearIdx])<90).length;
     document.getElementById('ds-below90').textContent=below90||'✓ None';
-    if(!below90){document.getElementById('ds-below90').style.color='#00c46a';}
+    if(!below90) document.getElementById('ds-below90').style.color='#00c46a';
     const sorted=[...withYE].sort((a,b)=>parseFloat(b[yearIdx])-parseFloat(a[yearIdx]));
-    const topFive = sorted.slice(0,5);
-    document.getElementById('ds-podium').innerHTML = topFive.map((row,i)=>{
-      const name=(row[nameIdx]||'').trim();
-      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye);
-      let cls = dsColorScore(ye);
-      let scoreClass = '';
-      if(cls === 'excellent') scoreClass = 'excellent';
-      else if(cls === 'green') scoreClass = 'green';
-      else if(cls === 'yellow') scoreClass = 'yellow';
-      else scoreClass = 'red';
-      return`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}
-        <div class="ds-pod-name">${name}</div>
-        <div class="ds-pod-score ${scoreClass}">${isNaN(yeN)?'—':yeN.toFixed(1)}</div>
-      </div>`;
-    }).join('');
-    document.getElementById('ds-list').innerHTML=dataRows.map(row=>{
-      const name=(row[nameIdx]||'Unassigned').trim();
-      const monthCells=MONTHS.map(m=>{
-        const idx=headers.findIndex(h=>h.trim()===m);
-        const val=idx>=0?(row[idx]||'').trim():'';
-        const n=parseFloat(val);
-        let cls = dsColorScore(val);
-        let valClass = '';
-        if(cls === 'excellent') valClass = 'excellent';
-        else if(cls === 'green') valClass = 'green';
-        else if(cls === 'yellow') valClass = 'yellow';
-        else valClass = 'empty';
-        return`<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${valClass}">${isNaN(n)||val===''?'—':n}</div></div>`;
-      }).join('');
-      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye);
-      let yeCls = dsColorScore(ye);
-      let yeClass = '';
-      if(yeCls === 'excellent') yeClass = 'excellent';
-      else if(yeCls === 'green') yeClass = 'green';
-      else if(yeCls === 'yellow') yeClass = 'yellow';
-      else yeClass = 'empty';
-      return`<div class="ds-row">
-        <div class="ds-name">${name}</div>
-        <div class="ds-months">${monthCells}</div>
-        <div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeClass}">${isNaN(yeN)||ye===''?'—':yeN.toFixed(1)}</div></div>
-      </div>`;
-    }).join('');
-    window._tickerDrivers=sorted.length?'Top driver scores: '+sorted.slice(0,3).map(r=>`${(r[nameIdx]||'').trim()} (${parseFloat(r[yearIdx]).toFixed(1)})`).join('  •  '):'Driver scores updated — stay safe!';
-  }catch(e){console.error('Drivers',e);}
+    const topFive=sorted.slice(0,5);
+    document.getElementById('ds-podium').innerHTML=topFive.map((row,i)=>`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${row[nameIdx]}</div><div class="ds-pod-score green">${parseFloat(row[yearIdx]).toFixed(1)}</div></div>`).join('');
+    document.getElementById('ds-list').innerHTML=data.map(row=>{ const name=row[nameIdx]; const monthCells=monthIdx.map(idx=>{ const val=row[idx]; const num=parseFloat(val); let cls=!val||isNaN(num)?'empty':(num>=90?'green':(num>=75?'yellow':'red')); return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val ${cls}">${isNaN(num)?'—':num}</div></div>`; }).join(''); const ye=row[yearIdx],yeNum=parseFloat(ye); let yeCls=!ye||isNaN(yeNum)?'empty':(yeNum>=90?'green':(yeNum>=75?'yellow':'red')); return `<div class="ds-row"><div class="ds-name">${name}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeCls}">${isNaN(yeNum)?'—':yeNum.toFixed(1)}</div></div></div>`; }).join('');
+    window._tickerDrivers = topFive.length ? `Top drivers: ${topFive[0][nameIdx]} leads` : 'Driver scores updated';
+  }catch(e){console.error('Driver',e);}
 }
 
-// ============ CLOCK ============
-function clock(){
-  const n=new Date();
-  document.getElementById('top-date').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('top-time').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+// ============ SALES BOARD ============
+function fmtSales(v){ 
+  if(v === undefined || v === null || v === '') return '—';
+  const num = parseFloat(v);
+  if(isNaN(num) || num === 0) return '—';
+  return '$'+num.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); 
 }
+async function renderSales(){
+  try{
+    const txt=await fetchTxt(SALES_URL);
+    const raw=parseCSVRaw(txt);
+    let headerRow=-1;
+    for(let i=0;i<Math.min(raw.length,30);i++){
+      if(raw[i] && raw[i][1] && raw[i][1].trim().toLowerCase() === 'name'){
+        headerRow=i; break;
+      }
+    }
+    if(headerRow===-1){ console.error('Sales header not found'); return; }
+    const months=[];
+    for(let i=2;i<=13;i++){
+      if(raw[headerRow][i] && raw[headerRow][i].trim()!=='') months.push(raw[headerRow][i].trim());
+    }
+    const ytdIdx=2+months.length;
+    let updatedDate='';
+    if(raw[21] && raw[21][3]) updatedDate=raw[21][3].trim();
+    else if(raw[21] && raw[21][2]) updatedDate=raw[21][2].trim();
+    document.getElementById('sales-updated').textContent=updatedDate?`Updated through ${updatedDate}`:'Sales · Year to Date';
+    const regularTechs=[], specialTechs=[], specialNames=['Wesley Banning','Craig Salek'];
+    for(let i=headerRow+1;i<raw.length;i++){
+      const row=raw[i]; if(!row||row.length<2) continue;
+      const name=row[1]?row[1].trim():'';
+      if(!name||name==='') continue;
+      if(name.toLowerCase()==='total'||name.toLowerCase().includes('updated')) break;
+      const sales=[];
+      for(let m=0;m<months.length;m++){
+        let val=0;
+        if(row[2+m]!==undefined && row[2+m]!=='') val=parseFloat(row[2+m])||0;
+        sales.push(val);
+      }
+      let ytd=0;
+      if(row[ytdIdx]!==undefined && row[ytdIdx]!=='') ytd=parseFloat(row[ytdIdx])||0;
+      const techObj={name,sales,ytd};
+      if(specialNames.includes(name)) specialTechs.push(techObj);
+      else regularTechs.push(techObj);
+    }
+    const currentIdx=months.length-1, prevIdx=Math.max(currentIdx-1,0);
+    const activeTechs=regularTechs.filter(t=>t.sales[currentIdx]>0);
+    const coldTechs=regularTechs.filter(t=>t.sales[currentIdx]===0 && t.sales[prevIdx]===0);
+    const monthlyTotal=regularTechs.reduce((s,t)=>s+t.sales[currentIdx],0);
+    const ytdTotal=regularTechs.reduce((s,t)=>s+t.ytd,0);
+    const sorted=[...regularTechs].sort((a,b)=>b.sales[currentIdx]-a.sales[currentIdx]);
+    const topTech=sorted[0];
+    document.getElementById('sales-monthly-total').textContent=fmtSales(monthlyTotal);
+    document.getElementById('sales-month-name').textContent=months[currentIdx]+' 2026';
+    document.getElementById('sales-ytd').textContent=fmtSales(ytdTotal);
+    document.getElementById('sales-top-performer').textContent=topTech?.name?.split(' ')[0]||'—';
+    document.getElementById('sales-top-amount').textContent=topTech?fmtSales(topTech.sales[currentIdx])+' — '+months[currentIdx]:'—';
+    document.getElementById('sales-active-count').textContent=activeTechs.length+' / '+regularTechs.length;
+    document.getElementById('sales-cold-count').textContent=coldTechs.length>0?coldTechs.length:'✓ None';
+    if(!coldTechs.length) document.getElementById('sales-cold-count').style.color='#00c46a';
+    const top5=sorted.slice(0,5);
+    document.getElementById('sales-podium').innerHTML=top5.map((t,i)=>`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${t.name}</div><div class="ds-pod-score green">${fmtSales(t.sales[currentIdx])}</div></div>`).join('');
+    let allRows='';
+    [...sorted].forEach(t=>{
+      const hasCurrent=t.sales[currentIdx]>0, hasPrev=t.sales[prevIdx]>0;
+      let status='green'; if(!hasCurrent && hasPrev) status='yellow'; if(!hasCurrent && !hasPrev) status='red';
+      const monthCells=months.map((m,idx)=>`<div class="ds-month"><div class="ds-month-label">${m.substring(0,3)}</div><div class="ds-month-val ${t.sales[idx]>0?'green':'empty'}">${fmtSales(t.sales[idx])}</div></div>`).join('');
+      allRows+=`<div class="ds-row"><div class="ds-name">${t.name}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">YTD</div><div class="ds-ye ${status}">${fmtSales(t.ytd)}</div></div></div>`;
+    });
+    specialTechs.forEach(s=>{
+      const monthCells=months.map((m,idx)=>`<div class="ds-month"><div class="ds-month-label">${m.substring(0,3)}</div><div class="ds-month-val ${s.sales[idx]>0?'green':'empty'}">${fmtSales(s.sales[idx])}</div></div>`).join('');
+      const note=s.name==='Wesley Banning'?'⚙ Hybrid Irrigation / Sales':'★ Field Only · Self-Reported';
+      allRows+=`<div class="ds-row" style="background:rgba(0,138,80,0.05); border:1px dashed rgba(0,138,80,0.3); margin-top:6px;"><div class="ds-name" style="color:rgba(0,196,114,0.85);">${note}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">YTD</div><div class="ds-ye ${s.ytd>0?'green':'empty'}">${fmtSales(s.ytd)}</div></div></div>`;
+    });
+    document.getElementById('sales-list').innerHTML=allRows;
+    window._tickerSales=top5.length?`📈 Top sales: ${top5[0].name} with ${fmtSales(top5[0].sales[currentIdx])}`:'Sales data loaded';
+  }catch(e){ console.error('Sales error:',e); document.getElementById('sales-list').innerHTML='<div class="loading">Error loading sales data</div>'; }
+}
+
+// ============ CLOCK & ROTATION ============
+function clock(){ const n=new Date(); document.getElementById('top-date').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); document.getElementById('top-time').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
 clock(); setInterval(clock,10000);
 
-// ============ ROTATION ============
-const SCREENS=['screen-poker','screen-nps','screen-driver'];
-const NAMES=['Poker Chips','Net Promoter Score','Driver Safety Scores'];
-const TICKERS=['Poker Chips','NPS','Driver Scores'];
+const SCREENS=['screen-poker','screen-nps','screen-driver','screen-sales'];
+const NAMES=['Poker Chips','Net Promoter Score','Driver Safety Scores','Sales Board'];
+const TICKERS=['Poker Chips','NPS','Driver Scores','Sales'];
 let si=0;
 function setTicker(i){
   document.getElementById('ticker-label').textContent=TICKERS[i];
-  const texts=[window._tickerPoker,window._tickerNPS,window._tickerDrivers];
+  const texts=[window._tickerPoker,window._tickerNPS,window._tickerDrivers,window._tickerSales];
   const txt=(texts[i]||'Loading...')+'          •          '+(texts[i]||'Loading...');
   const t=document.getElementById('ticker');
   t.textContent=txt; t.style.animation='none'; t.offsetHeight; t.style.animation='';
@@ -606,35 +523,18 @@ function nextScreen(){
   document.getElementById(SCREENS[si]).classList.add('active');
   document.getElementById('nd'+si).classList.add('on');
   document.getElementById('top-section').textContent=NAMES[si];
-  if(si!==0)document.getElementById('top-week').textContent='';
+  if(si!==0) document.getElementById('top-week').textContent='';
   setTicker(si);
   startProgress();
 }
-setInterval(nextScreen,SCREEN_MS);
-function startProgress(){
-  const bar=document.getElementById('prog-bar');
-  bar.style.transition='none'; bar.style.width='0%'; bar.offsetHeight;
-  bar.style.transition=`width ${SCREEN_MS}ms linear`; bar.style.width='100%';
-}
-startProgress();
+function startProgress(){ const bar=document.getElementById('prog-bar'); bar.style.transition='none'; bar.style.width='0%'; bar.offsetHeight; bar.style.transition=`width ${SCREEN_MS}ms linear`; bar.style.width='100%'; }
+setInterval(nextScreen,SCREEN_MS); startProgress();
 
-// ============ POKER RIGHT PANEL FLIP ============
 let pi=0;
-const PVIEWS=['pview-prize','pview-winners'];
-setInterval(()=>{
-  if(si!==0)return;
-  document.getElementById(PVIEWS[pi]).classList.remove('active');
-  pi=(pi+1)%2;
-  document.getElementById(PVIEWS[pi]).classList.add('active');
-},14000);
+setInterval(()=>{ if(si!==0)return; const v=['pview-prize','pview-winners']; document.getElementById(v[pi]).classList.remove('active'); pi=(pi+1)%2; document.getElementById(v[pi]).classList.add('active'); },14000);
 
-// ============ LOAD + REFRESH ============
-async function loadAll(){
-  await Promise.all([renderPoker(),renderPrizes(),renderNPS(),renderDrivers()]);
-  setTicker(si);
-}
-loadAll();
-setInterval(loadAll,5*60*1000);
+async function loadAll(){ await Promise.all([renderPoker(),renderPrizes(),renderNPS(),renderDrivers(),renderSales()]); setTicker(si); }
+loadAll(); setInterval(loadAll,5*60*1000);
 </script>
 </body>
 </html>

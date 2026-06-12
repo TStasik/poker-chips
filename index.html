@@ -128,10 +128,10 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 .prize-wrap { flex:1; padding:14px 18px; overflow:hidden; }
 .prize-title { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:12px; font-weight:700; }
 .prize-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
-.prize-card { background:#fff; border-radius:12px; padding:10px 6px; text-align:center; }
-.prize-name { font-size:13px; font-weight:800; color:#1e3a2f; font-family:'DM Sans',sans-serif; margin-bottom:6px; line-height:1.2; }
-.prize-cost { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#008a50; background:rgba(0,138,80,0.1); display:inline-block; padding:2px 10px; border-radius:30px; }
-.prize-unit { font-size:10px; font-weight:600; color:#2c5a45; margin-top:2px; }
+.prize-card { background:#141414; border:1px solid #202020; border-radius:12px; padding:14px 8px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.prize-name { font-size:13px; font-weight:700; color:#eee; font-family:'DM Sans',sans-serif; line-height:1.25; min-height:32px; display:flex; align-items:center; justify-content:center; }
+.prize-cost { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#00c46a; background:rgba(0,196,114,0.12); border:1px solid rgba(0,196,114,0.3); display:inline-block; padding:3px 14px; border-radius:30px; }
+.prize-unit { font-size:10px; font-weight:700; color:var(--gray-dim); text-transform:uppercase; letter-spacing:0.05em; }
 
 /* ===== NPS SCREEN ===== */
 .nps-grid { flex:1; padding:8px 14px; display:grid; gap:7px; overflow:hidden; align-content:start; }
@@ -179,7 +179,7 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
   <!-- TOP BAR -->
   <div class="top-bar">
     <div class="top-left">
-      <img class="logo" src="https://nexgreen.com/wp-content/uploads/2023/11/logo-c35c53c3d80b07c4427a965f36f1a450-768x219.png" alt="NexGreen" onerror="this.style.display='none'">
+      <img class="logo" src="logo.webp" alt="NexGreen" onerror="this.style.display='none'">
       <div class="top-divider"></div>
       <div class="top-titles">
         <div class="top-title">Team Dashboard 2026</div>
@@ -333,7 +333,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
     <div class="ticker-label" id="ticker-label">Poker Chips</div>
     <div class="ticker-div"></div>
     <div class="ticker-wrap"><div class="ticker" id="ticker">Loading updates...</div></div>
-    <div class="refresh-tag">Refreshed: <span id="refresh-time">--:--</span></div>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
 
@@ -344,7 +343,7 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 const POKER_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?output=csv';
 const NPS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXb6OEUdrzzmd-9E1jp_FDu7OrD8Af1tDTDOVwqkZkJOcG_-lpOO2VKlJ6OMmGVqMeMU_OcHEbCGf5/pub?gid=552293431&single=true&output=csv';
 const DRIVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRhhNairFH07Go7kt7bO1A6PyJ_MgUOBetN6RiQGoiBQFernx3fdTlKq9RT4eQhYmp3scrkR1s-slFF/pub?gid=0&single=true&output=csv';
-const PRIZE_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?gid=1043164795&output=csv';
+const PRIZE_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFkCtOiefM3r2qK_58KpY2XRWdrHK2Zh9B_3FM5zAWCyKYZ4RN_WFbS4FcLQBjoggl6IxK/pub?gid=1598119986&single=true&output=csv';
 const SCREEN_MS  = 30000;
 const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
 
@@ -425,16 +424,15 @@ async function renderPoker(){
 async function renderPrizes(){
   try{
     const txt=await fetchTxt(PRIZE_URL);
-    const {rows}=parseCSV(txt);
-    if(!rows.length) throw new Error();
-    const keys=Object.keys(rows[0]);
-    const nameKey=keys[0], costKey=keys[1];
+    const raw=parseCSVRaw(txt);
+    const dataRows=raw.slice(1).filter(row=>row[0]&&row[0].trim()!=='');
+    if(!dataRows.length) throw new Error();
     document.getElementById('prize-wrap').innerHTML=`
       <div class="prize-title">Redeem Your Chips — Available Prizes</div>
-      <div class="prize-grid">${rows.slice(0,10).map(r=>`
+      <div class="prize-grid">${dataRows.slice(0,10).map(row=>`
         <div class="prize-card">
-          <div class="prize-name">${r[nameKey]||'Prize'}</div>
-          <div class="prize-cost">${r[costKey]||'?'}</div>
+          <div class="prize-name">${(row[0]||'Prize').trim()}</div>
+          <div class="prize-cost">${(row[1]||'?').trim()}</div>
           <div class="prize-unit">chips</div>
         </div>`).join('')}</div>`;
   }catch(e){
@@ -446,34 +444,44 @@ async function renderPrizes(){
 async function renderNPS(){
   try{
     const txt=await fetchTxt(NPS_URL);
-    const {rows,raw}=parseCSV(txt);
-    const keys=Object.keys(rows[0]||{});
-    const[tK,pK,dK,rK,sK]=[keys[0],keys[1],keys[2],keys[3],keys[4]];
-    // B28 = raw row 28, col 1
-    const updatedVal=(raw.length>28&&raw[28]&&raw[28][1])?raw[28][1].trim():'';
-    document.getElementById('nps-updated').textContent=updatedVal?`Updated through ${updatedVal}`:'NPS · Year to Date';
-    const valid=rows.filter(r=>r[tK]&&r[tK]!=='Tech'&&r[tK]!=='');
+    const raw=parseCSVRaw(txt);
+    // Columns by position: A=Tech(0), B=Promoters(1), C=Detractors(2), D=Responses(3), E=Score(4)
+    // Row 0 = headers. Data rows = 1..26 (techs). Row index 28 = B28 (Updated To). Row index 29 = D29 (Year-End Score)
+    const dataRows = raw.slice(1, 27).filter(row => row[0] && row[0] !== 'Tech' && row[0] !== '');
+
+    // Updated To = B28 => raw[28][1]
+    const updatedVal = (raw[28] && raw[28][1]) ? raw[28][1].trim() : '';
+    document.getElementById('nps-updated').textContent = updatedVal ? `Updated through ${updatedVal}` : 'NPS · Year to Date';
+
+    // Year-End Score = D29 => raw[29][3]
+    const yearEndRaw = (raw[29] && raw[29][3]) ? raw[29][3].trim() : '';
+    const yearEnd = (!yearEndRaw || yearEndRaw==='None' || yearEndRaw==='#DIV/0!' || yearEndRaw==='#VALUE!') ? null : parseFloat(yearEndRaw);
+    const tsCls = npsColor(yearEnd);
+    const el = document.getElementById('nps-team-score');
+    el.textContent = yearEnd!==null ? yearEnd.toFixed(1) : '—';
+    el.style.color = tsCls==='green'?'#00c46a':tsCls==='yellow'?'#f0c040':tsCls==='red'?'#e05555':'var(--gray-dim)';
+
+    // Totals — sum columns B, C, D across data rows
     let tPro=0,tDet=0,tResp=0;
-    valid.forEach(r=>{tPro+=parseInt(r[pK])||0;tDet+=parseInt(r[dK])||0;tResp+=parseInt(r[rK])||0;});
-    const teamScore=tResp>0?((tPro-tDet)/tResp)*100:null;
-    const tsCls=npsColor(teamScore);
-    document.getElementById('nps-team-score').className=`stat-value ${tsCls==='green'?'':''}${tsCls==='yellow'?'gold':''}${tsCls==='red'?'red':''}${tsCls==='none'?'':''}`;
-    if(teamScore!==null) document.getElementById('nps-team-score').style.color=tsCls==='green'?'#00c46a':tsCls==='yellow'?'#f0c040':tsCls==='red'?'#e05555':'var(--gray-dim)';
-    document.getElementById('nps-team-score').textContent=teamScore!==null?teamScore.toFixed(1):'—';
+    dataRows.forEach(row=>{
+      tPro += parseInt(row[1])||0;
+      tDet += parseInt(row[2])||0;
+      tResp += parseInt(row[3])||0;
+    });
     document.getElementById('nps-total-resp').textContent=tResp;
     document.getElementById('nps-total-pro').textContent=tPro;
     document.getElementById('nps-total-det').textContent=tDet;
-    const maxR=Math.max(...valid.map(r=>parseInt(r[rK])||0),1);
-    // Auto grid columns based on count
-    const cols=valid.length<=8?2:valid.length<=15?3:4;
+
+    const maxR=Math.max(...dataRows.map(row=>parseInt(row[3])||0),1);
+    const cols=dataRows.length<=8?2:dataRows.length<=15?3:4;
     const grid=document.getElementById('nps-grid');
     grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-    grid.innerHTML=valid.map(r=>{
-      const name=(!r[tK]||r[tK]==='0')?'Unassigned':r[tK];
-      const raw2=r[sK],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!'||raw2==='#VALUE!';
+    grid.innerHTML=dataRows.map(row=>{
+      const name=(!row[0]||row[0]==='0')?'Unassigned':row[0];
+      const raw2=row[4],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!'||raw2==='#VALUE!';
       const sc=isNone?null:parseFloat(raw2);
       const cls=npsColor(sc);
-      const pro=parseInt(r[pK])||0,det=parseInt(r[dK])||0,resp=parseInt(r[rK])||0;
+      const pro=parseInt(row[1])||0,det=parseInt(row[2])||0,resp=parseInt(row[3])||0;
       return`<div class="nps-card">
         <div class="nps-name">${name}</div>
         <div class="nps-score-row">
@@ -487,8 +495,8 @@ async function renderNPS(){
         <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxR*100)}%"></div></div>
       </div>`;
     }).join('');
-    const top=valid.filter(r=>{const v=r[sK];return v&&v!=='None'&&parseFloat(v)>=90;});
-    window._tickerNPS=top.length?'Top NPS: '+top.map(r=>`${r[tK]==='0'?'Unassigned':r[tK]} (${parseFloat(r[sK]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
+    const top=dataRows.filter(row=>{const v=row[4];return v&&v!=='None'&&!isNaN(parseFloat(v))&&parseFloat(v)>=90;});
+    window._tickerNPS=top.length?'Top NPS: '+top.map(row=>`${row[0]==='0'?'Unassigned':row[0]} (${parseFloat(row[4]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
   }catch(e){console.error('NPS',e);}
 }
 
@@ -603,7 +611,6 @@ setInterval(()=>{
 // ============ LOAD + REFRESH ============
 async function loadAll(){
   await Promise.all([renderPoker(),renderPrizes(),renderNPS(),renderDrivers()]);
-  document.getElementById('refresh-time').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   setTicker(si);
 }
 loadAll();

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=1920, initial-scale=1.0">
 <title>NexGreen Sterling Heights — Live Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -12,9 +12,9 @@
   --gray-dim:#6a9278; --gold:#FFD166; --amber:#F4A261;
   --red-soft:#FF6B6B; --white:#edf7f2; --card-border:rgba(0,138,80,0.18);
 }
-body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:flex; align-items:center; justify-content:center; }
+html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; margin:0; padding:0; }
 #root {
-  width:1920px; height:1080px; position:relative; transform-origin:center center; overflow:hidden;
+  width:1920px; height:1080px; position:relative; overflow:hidden;
   background:var(--green-deep);
   background-image:
     radial-gradient(ellipse 80% 70% at 0% 50%, rgba(0,80,40,0.75) 0%, transparent 65%),
@@ -32,14 +32,11 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 /* TOP BAR */
 .top-bar { background:#008a50; display:flex; align-items:center; justify-content:space-between; padding:0 44px; height:85px; flex-shrink:0; position:relative; z-index:20; }
 .top-left { display:flex; align-items:center; gap:20px; }
-.logo { height:48px; width:auto; object-fit:contain; }
+.logo { height:46px; width:auto; max-width:180px; object-fit:contain; flex-shrink:0; }
 .top-divider { width:1px; height:38px; background:rgba(255,255,255,0.3); }
-.top-titles { display:flex; flex-direction:column; gap:2px; }
-.top-title { font-size:15px; font-weight:700; color:#fff; letter-spacing:0.08em; text-transform:uppercase; line-height:1; }
-.top-subtitle { font-size:12px; color:rgba(255,255,255,0.7); font-weight:400; letter-spacing:0.06em; text-transform:uppercase; }
 .top-section { font-size:18px; color:rgba(255,255,255,0.75); letter-spacing:0.1em; text-transform:uppercase; padding-left:20px; border-left:2px solid rgba(255,255,255,0.3); }
-.top-week { font-size:14px; color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase; }
-.nav-dots { display:flex; gap:10px; margin-left:8px; }
+.top-week { font-size:14px; color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase; margin-left:20px; }
+.nav-dots { display:flex; gap:10px; margin-left:20px; }
 .nav-dot { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.3); transition:all 0.3s; }
 .nav-dot.on { background:#fff; transform:scale(1.3); box-shadow:0 0 6px #fff; }
 .top-right { text-align:right; }
@@ -55,7 +52,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 @keyframes scrollTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 .progress-wrap { width:100%; height:3px; background:rgba(0,196,114,0.2); position:absolute; bottom:44px; left:0; z-index:30; }
 .progress-bar { height:100%; width:0%; background:var(--brand-bright); box-shadow:0 0 8px var(--brand-bright); }
-.refresh-tag { position:absolute; bottom:50px; right:16px; font-size:10px; color:var(--gray-dim); background:rgba(0,0,0,0.5); padding:3px 10px; border-radius:20px; z-index:40; }
 
 /* SHARED LAYOUT */
 .two-col { display:grid; grid-template-columns:400px 1fr; height:100%; }
@@ -67,8 +63,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 
 /* LEFT STATS (shared) */
 .left-inner { padding:28px 28px 20px; display:flex; flex-direction:column; flex:1; overflow:hidden; }
-.brand-logo { font-family:'Bebas Neue',sans-serif; font-size:54px; letter-spacing:5px; color:var(--brand-bright); line-height:1; text-shadow:0 0 50px rgba(0,196,114,0.35); margin-bottom:2px; }
-.brand-sub { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--gray-dim); font-weight:300; margin-bottom:18px; }
 .stat-divider { width:32px; height:2px; background:var(--brand); margin-bottom:18px; box-shadow:0 0 10px rgba(0,138,80,0.6); }
 .stat-block { margin-bottom:14px; }
 .stat-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:2px; }
@@ -81,10 +75,10 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 .legend-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:8px; }
 .legend-item { display:flex; align-items:center; gap:8px; margin-bottom:7px; font-size:11px; color:var(--gray-dim); }
 .legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-.bottom-badge { display:inline-flex; align-items:center; gap:8px; margin-top:auto; background:rgba(0,138,80,0.08); border:1px solid rgba(0,138,80,0.25); border-radius:100px; padding:8px 14px; flex-shrink:0; }
+.bottom-badge { display:inline-flex; align-items:center; gap:8px; margin-top:auto; background:rgba(0,138,80,0.08); border:1px solid rgba(0,138,80,0.25); border-radius:100px; padding:8px 14px; flex-shrink:0; max-width:100%; }
 .pulse-dot { width:6px; height:6px; border-radius:50%; background:var(--brand-bright); box-shadow:0 0 8px var(--brand-bright); animation:pulse 2s infinite; flex-shrink:0; }
 @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-.badge-text { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--brand-bright); font-weight:500; }
+.badge-text { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--brand-bright); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* MEDALS */
 .medal-wrap { position:relative; width:42px; height:42px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
@@ -115,7 +109,7 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 .pview.active { display:flex; animation:fadeUp 0.5s; }
 
 /* winners grid */
-.winners-wrap { flex:1; padding:10px 14px; display:grid; grid-template-columns:1fr 1fr; gap:8px; overflow:hidden; align-content:start; }
+.winners-wrap { flex:1; padding:10px 14px; display:grid; grid-template-columns:1fr 1fr; gap:8px; overflow-y:auto; align-content:start; }
 .wcard { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; display:flex; flex-direction:column; gap:3px; }
 .wcard.hot { border-color:#008a50; background:#0d1a14; }
 .wcard-top { display:flex; align-items:flex-start; justify-content:space-between; gap:6px; }
@@ -125,7 +119,7 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 .wcard-note { font-size:10px; color:var(--amber); font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* prize board */
-.prize-wrap { flex:1; padding:14px 18px; overflow:hidden; }
+.prize-wrap { flex:1; padding:14px 18px; overflow-y:auto; }
 .prize-title { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); margin-bottom:12px; font-weight:700; }
 .prize-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
 .prize-card { background:#141414; border:1px solid #202020; border-radius:12px; padding:14px 8px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; }
@@ -134,7 +128,7 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 .prize-unit { font-size:10px; font-weight:700; color:var(--gray-dim); text-transform:uppercase; letter-spacing:0.05em; }
 
 /* ===== NPS SCREEN ===== */
-.nps-grid { flex:1; padding:8px 14px; display:grid; gap:7px; overflow:hidden; align-content:start; }
+.nps-grid { flex:1; padding:8px 14px; display:grid; gap:7px; overflow-y:auto; align-content:start; }
 .nps-card { background:#141414; border:1px solid #202020; border-radius:9px; padding:8px 12px; display:flex; flex-direction:column; gap:4px; }
 .nps-name { font-size:14px; font-weight:700; color:#fff; line-height:1.2; }
 .nps-score-row { display:flex; align-items:center; justify-content:space-between; gap:6px; }
@@ -143,31 +137,36 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
 .nps-pills { display:flex; gap:5px; flex-wrap:wrap; }
 .nps-pill { font-size:13px; font-weight:800; padding:2px 7px; border-radius:14px; }
 .nps-pill.pro{background:rgba(0,196,106,0.15);color:#00c46a}
+.nps-pill.passive{background:rgba(240,192,64,0.15);color:#f0c040}
 .nps-pill.det{background:rgba(224,85,85,0.15);color:#e05555}
 .nps-pill.resp{background:rgba(255,255,255,0.07);color:#999}
 .nps-bar-wrap { height:3px; background:#222; border-radius:2px; }
 .nps-bar { height:100%; background:#008a50; border-radius:2px; }
-.nps-section-sep { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); font-weight:700; padding:5px 0 2px; border-bottom:1px solid rgba(0,138,80,0.15); grid-column:1/-1; }
+.nps-divider { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); font-weight:700; padding:6px 4px 2px; grid-column:1/-1; border-top:1px solid rgba(0,138,80,0.15); margin-top:2px; }
+.nps-card.manager .nps-name { color:rgba(0,196,114,0.7); font-size:13px; }
 
 /* ===== DRIVER SCREEN ===== */
-.ds-podium { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:4px 0; }
-.ds-pod-row { display:flex; align-items:center; gap:10px; flex:1; min-height:0; padding:0 14px; border-bottom:1px solid #181818; }
+.ds-podium { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:2px 0; gap:2px; }
+.ds-pod-row { display:flex; align-items:center; gap:10px; padding:6px 14px; border-bottom:1px solid #181818; min-height:44px; }
 .ds-pod-row.podium { background:rgba(0,138,80,0.06); }
-.ds-pod-name { flex:1; font-size:15px; font-weight:600; color:#eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ds-pod-score { font-family:'Bebas Neue',sans-serif; font-size:22px; }
+.ds-pod-name { flex:1; font-size:14px; font-weight:600; color:#eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ds-pod-score { font-family:'Bebas Neue',sans-serif; font-size:20px; }
+.ds-pod-score.excellent { color:#00c46a; text-shadow:0 0 8px #00c46a; animation:pulse-glow 1.5s ease-in-out infinite; }
+@keyframes pulse-glow { 0%,100%{text-shadow:0 0 4px #00c46a;} 50%{text-shadow:0 0 16px #00c46a;} }
 .ds-pod-score.green{color:#00c46a} .ds-pod-score.yellow{color:#f0c040} .ds-pod-score.red{color:#e05555}
-
-.ds-list { flex:1; padding:6px 18px; display:flex; flex-direction:column; gap:4px; overflow:hidden; }
+.ds-list { flex:1; padding:6px 18px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; }
 .ds-row { display:flex; align-items:center; gap:8px; background:#141414; border:1px solid #1e1e1e; border-radius:7px; flex:1; min-height:0; padding:0 12px; }
 .ds-name { width:170px; font-size:15px; font-weight:600; color:#eee; flex-shrink:0; }
 .ds-months { display:flex; gap:3px; flex:1; align-items:center; }
 .ds-month { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:44px; }
 .ds-month-label { font-size:8px; color:#444; font-weight:700; text-transform:uppercase; }
 .ds-month-val { font-size:13px; font-weight:800; }
+.ds-month-val.excellent { color:#00c46a; text-shadow:0 0 6px #00c46a; }
 .ds-month-val.green{color:#00c46a} .ds-month-val.yellow{color:#f0c040} .ds-month-val.red{color:#e05555} .ds-month-val.empty{color:#242424}
 .ds-ye-wrap { display:flex; flex-direction:column; align-items:center; gap:1px; flex-shrink:0; min-width:56px; }
 .ds-ye-label { font-size:8px; color:#444; font-weight:700; text-transform:uppercase; }
 .ds-ye { font-family:'Bebas Neue',sans-serif; font-size:18px; }
+.ds-ye.excellent { color:#00c46a; text-shadow:0 0 8px #00c46a; animation:pulse-glow 1.5s ease-in-out infinite; }
 .ds-ye.green{color:#00c46a} .ds-ye.yellow{color:#f0c040} .ds-ye.red{color:#e05555} .ds-ye.empty{color:#333}
 
 .loading { display:flex; align-items:center; justify-content:center; height:100%; font-size:20px; color:var(--gray-dim); }
@@ -181,10 +180,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
     <div class="top-left">
       <img class="logo" src="logo.webp" alt="NexGreen" onerror="this.style.display='none'">
       <div class="top-divider"></div>
-      <div class="top-titles">
-        <div class="top-title">Team Dashboard 2026</div>
-        <div class="top-subtitle">NexGreen Sterling Heights</div>
-      </div>
       <div class="top-section" id="top-section">Poker Chips</div>
       <div class="top-week" id="top-week"></div>
       <div class="nav-dots">
@@ -204,8 +199,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
     <div class="two-col">
       <div class="left-panel">
         <div class="left-inner">
-          <div class="brand-logo">NexGreen</div>
-          <div class="brand-sub">Sterling Heights · Poker Chips</div>
           <div class="stat-divider"></div>
           <div class="stat-block">
             <div class="stat-label">Total Chips Awarded</div>
@@ -221,14 +214,12 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
         </div>
       </div>
       <div class="right-panel">
-        <!-- Prize Board view -->
         <div class="pview active" id="pview-prize">
           <div class="panel-hdr">🎁 Prize Board — What Can You Win?</div>
           <div class="panel-body">
             <div class="prize-wrap" id="prize-wrap"><div class="loading">Loading prizes...</div></div>
           </div>
         </div>
-        <!-- Winners view -->
         <div class="pview" id="pview-winners">
           <div class="panel-hdr">🏆 This Week's Winners</div>
           <div class="panel-body">
@@ -244,8 +235,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
     <div class="two-col" style="grid-template-columns:320px 1fr">
       <div class="left-panel">
         <div class="left-inner">
-          <div class="brand-logo">NexGreen</div>
-          <div class="brand-sub">Sterling Heights · NPS</div>
           <div class="stat-divider"></div>
           <div class="stat-block">
             <div class="stat-label">Team Year-End Score</div>
@@ -265,9 +254,9 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
           </div>
           <div class="legend">
             <div class="legend-label">Score Key</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90+ — Excellent</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>50–89 — Good</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Below 50 — Needs Attention</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>Promoters — 9 and above</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>Passive — 7 – 8.9</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Detractors — 6 and below</span></div>
           </div>
           <div class="bottom-badge" style="margin-top:12px;">
             <div class="pulse-dot"></div>
@@ -289,8 +278,6 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
     <div class="two-col" style="grid-template-columns:320px 1fr">
       <div class="left-panel">
         <div class="left-inner">
-          <div class="brand-logo">NexGreen</div>
-          <div class="brand-sub">Sterling Heights · Driver Scores</div>
           <div class="stat-divider"></div>
           <div class="stat-block">
             <div class="stat-label">Branch Average YTD</div>
@@ -307,16 +294,13 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
           </div>
           <div class="legend">
             <div class="legend-label">Score Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>93+ — Excellent (pulsing glow)</span></div>
             <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90+ — Good Standing</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>75–89 — Monitor</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Below 75 — Needs Attention</span></div>
-          </div>
-          <div class="bottom-badge" style="margin-top:12px;">
-            <div class="pulse-dot"></div>
-            <div class="badge-text">2026 Season · Fleetio</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>86 – 89.9 — Monitor</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>85 and below — Needs Immediate Correction</span></div>
           </div>
         </div>
-        <div class="panel-hdr">🏅 Top Performers</div>
+        <div class="panel-hdr">🏅 Top 5 Performers</div>
         <div class="ds-podium" id="ds-podium"><div class="loading">Loading...</div></div>
       </div>
       <div class="right-panel">
@@ -336,7 +320,7 @@ body { width:100vw; height:100vh; overflow:hidden; background:#020d07; display:f
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
 
-</div><!-- #root -->
+</div>
 
 <script>
 // ============ CONFIG ============
@@ -347,14 +331,6 @@ const PRIZE_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTx8ZFK52wFk
 const SCREEN_MS  = 30000;
 const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
 
-// ============ SCALE ============
-function scale() {
-  const el = document.getElementById('root');
-  const s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
-  el.style.transform = `scale(${s})`;
-}
-window.addEventListener('resize', scale); scale();
-
 // ============ CSV ============
 function parseCSVRaw(txt) {
   return txt.trim().split('\n').map(line => {
@@ -364,17 +340,18 @@ function parseCSVRaw(txt) {
     return cols;
   });
 }
-function parseCSV(txt) {
-  const raw=parseCSVRaw(txt); if(!raw.length) return {rows:[],raw};
-  const headers=raw[0];
-  const rows=raw.slice(1).map(cols=>{ const o={}; headers.forEach((h,i)=>o[h]=(cols[i]||'').trim()); return o; }).filter(r=>Object.values(r).some(v=>v));
-  return {rows,raw};
-}
 async function fetchTxt(url){ const r=await fetch(url+'&t='+Date.now()); return r.text(); }
 
 // ============ HELPERS ============
-function dsColor(v){ const n=parseFloat(v); if(isNaN(n)||v==='')return'empty'; if(n>=90)return'green'; if(n>=75)return'yellow'; return'red'; }
-function npsColor(v){ if(v===null||isNaN(v))return'none'; if(v>=90)return'green'; if(v>=50)return'yellow'; return'red'; }
+function dsColorScore(v){ 
+  const n=parseFloat(v); 
+  if(isNaN(n)||v==='') return 'empty'; 
+  if(n >= 93) return 'excellent';
+  if(n >= 90) return 'green'; 
+  if(n >= 86) return 'yellow'; 
+  return 'red'; 
+}
+function npsColor(v){ if(v===null||isNaN(v))return'none'; if(v>=9)return'green'; if(v>=7)return'yellow'; return'red'; }
 function medalHtml(i){
   if(i===0) return `<div class="medal-wrap"><div class="mg mg-gold"></div><div class="mr mr-gold"></div><div class="medal m1">1</div></div>`;
   if(i===1) return `<div class="medal-wrap"><div class="mg mg-silver"></div><div class="mr mr-silver"></div><div class="medal m2">2</div></div>`;
@@ -393,7 +370,15 @@ function getWeek(rows){ let m=0; rows.forEach(r=>{const w=parseInt(r.Week);if(w>
 async function renderPoker(){
   try{
     const txt=await fetchTxt(POKER_URL);
-    const {rows}=parseCSV(txt);
+    const lines=txt.trim().split('\n');
+    const headers=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+    const rows=lines.slice(1).map(line=>{
+      const cols=[]; let cur='',inQ=false;
+      for(const c of line){ if(c==='"')inQ=!inQ; else if(c===','&&!inQ){cols.push(cur.trim());cur='';} else cur+=c; }
+      cols.push(cur.trim());
+      const o={}; headers.forEach((h,i)=>o[h]=(cols[i]||'').replace(/^"|"$/g,'').trim());
+      return o;
+    }).filter(r=>Object.values(r).some(v=>v));
     const allTime=buildAllTime(rows);
     const {weekRows,maxWeek}=getWeek(rows);
     const weekDate=weekRows.find(r=>r.Date)?.Date||'';
@@ -445,23 +430,18 @@ async function renderNPS(){
   try{
     const txt=await fetchTxt(NPS_URL);
     const raw=parseCSVRaw(txt);
-    // Columns by position: A=Tech(0), B=Promoters(1), C=Detractors(2), D=Responses(3), E=Score(4)
-    // Row 0 = headers. Data rows = 1..26 (techs). Row index 28 = B28 (Updated To). Row index 29 = D29 (Year-End Score)
-    const dataRows = raw.slice(1, 27).filter(row => row[0] && row[0] !== 'Tech' && row[0] !== '');
-
-    // Updated To = B28 => raw[28][1]
-    const updatedVal = (raw[28] && raw[28][1]) ? raw[28][1].trim() : '';
+    const dataRows = raw.slice(1, 27).filter(row => row[0] && row[0].trim()!=='' && row[0].trim()!=='Tech');
+    const updatedVal = (raw[27] && raw[27][1]) ? raw[27][1].trim() : '';
     document.getElementById('nps-updated').textContent = updatedVal ? `Updated through ${updatedVal}` : 'NPS · Year to Date';
-
-    // Year-End Score = D29 => raw[29][3]
-    const yearEndRaw = (raw[29] && raw[29][3]) ? raw[29][3].trim() : '';
+    const yearEndRaw = (raw[28] && raw[28][3]) ? raw[28][3].trim() : '';
     const yearEnd = (!yearEndRaw || yearEndRaw==='None' || yearEndRaw==='#DIV/0!' || yearEndRaw==='#VALUE!') ? null : parseFloat(yearEndRaw);
-    const tsCls = npsColor(yearEnd);
     const el = document.getElementById('nps-team-score');
     el.textContent = yearEnd!==null ? yearEnd.toFixed(1) : '—';
-    el.style.color = tsCls==='green'?'#00c46a':tsCls==='yellow'?'#f0c040':tsCls==='red'?'#e05555':'var(--gray-dim)';
-
-    // Totals — sum columns B, C, D across data rows
+    if(yearEnd!==null){
+      if(yearEnd >= 9) el.style.color = '#00c46a';
+      else if(yearEnd >= 7) el.style.color = '#f0c040';
+      else el.style.color = '#e05555';
+    } else { el.style.color = 'var(--gray-dim)'; }
     let tPro=0,tDet=0,tResp=0;
     dataRows.forEach(row=>{
       tPro += parseInt(row[1])||0;
@@ -471,21 +451,33 @@ async function renderNPS(){
     document.getElementById('nps-total-resp').textContent=tResp;
     document.getElementById('nps-total-pro').textContent=tPro;
     document.getElementById('nps-total-det').textContent=tDet;
-
     const maxR=Math.max(...dataRows.map(row=>parseInt(row[3])||0),1);
     const cols=dataRows.length<=8?2:dataRows.length<=15?3:4;
     const grid=document.getElementById('nps-grid');
     grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-    grid.innerHTML=dataRows.map(row=>{
+    const managerNames=['troy stasik','eddie lapointe','joe sepesi','joe herrera'];
+    const regular=[], managers=[];
+    dataRows.forEach(row=>{
+      const name=(row[0]||'').trim().toLowerCase();
+      if(managerNames.includes(name)) managers.push(row);
+      else regular.push(row);
+    });
+    function cardHtml(row, isManager){
       const name=(!row[0]||row[0]==='0')?'Unassigned':row[0];
       const raw2=row[4],isNone=!raw2||raw2==='None'||raw2===''||raw2==='#DIV/0!'||raw2==='#VALUE!';
       const sc=isNone?null:parseFloat(raw2);
-      const cls=npsColor(sc);
+      let cls='none';
+      if(!isNone && sc!==null){
+        if(sc >= 9) cls='green';
+        else if(sc >= 7) cls='yellow';
+        else cls='red';
+      }
       const pro=parseInt(row[1])||0,det=parseInt(row[2])||0,resp=parseInt(row[3])||0;
-      return`<div class="nps-card">
+      const displayScore = isNone ? '—' : (sc >= 0 ? '+' : '') + sc.toFixed(1);
+      return`<div class="nps-card${isManager?' manager':''}">
         <div class="nps-name">${name}</div>
         <div class="nps-score-row">
-          <div class="nps-score ${cls}">${isNone?'—':(sc>=0?'+':'')+sc.toFixed(1)}</div>
+          <div class="nps-score ${cls}">${displayScore}</div>
           <div class="nps-pills">
             <div class="nps-pill pro">👍 ${pro}</div>
             <div class="nps-pill det">👎 ${det}</div>
@@ -494,8 +486,14 @@ async function renderNPS(){
         </div>
         <div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxR*100)}%"></div></div>
       </div>`;
-    }).join('');
-    const top=dataRows.filter(row=>{const v=row[4];return v&&v!=='None'&&!isNaN(parseFloat(v))&&parseFloat(v)>=90;});
+    }
+    let html = regular.map(row=>cardHtml(row,false)).join('');
+    if(managers.length){
+      html += `<div class="nps-divider">👔 Management Team</div>`;
+      html += managers.map(row=>cardHtml(row,true)).join('');
+    }
+    grid.innerHTML = html;
+    const top=dataRows.filter(row=>{const v=row[4];return v&&v!=='None'&&!isNaN(parseFloat(v))&&parseFloat(v)>=9;});
     window._tickerNPS=top.length?'Top NPS: '+top.map(row=>`${row[0]==='0'?'Unassigned':row[0]} (${parseFloat(row[4]).toFixed(1)})`).join('  •  '):'NPS scores updated — keep earning great reviews!';
   }catch(e){console.error('NPS',e);}
 }
@@ -518,7 +516,6 @@ async function renderDrivers(){
       if(name.toLowerCase().includes('branch')||name.toLowerCase().includes('average')||name.toLowerCase().includes('avg'))break;
       dataRows.push(row);
     }
-    // Stats
     const withYE=dataRows.filter(r=>!isNaN(parseFloat((r[yearIdx]||'').trim())));
     const avg=withYE.length?withYE.reduce((s,r)=>s+parseFloat(r[yearIdx]),0)/withYE.length:0;
     document.getElementById('ds-avg').textContent=avg?avg.toFixed(1):'—';
@@ -526,30 +523,47 @@ async function renderDrivers(){
     const below90=withYE.filter(r=>parseFloat(r[yearIdx])<90).length;
     document.getElementById('ds-below90').textContent=below90||'✓ None';
     if(!below90){document.getElementById('ds-below90').style.color='#00c46a';}
-    // Podium sorted by year-end
     const sorted=[...withYE].sort((a,b)=>parseFloat(b[yearIdx])-parseFloat(a[yearIdx]));
-    document.getElementById('ds-podium').innerHTML=sorted.map((row,i)=>{
+    const topFive = sorted.slice(0,5);
+    document.getElementById('ds-podium').innerHTML = topFive.map((row,i)=>{
       const name=(row[nameIdx]||'').trim();
-      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye),cls=dsColor(ye);
+      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye);
+      let cls = dsColorScore(ye);
+      let scoreClass = '';
+      if(cls === 'excellent') scoreClass = 'excellent';
+      else if(cls === 'green') scoreClass = 'green';
+      else if(cls === 'yellow') scoreClass = 'yellow';
+      else scoreClass = 'red';
       return`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}
         <div class="ds-pod-name">${name}</div>
-        <div class="ds-pod-score ${cls}">${isNaN(yeN)?'—':yeN.toFixed(1)}</div>
+        <div class="ds-pod-score ${scoreClass}">${isNaN(yeN)?'—':yeN.toFixed(1)}</div>
       </div>`;
     }).join('');
-    // Full list
     document.getElementById('ds-list').innerHTML=dataRows.map(row=>{
       const name=(row[nameIdx]||'Unassigned').trim();
       const monthCells=MONTHS.map(m=>{
         const idx=headers.findIndex(h=>h.trim()===m);
         const val=idx>=0?(row[idx]||'').trim():'';
-        const n=parseFloat(val),cls=dsColor(val);
-        return`<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${cls}">${isNaN(n)||val===''?'—':n}</div></div>`;
+        const n=parseFloat(val);
+        let cls = dsColorScore(val);
+        let valClass = '';
+        if(cls === 'excellent') valClass = 'excellent';
+        else if(cls === 'green') valClass = 'green';
+        else if(cls === 'yellow') valClass = 'yellow';
+        else valClass = 'empty';
+        return`<div class="ds-month"><div class="ds-month-label">${m}</div><div class="ds-month-val ${valClass}">${isNaN(n)||val===''?'—':n}</div></div>`;
       }).join('');
-      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye),yeCls=dsColor(ye);
+      const ye=(row[yearIdx]||'').trim(),yeN=parseFloat(ye);
+      let yeCls = dsColorScore(ye);
+      let yeClass = '';
+      if(yeCls === 'excellent') yeClass = 'excellent';
+      else if(yeCls === 'green') yeClass = 'green';
+      else if(yeCls === 'yellow') yeClass = 'yellow';
+      else yeClass = 'empty';
       return`<div class="ds-row">
         <div class="ds-name">${name}</div>
         <div class="ds-months">${monthCells}</div>
-        <div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeCls}">${isNaN(yeN)||ye===''?'—':yeN.toFixed(1)}</div></div>
+        <div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeClass}">${isNaN(yeN)||ye===''?'—':yeN.toFixed(1)}</div></div>
       </div>`;
     }).join('');
     window._tickerDrivers=sorted.length?'Top driver scores: '+sorted.slice(0,3).map(r=>`${(r[nameIdx]||'').trim()} (${parseFloat(r[yearIdx]).toFixed(1)})`).join('  •  '):'Driver scores updated — stay safe!';
@@ -572,9 +586,8 @@ let si=0;
 function setTicker(i){
   document.getElementById('ticker-label').textContent=TICKERS[i];
   const texts=[window._tickerPoker,window._tickerNPS,window._tickerDrivers];
-  const t=document.getElementById('ticker');
-  // Double the text so scroll loops seamlessly
   const txt=(texts[i]||'Loading...')+'          •          '+(texts[i]||'Loading...');
+  const t=document.getElementById('ticker');
   t.textContent=txt; t.style.animation='none'; t.offsetHeight; t.style.animation='';
 }
 function nextScreen(){
@@ -589,8 +602,6 @@ function nextScreen(){
   startProgress();
 }
 setInterval(nextScreen,SCREEN_MS);
-
-// ============ PROGRESS BAR ============
 function startProgress(){
   const bar=document.getElementById('prog-bar');
   bar.style.transition='none'; bar.style.width='0%'; bar.offsetHeight;

@@ -32,7 +32,16 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 /* TOP BAR */
 .top-bar { background:#008a50; display:flex; align-items:center; justify-content:space-between; padding:0 44px; height:85px; flex-shrink:0; position:relative; z-index:20; }
 .top-left { display:flex; align-items:center; gap:20px; }
-.logo { height:46px; width:auto; max-width:180px; object-fit:contain; flex-shrink:0; }
+.logo-wrapper {
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.logo { height: 38px; width: auto; max-width: 160px; object-fit: contain; display: block; }
 .top-divider { width:1px; height:38px; background:rgba(255,255,255,0.3); }
 .top-section { font-size:18px; color:rgba(255,255,255,0.75); letter-spacing:0.1em; text-transform:uppercase; padding-left:20px; border-left:2px solid rgba(255,255,255,0.3); }
 .top-week { font-size:14px; color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase; margin-left:20px; }
@@ -178,7 +187,9 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
   <!-- TOP BAR -->
   <div class="top-bar">
     <div class="top-left">
-      <img class="logo" src="logo.webp" alt="NexGreen" onerror="this.style.display='none'">
+      <div class="logo-wrapper">
+        <img class="logo" src="logo.webp" alt="NexGreen" onerror="this.style.display='none'">
+      </div>
       <div class="top-divider"></div>
       <div class="top-section" id="top-section">Poker Chips</div>
       <div class="top-week" id="top-week"></div>

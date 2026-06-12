@@ -32,16 +32,14 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 /* TOP BAR */
 .top-bar { background:#008a50; display:flex; align-items:center; justify-content:space-between; padding:0 44px; height:85px; flex-shrink:0; position:relative; z-index:20; }
 .top-left { display:flex; align-items:center; gap:20px; }
-.logo-wrapper {
-  background: rgba(255,255,255,0.15);
-  border-radius: 10px;
-  padding: 5px 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(2px);
+.logo { 
+  height: 38px; 
+  width: auto; 
+  max-width: 160px; 
+  object-fit: contain; 
+  display: block;
+  filter: brightness(0) invert(1);
 }
-.logo { height: 38px; width: auto; max-width: 160px; object-fit: contain; display: block; }
 .top-divider { width:1px; height:38px; background:rgba(255,255,255,0.3); }
 .top-section { font-size:18px; color:rgba(255,255,255,0.75); letter-spacing:0.1em; text-transform:uppercase; padding-left:20px; border-left:2px solid rgba(255,255,255,0.3); }
 .top-week { font-size:14px; color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase; margin-left:20px; }

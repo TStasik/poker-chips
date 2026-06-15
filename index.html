@@ -122,10 +122,10 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .nps-pills { display:flex; gap:5px; }
 .nps-pill { font-size:11px; font-weight:800; padding:2px 6px; border-radius:14px; }
 .nps-pill.pro{background:rgba(0,196,106,0.15);color:#00c46a}
+.nps-pill.passive{background:#f0c040;color:#2c2c2c;}
 .nps-pill.det{background:rgba(224,85,85,0.15);color:#e05555}
 .nps-pill.resp{background:rgba(255,255,255,0.07);color:#999}
-.nps-bar-wrap { height:2px; background:#222; border-radius:2px; margin-top:5px; }
-.nps-bar { height:100%; background:#008a50; border-radius:2px; }
+.nps-stack-bar { height: 4px; background: #333; border-radius: 3px; overflow: hidden; margin-top: 6px; display: flex; }
 .nps-divider { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-dim); padding:6px 0 2px; grid-column:1/-1; border-top:1px solid rgba(0,138,80,0.15); margin-top:4px; }
 
 .ds-podium { flex:1; overflow:hidden; display:flex; flex-direction:column; padding:2px 0; gap:2px; }
@@ -133,6 +133,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .ds-pod-row.podium { background:rgba(0,138,80,0.06); }
 .ds-pod-name { flex:1; font-size:14px; font-weight:600; color:#eee; }
 .ds-pod-score { font-family:'Bebas Neue',sans-serif; font-size:20px; }
+.ds-pod-score.excellent { color: #FFD166; text-shadow: 0 0 8px #FFD166; animation: pulse-gold 1.5s ease-in-out infinite; }
 .ds-pod-score.green{color:#00c46a} .ds-pod-score.yellow{color:#f0c040} .ds-pod-score.red{color:#e05555}
 .ds-list { flex:1; padding:6px 18px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; }
 .ds-row { display:flex; align-items:center; gap:8px; background:#141414; border:1px solid #1e1e1e; border-radius:7px; padding:0 12px; min-height:44px; }
@@ -141,11 +142,27 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .ds-month { text-align:center; min-width:44px; }
 .ds-month-label { font-size:7px; color:#666; text-transform:uppercase; }
 .ds-month-val { font-size:12px; font-weight:800; }
+.ds-month-val.excellent { color: #FFD166; text-shadow: 0 0 6px #FFD166; animation: pulse-gold 1.5s ease-in-out infinite; }
 .ds-month-val.green{color:#00c46a} .ds-month-val.yellow{color:#f0c040} .ds-month-val.red{color:#e05555} .ds-month-val.empty{color:#333}
 .ds-ye-wrap { text-align:center; min-width:55px; }
 .ds-ye-label { font-size:7px; color:#666; text-transform:uppercase; }
 .ds-ye { font-family:'Bebas Neue',sans-serif; font-size:17px; }
+.ds-ye.excellent { color: #FFD166; text-shadow: 0 0 8px #FFD166; animation: pulse-gold 1.5s ease-in-out infinite; }
 .ds-ye.green{color:#00c46a} .ds-ye.yellow{color:#f0c040} .ds-ye.red{color:#e05555} .ds-ye.empty{color:#333}
+@keyframes pulse-gold { 0%,100% { text-shadow: 0 0 4px #FFD166; } 50% { text-shadow: 0 0 16px #FFD166; } }
+
+/* Sales row highlighting */
+.sales-monitor-row { background: rgba(240, 192, 64, 0.12); border-left: 3px solid #f0c040; }
+.sales-attention-row { background: rgba(224, 85, 85, 0.12); border-left: 3px solid #e05555; }
+.special-sales-row { background: rgba(0, 138, 80, 0.05); border: 1px dashed rgba(0, 138, 80, 0.3); margin-top: 6px; }
+
+/* Compact left panel for Sales screen */
+#screen-sales .left-inner { padding: 20px 24px 16px; }
+#screen-sales .stat-block { margin-bottom: 8px; }
+#screen-sales .stat-value { font-size: 34px; }
+#screen-sales .legend { margin-top: 6px; }
+#screen-sales .legend-item { margin-bottom: 5px; }
+#screen-sales .bottom-badge { margin-top: 8px; padding: 6px 12px; }
 
 .loading { display:flex; align-items:center; justify-content:center; height:100%; font-size:20px; color:var(--gray-dim); }
 </style>
@@ -224,7 +241,8 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
           <div class="stat-block"><div class="stat-label">Total Drivers</div><div class="stat-value" id="ds-total">—</div></div>
           <div class="stat-block"><div class="stat-label">Below 90 Year-End</div><div class="stat-value amber" id="ds-below90">—</div></div>
           <div class="legend"><div class="legend-label">Score Key</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90+ — Good Standing</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FFD166"></div><span>94+ — Excellent (pulsing gold)</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>90–93 — Good Standing</span></div>
             <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>86–89.9 — Monitor</span></div>
             <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>85- — Needs Attention</span></div>
           </div>
@@ -244,13 +262,12 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
         <div class="left-inner">
           <div class="stat-divider"></div>
           <div class="stat-block"><div class="stat-label">Team Total — Latest Month</div><div class="stat-value gold" id="sales-monthly-total">—</div><div class="stat-note" id="sales-month-name">—</div></div>
-          <div class="stat-block"><div class="stat-label">Total Truck Sales — YTD</div><div class="stat-value gold" id="sales-ytd">—</div><div class="stat-note">Excludes hybrid &amp; field-only</div></div>
-          <div class="stat-block"><div class="stat-label">Top Performer</div><div class="stat-value" id="sales-top-performer">—</div><div class="stat-note" id="sales-top-amount">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Truck Sales — YTD</div><div class="stat-value gold" id="sales-ytd">—</div></div>
           <div class="stat-block"><div class="stat-label">Active This Month</div><div class="stat-value" id="sales-active-count">—</div><div class="stat-note">Technicians with sales</div></div>
           <div class="stat-block"><div class="stat-label">Needs Attention</div><div class="stat-value red" id="sales-cold-count">—</div><div class="stat-note">No sales past 2 months</div></div>
           <div class="legend"><div class="legend-label">Sales Key</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>No Sales This Month — Monitor</span></div>
-            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>2+ Months No Sales — Attention</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>⚠️ No Sales This Month — Monitor</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>🔴 2+ Months No Sales — Attention</span></div>
           </div>
           <div class="bottom-badge"><div class="pulse-dot"></div><div class="badge-text" id="sales-updated">Loading...</div></div>
         </div>
@@ -292,7 +309,6 @@ function parseCSVRaw(txt){
     return cols;
   });
 }
-function dsColor(v){ const n=parseFloat(v); if(isNaN(n)||v==='')return'empty'; if(n>=90)return'green'; if(n>=75)return'yellow'; return'red'; }
 function medalHtml(i){
   if(i===0) return `<div class="medal-wrap"><div class="mg mg-gold"></div><div class="mr mr-gold"></div><div class="medal m1">1</div></div>`;
   if(i===1) return `<div class="medal-wrap"><div class="mg mg-silver"></div><div class="mr mr-silver"></div><div class="medal m2">2</div></div>`;
@@ -347,7 +363,7 @@ async function renderPrizes(){
   }catch(e){ document.getElementById('prize-wrap').innerHTML='<div class="loading">Prize board unavailable</div>'; }
 }
 
-// ============ NPS ============
+// ============ NPS (stacked bar + yellow pill) ============
 async function renderNPS(){
   try{
     const txt=await fetchTxt(NPS_URL);
@@ -375,30 +391,62 @@ async function renderNPS(){
     const managerNames=['troy stasik','eddie lapointe','joe sepesi','joe herrera'];
     const regular=[], managers=[];
     dataRows.forEach(row=>{ const name=(row[0]||'').trim().toLowerCase(); if(managerNames.includes(name)) managers.push(row); else regular.push(row); });
-    function cardHtml(row,isManager){
+    
+    function cardHtml(row, isManager){
       const name=(!row[0]||row[0]==='0')?'Unassigned':row[0];
-      const raw2=row[4],isNone=!raw2||raw2==='None'||raw2===''; const sc=isNone?null:parseFloat(raw2);
-      let cls='none'; if(!isNone&&sc!==null){ if(sc>=9) cls='green'; else if(sc>=7) cls='yellow'; else cls='red'; }
-      const pro=parseInt(row[1])||0,det=parseInt(row[2])||0,resp=parseInt(row[3])||0;
-      return `<div class="nps-card${isManager?' manager':''}"><div class="nps-name">${name}</div><div class="nps-score-row"><div class="nps-score ${cls}">${isNone?'—':sc.toFixed(1)}</div><div class="nps-pills"><div class="nps-pill pro">👍 ${pro}</div><div class="nps-pill det">👎 ${det}</div><div class="nps-pill resp">${resp}</div></div></div><div class="nps-bar-wrap"><div class="nps-bar" style="width:${Math.round(resp/maxR*100)}%"></div></div></div>`;
+      const raw2=row[4],isNone=!raw2||raw2==='None'||raw2===''; 
+      const sc=isNone?null:parseFloat(raw2);
+      let cls='none';
+      if(!isNone&&sc!==null){
+        if(sc >= 9) cls='green';
+        else if(sc >= 7) cls='yellow';
+        else cls='red';
+      }
+      const pro=parseInt(row[1])||0;
+      const det=parseInt(row[2])||0;
+      const resp=parseInt(row[3])||0;
+      const passive = resp - pro - det;
+      let greenPct=0, yellowPct=0, redPct=0;
+      if(resp>0){
+        greenPct=(pro/resp)*100;
+        yellowPct=(passive/resp)*100;
+        redPct=(det/resp)*100;
+      }
+      return `<div class="nps-card${isManager?' manager':''}">
+        <div class="nps-name">${name}</div>
+        <div class="nps-score-row">
+          <div class="nps-score ${cls}">${isNone?'—':sc.toFixed(1)}</div>
+          <div class="nps-pills">
+            <div class="nps-pill pro">👍 ${pro}</div>
+            <div class="nps-pill passive">➖ ${passive}</div>
+            <div class="nps-pill det">👎 ${det}</div>
+            <div class="nps-pill resp">${resp} rev</div>
+          </div>
+        </div>
+        <div class="nps-stack-bar">
+          <div style="width:${greenPct}%; background:#00c46a; height:100%;"></div>
+          <div style="width:${yellowPct}%; background:#f0c040; height:100%;"></div>
+          <div style="width:${redPct}%; background:#e05555; height:100%;"></div>
+        </div>
+      </div>`;
     }
+    
     let html = regular.map(row=>cardHtml(row,false)).join('');
     if(managers.length) html += `<div class="nps-divider">👔 Management Team</div>` + managers.map(row=>cardHtml(row,true)).join('');
     document.getElementById('nps-grid').innerHTML = html;
-    window._tickerNPS = regular.filter(r=>{const v=r[4];return v&&v!=='None'&&parseFloat(v)>=9;}).length ? 'Top NPS performers active' : 'NPS scores updated';
+    
+    const topCount = regular.filter(r=>{const v=r[4];return v&&v!=='None'&&parseFloat(v)>=9;}).length;
+    window._tickerNPS = topCount ? `🏆 Top NPS: ${topCount} promoter${topCount>1?'s':''} this period` : 'NPS scores updated — keep earning promoters!';
   }catch(e){console.error('NPS',e);}
 }
 
-// ============ DRIVER SCORES ============
+// ============ DRIVER SCORES (94+ gold pulse) ============
 async function renderDrivers(){
   try{
     const txt=await fetchTxt(DRIVER_URL);
     const lines=txt.trim().split('\n').map(l=>l.split(',').map(c=>c.trim().replace(/^"|"$/g,'')));
-    // Get updated date from cell A1 (first row, first column)
     let driverUpdated = '';
-    if(lines[0] && lines[0][0]){
-      driverUpdated = lines[0][0].trim();
-    }
+    if(lines[0] && lines[0][0]) driverUpdated = lines[0][0].trim();
     document.getElementById('driver-updated').textContent = driverUpdated ? `Updated: ${driverUpdated}` : 'Driver scores · 2026';
     
     let hidx=-1; for(let i=0;i<lines.length;i++) if(lines[i].some(c=>c.toLowerCase().includes('specialist'))){ hidx=i; break; }
@@ -416,23 +464,48 @@ async function renderDrivers(){
     if(!below90) document.getElementById('ds-below90').style.color='#00c46a';
     const sorted=[...withYE].sort((a,b)=>parseFloat(b[yearIdx])-parseFloat(a[yearIdx]));
     const topFive=sorted.slice(0,5);
-    document.getElementById('ds-podium').innerHTML=topFive.map((row,i)=>`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${row[nameIdx]}</div><div class="ds-pod-score green">${parseFloat(row[yearIdx]).toFixed(1)}</div></div>`).join('');
-    document.getElementById('ds-list').innerHTML=data.map(row=>{ const name=row[nameIdx]; const monthCells=monthIdx.map(idx=>{ const val=row[idx]; const num=parseFloat(val); let cls=!val||isNaN(num)?'empty':(num>=90?'green':(num>=75?'yellow':'red')); return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val ${cls}">${isNaN(num)?'—':num}</div></div>`; }).join(''); const ye=row[yearIdx],yeNum=parseFloat(ye); let yeCls=!ye||isNaN(yeNum)?'empty':(yeNum>=90?'green':(yeNum>=75?'yellow':'red')); return `<div class="ds-row"><div class="ds-name">${name}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeCls}">${isNaN(yeNum)?'—':yeNum.toFixed(1)}</div></div></div>`; }).join('');
-    window._tickerDrivers = topFive.length ? `Top drivers: ${topFive[0][nameIdx]} leads` : 'Driver scores updated';
+    
+    function getScoreClass(score){
+      if(score >= 94) return 'excellent';
+      if(score >= 90) return 'green';
+      if(score >= 86) return 'yellow';
+      return 'red';
+    }
+    
+    document.getElementById('ds-podium').innerHTML=topFive.map((row,i)=>{
+      const score = parseFloat(row[yearIdx]);
+      const scoreClass = getScoreClass(score);
+      return `<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${row[nameIdx]}</div><div class="ds-pod-score ${scoreClass}">${score.toFixed(1)}</div></div>`;
+    }).join('');
+    
+    document.getElementById('ds-list').innerHTML=data.map(row=>{ 
+      const name=row[nameIdx]; 
+      const monthCells=monthIdx.map(idx=>{ 
+        const val=row[idx]; const num=parseFloat(val); 
+        const scoreClass = !val||isNaN(num) ? 'empty' : getScoreClass(num);
+        return `<div class="ds-month"><div class="ds-month-label">${MONTHS[monthIdx.indexOf(idx)]}</div><div class="ds-month-val ${scoreClass}">${isNaN(num)?'—':num}</div></div>`; 
+      }).join(''); 
+      const ye=row[yearIdx], yeNum=parseFloat(ye); 
+      const yeClass = !ye||isNaN(yeNum) ? 'empty' : getScoreClass(yeNum);
+      return `<div class="ds-row"><div class="ds-name">${name}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">Year End</div><div class="ds-ye ${yeClass}">${isNaN(yeNum)?'—':yeNum.toFixed(1)}</div></div></div>`; 
+    }).join('');
+    window._tickerDrivers = topFive.length ? `🏁 Top driver: ${topFive[0][nameIdx]} (${topFive[0][yearIdx]} pts)` : 'Driver scores updated';
   }catch(e){console.error('Driver',e);}
 }
 
-// ============ SALES BOARD ============
+// ============ SALES BOARD (DYNAMIC CURRENT MONTH) ============
 function fmtSales(v){ 
   if(v === undefined || v === null || v === '') return '—';
   const num = parseFloat(v);
   if(isNaN(num) || num === 0) return '—';
   return '$'+num.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); 
 }
+
 async function renderSales(){
   try{
     const txt=await fetchTxt(SALES_URL);
     const raw=parseCSVRaw(txt);
+    
     let headerRow=-1;
     for(let i=0;i<Math.min(raw.length,30);i++){
       if(raw[i] && raw[i][1] && raw[i][1].trim().toLowerCase() === 'name'){
@@ -440,64 +513,103 @@ async function renderSales(){
       }
     }
     if(headerRow===-1){ console.error('Sales header not found'); return; }
-    const months=[];
-    for(let i=2;i<=13;i++){
-      if(raw[headerRow][i] && raw[headerRow][i].trim()!=='') months.push(raw[headerRow][i].trim());
+    
+    const months = [];
+    for(let i=2; i<=11; i++){
+      if(raw[headerRow][i] && raw[headerRow][i].trim() !== ''){
+        months.push(raw[headerRow][i].trim());
+      }
     }
-    const ytdIdx=2+months.length;
-    let updatedDate='';
-    if(raw[21] && raw[21][3]) updatedDate=raw[21][3].trim();
-    else if(raw[21] && raw[21][2]) updatedDate=raw[21][2].trim();
-    document.getElementById('sales-updated').textContent=updatedDate?`Updated through ${updatedDate}`:'Sales · Year to Date';
-    const regularTechs=[], specialTechs=[], specialNames=['Wesley Banning','Craig Salek'];
-    for(let i=headerRow+1;i<raw.length;i++){
-      const row=raw[i]; if(!row||row.length<2) continue;
-      const name=row[1]?row[1].trim():'';
-      if(!name||name==='') continue;
-      if(name.toLowerCase()==='total'||name.toLowerCase().includes('updated')) break;
-      const sales=[];
-      for(let m=0;m<months.length;m++){
-        let val=0;
-        if(row[2+m]!==undefined && row[2+m]!=='') val=parseFloat(row[2+m])||0;
+    const ytdIdx = 12;
+    
+    let updatedDate = '';
+    for(let i=0;i<raw.length;i++){
+      if(raw[i] && raw[i][1] && raw[i][1].toLowerCase().includes('updated')){
+        updatedDate = raw[i][2] || '';
+        break;
+      }
+    }
+    document.getElementById('sales-updated').textContent = updatedDate ? `Updated through ${updatedDate}` : 'Sales · Year to Date';
+    
+    const regularTechs = [];
+    const specialTechs = [];
+    const specialNames = ['Wesley Banning'];
+    const skipNames = ['Total', 'Updated to:', 'Team Eddie', 'Team Troy'];
+    
+    for(let i=headerRow+1; i<raw.length; i++){
+      const row = raw[i];
+      if(!row || row.length < 2) continue;
+      const name = row[1] ? row[1].trim() : '';
+      if(!name || name === '' || skipNames.some(s => name.toLowerCase().includes(s.toLowerCase()))) continue;
+      
+      const sales = [];
+      for(let m=0; m<months.length; m++){
+        let val = 0;
+        const cellValue = row[2 + m];
+        if(cellValue !== undefined && cellValue !== '' && cellValue !== null){
+          val = parseFloat(cellValue) || 0;
+        }
         sales.push(val);
       }
-      let ytd=0;
-      if(row[ytdIdx]!==undefined && row[ytdIdx]!=='') ytd=parseFloat(row[ytdIdx])||0;
-      const techObj={name,sales,ytd};
-      if(specialNames.includes(name)) specialTechs.push(techObj);
-      else regularTechs.push(techObj);
+      let ytd = 0;
+      if(row[ytdIdx] !== undefined && row[ytdIdx] !== '' && row[ytdIdx] !== null){
+        ytd = parseFloat(row[ytdIdx]) || 0;
+      }
+      const techObj = { name, sales, ytd };
+      if(specialNames.includes(name)){
+        specialTechs.push(techObj);
+      } else {
+        regularTechs.push(techObj);
+      }
     }
-    const currentIdx=months.length-1, prevIdx=Math.max(currentIdx-1,0);
-    const activeTechs=regularTechs.filter(t=>t.sales[currentIdx]>0);
-    const coldTechs=regularTechs.filter(t=>t.sales[currentIdx]===0 && t.sales[prevIdx]===0);
-    const monthlyTotal=regularTechs.reduce((s,t)=>s+t.sales[currentIdx],0);
-    const ytdTotal=regularTechs.reduce((s,t)=>s+t.ytd,0);
-    const sorted=[...regularTechs].sort((a,b)=>b.sales[currentIdx]-a.sales[currentIdx]);
-    const topTech=sorted[0];
-    document.getElementById('sales-monthly-total').textContent=fmtSales(monthlyTotal);
-    document.getElementById('sales-month-name').textContent=months[currentIdx]+' 2026';
-    document.getElementById('sales-ytd').textContent=fmtSales(ytdTotal);
-    document.getElementById('sales-top-performer').textContent=topTech?.name?.split(' ')[0]||'—';
-    document.getElementById('sales-top-amount').textContent=topTech?fmtSales(topTech.sales[currentIdx])+' — '+months[currentIdx]:'—';
-    document.getElementById('sales-active-count').textContent=activeTechs.length+' / '+regularTechs.length;
-    document.getElementById('sales-cold-count').textContent=coldTechs.length>0?coldTechs.length:'✓ None';
-    if(!coldTechs.length) document.getElementById('sales-cold-count').style.color='#00c46a';
-    const top5=sorted.slice(0,5);
-    document.getElementById('sales-podium').innerHTML=top5.map((t,i)=>`<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${t.name}</div><div class="ds-pod-score green">${fmtSales(t.sales[currentIdx])}</div></div>`).join('');
-    let allRows='';
-    [...sorted].forEach(t=>{
-      const hasCurrent=t.sales[currentIdx]>0, hasPrev=t.sales[prevIdx]>0;
-      let status='green'; if(!hasCurrent && hasPrev) status='yellow'; if(!hasCurrent && !hasPrev) status='red';
-      const monthCells=months.map((m,idx)=>`<div class="ds-month"><div class="ds-month-label">${m.substring(0,3)}</div><div class="ds-month-val ${t.sales[idx]>0?'green':'empty'}">${fmtSales(t.sales[idx])}</div></div>`).join('');
-      allRows+=`<div class="ds-row"><div class="ds-name">${t.name}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">YTD</div><div class="ds-ye ${status}">${fmtSales(t.ytd)}</div></div></div>`;
+    
+    // Dynamic current month detection
+    const today = new Date();
+    const currentMonthName = today.toLocaleString('default', { month: 'long' });
+    let currentIdx = months.findIndex(m => m.toLowerCase() === currentMonthName.toLowerCase());
+    if(currentIdx === -1) currentIdx = months.length - 1;
+    const prevIdx = Math.max(currentIdx - 1, 0);
+    
+    const activeTechs = regularTechs.filter(t => t.sales[currentIdx] > 0);
+    const coldTechs = regularTechs.filter(t => t.sales[currentIdx] === 0 && t.sales[prevIdx] === 0);
+    const monthlyTotal = regularTechs.reduce((s,t) => s + t.sales[currentIdx], 0);
+    const ytdTotal = regularTechs.reduce((s,t) => s + t.ytd, 0);
+    const sorted = [...regularTechs].sort((a,b) => b.sales[currentIdx] - a.sales[currentIdx]);
+    
+    document.getElementById('sales-monthly-total').textContent = fmtSales(monthlyTotal);
+    document.getElementById('sales-month-name').textContent = months[currentIdx] + ' 2026';
+    document.getElementById('sales-ytd').textContent = fmtSales(ytdTotal);
+    document.getElementById('sales-active-count').textContent = activeTechs.length + ' / ' + regularTechs.length;
+    document.getElementById('sales-cold-count').textContent = coldTechs.length > 0 ? coldTechs.length : '✓ None';
+    if(!coldTechs.length) document.getElementById('sales-cold-count').style.color = '#00c46a';
+    
+    const top5 = sorted.slice(0,5);
+    document.getElementById('sales-podium').innerHTML = top5.map((t,i) => `<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${t.name}</div><div class="ds-pod-score green">${fmtSales(t.sales[currentIdx])}</div></div>`).join('');
+    
+    let allRows = '';
+    [...sorted].forEach(t => {
+      const hasCurrent = t.sales[currentIdx] > 0;
+      const hasPrev = t.sales[prevIdx] > 0;
+      let rowClass = '';
+      let statusIcon = '';
+      if(!hasCurrent && hasPrev) {
+        rowClass = 'sales-monitor-row';
+        statusIcon = ' ⚠️ No sales this month';
+      } else if(!hasCurrent && !hasPrev) {
+        rowClass = 'sales-attention-row';
+        statusIcon = ' 🔴 No sales for 2+ months';
+      }
+      const monthCells = months.map((m, idx) => `<div class="ds-month"><div class="ds-month-label">${m.substring(0,3)}</div><div class="ds-month-val ${t.sales[idx] > 0 ? 'green' : 'empty'}">${fmtSales(t.sales[idx])}</div></div>`).join('');
+      allRows += `<div class="ds-row ${rowClass}"><div class="ds-name">${t.name}${statusIcon}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">YTD</div><div class="ds-ye ${t.ytd > 0 ? 'green' : 'empty'}">${fmtSales(t.ytd)}</div></div></div>`;
     });
-    specialTechs.forEach(s=>{
-      const monthCells=months.map((m,idx)=>`<div class="ds-month"><div class="ds-month-label">${m.substring(0,3)}</div><div class="ds-month-val ${s.sales[idx]>0?'green':'empty'}">${fmtSales(s.sales[idx])}</div></div>`).join('');
-      const note=s.name==='Wesley Banning'?'⚙ Hybrid Irrigation / Sales':'★ Field Only · Self-Reported';
-      allRows+=`<div class="ds-row" style="background:rgba(0,138,80,0.05); border:1px dashed rgba(0,138,80,0.3); margin-top:6px;"><div class="ds-name" style="color:rgba(0,196,114,0.85);">${note}</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">YTD</div><div class="ds-ye ${s.ytd>0?'green':'empty'}">${fmtSales(s.ytd)}</div></div></div>`;
+    
+    specialTechs.forEach(s => {
+      const monthCells = months.map((m, idx) => `<div class="ds-month"><div class="ds-month-label">${m.substring(0,3)}</div><div class="ds-month-val ${s.sales[idx] > 0 ? 'green' : 'empty'}">${fmtSales(s.sales[idx])}</div></div>`).join('');
+      allRows += `<div class="ds-row special-sales-row"><div class="ds-name" style="color:rgba(0,196,114,0.85);">⚙ ${s.name} (Hybrid Irrigation)</div><div class="ds-months">${monthCells}</div><div class="ds-ye-wrap"><div class="ds-ye-label">YTD</div><div class="ds-ye ${s.ytd > 0 ? 'green' : 'empty'}">${fmtSales(s.ytd)}</div></div></div>`;
     });
-    document.getElementById('sales-list').innerHTML=allRows;
-    window._tickerSales=top5.length?`📈 Top sales: ${top5[0].name} with ${fmtSales(top5[0].sales[currentIdx])}`:'Sales data loaded';
+    
+    document.getElementById('sales-list').innerHTML = allRows;
+    window._tickerSales = top5.length ? `📈 Top sales: ${top5[0].name} with ${fmtSales(top5[0].sales[currentIdx])} in ${months[currentIdx]}` : 'Sales data loaded';
   }catch(e){ console.error('Sales error:',e); document.getElementById('sales-list').innerHTML='<div class="loading">Error loading sales data</div>'; }
 }
 

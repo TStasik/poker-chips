@@ -539,12 +539,12 @@ async function renderProduction(){
     // Column mapping: 0=Tech, 1=Month, 2=Revenue, 3=Bonus, 4=ToDo, 5=Did, 6=%, 7=Missed
     const updatedDate=(raw[0]&&raw[0][10])?raw[0][10].trim():'';
     document.getElementById('prod-updated').textContent=updatedDate?`Updated through ${updatedDate}`:'Production · Year to Date';
+    
     const dataRows=[];
     for(let i=1;i<raw.length;i++){
       const row=raw[i]; if(!row||row.length<7) continue;
       const tech=(row[0]||'').trim(), month=(row[1]||'').trim();
       if(!tech||!month) continue;
-      // Parse % value — handle both decimal and percentage format
       let pct = parseFloat(row[6]) || 0;
       if (row[6] && row[6].includes('%')) {
         pct = pct / 100;
@@ -553,49 +553,71 @@ async function renderProduction(){
       const todo=parseFloat(row[4])||0, did=parseFloat(row[5])||0;
       dataRows.push({tech,month,pct,bonus,todo,did});
     }
-    const months=[...new Set(dataRows.map(r=>r.month))].sort((a,b)=>new Date(a+' 1 2026')-new Date(b+' 1 2026'));
-    const currentMonth=months[months.length-1]||'';
-    const currentData=dataRows.filter(r=>r.month===currentMonth);
-    const activeTechs=currentData.filter(r=>r.did>0||r.todo>0);
-    const bonusTechs=currentData.filter(r=>r.bonus==='Yes');
-    const avgPct=activeTechs.length?activeTechs.reduce((s,r)=>s+r.pct,0)/activeTechs.length:0;
-    const topPerformer=activeTechs.length?activeTechs.reduce((a,b)=>a.pct>b.pct?a:b):null;
-    document.getElementById('prod-avg').textContent=avgPct?(avgPct*100).toFixed(1)+'%':'—';
-    document.getElementById('prod-month-label').textContent=currentMonth?currentMonth+' 2026':'—';
-    document.getElementById('prod-bonus-count').textContent=bonusTechs.length+' / '+activeTechs.length;
-    document.getElementById('prod-top-performer').textContent=topPerformer?.tech||'—';
-    document.getElementById('prod-top-amount').textContent=topPerformer?(topPerformer.pct*100).toFixed(1)+'%':'—';
-    document.getElementById('prod-active-count').textContent=activeTechs.length+' / '+currentData.length;
-    const sortedCurrent=[...activeTechs].sort((a,b)=>b.pct-a.pct);
-    document.getElementById('prod-podium').innerHTML=sortedCurrent.slice(0,5).map((t,i)=>{
-      const cls=t.pct>=1?'excellent':t.pct>=0.98?'green':'red';
+    
+    // Only include months that have at least one tech with data (did > 0 OR todo > 0 OR pct > 0)
+    const allMonths = [...new Set(dataRows.map(r=>r.month))];
+    const activeMonths = allMonths.filter(month => {
+      return dataRows.some(r => r.month === month && (r.did > 0 || r.todo > 0 || r.pct > 0));
+    });
+    
+    // Sort months chronologically
+    const months = activeMonths.sort((a,b)=>new Date(a+' 1 2026')-new Date(b+' 1 2026'));
+    const currentMonth = months[months.length-1] || 'June';
+    
+    // Filter data for current month
+    const currentData = dataRows.filter(r=>r.month===currentMonth);
+    const activeTechs = currentData.filter(r=>r.did > 0 || r.todo > 0 || r.pct > 0);
+    const bonusTechs = activeTechs.filter(r=>r.bonus==='Yes' || r.bonus==='yes');
+    
+    // Calculate stats
+    const avgPct = activeTechs.length ? activeTechs.reduce((s,r)=>s+r.pct,0)/activeTechs.length : 0;
+    const topPerformer = activeTechs.length ? activeTechs.reduce((a,b)=>a.pct>b.pct?a:b) : null;
+    
+    // Update left panel
+    document.getElementById('prod-avg').textContent = avgPct ? (avgPct*100).toFixed(1)+'%' : '—';
+    document.getElementById('prod-month-label').textContent = currentMonth + ' 2026';
+    document.getElementById('prod-bonus-count').textContent = bonusTechs.length + ' / ' + activeTechs.length;
+    document.getElementById('prod-top-performer').textContent = topPerformer?.tech || '—';
+    document.getElementById('prod-top-amount').textContent = topPerformer ? (topPerformer.pct*100).toFixed(1)+'%' : '—';
+    document.getElementById('prod-active-count').textContent = activeTechs.length + ' / ' + currentData.length;
+    
+    // Podium
+    const sortedCurrent = [...activeTechs].sort((a,b)=>b.pct-a.pct);
+    document.getElementById('prod-podium').innerHTML = sortedCurrent.slice(0,5).map((t,i)=>{
+      const cls = t.pct >= 1 ? 'excellent' : (t.pct >= 0.98 ? 'green' : 'red');
       return `<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${t.tech}</div><div class="ds-pod-score ${cls}">${(t.pct*100).toFixed(1)}%</div></div>`;
     }).join('');
-    const allTechs=[...new Set(dataRows.map(r=>r.tech))];
-    let html='';
+    
+    // History list
+    const allTechs = [...new Set(dataRows.map(r=>r.tech))];
+    let html = '';
+    
     allTechs.forEach(tech=>{
-      const techData=dataRows.filter(r=>r.tech===tech);
+      const techData = dataRows.filter(r=>r.tech===tech && months.includes(r.month));
       if(!techData.some(r=>r.pct>0)) return;
-      const latest=techData.find(r=>r.month===currentMonth);
-      const latestPct=latest?.pct||0;
-      const latestCls=latestPct>=1?'excellent':latestPct>=0.98?'green':latestPct>0?'red':'empty';
-      const monthCells=months.map(month=>{
-        const found=techData.find(r=>r.month===month);
-        if(!found||!found.pct) return `<div class="ds-month"><div class="ds-month-label">${month.substring(0,3)}</div><div class="ds-month-val empty">—</div></div>`;
-        const cls=found.pct>=1?'excellent':found.pct>=0.98?'green':'red';
+      
+      const latest = techData.find(r=>r.month===currentMonth);
+      const latestPct = latest?.pct || 0;
+      const latestCls = latestPct>=1 ? 'excellent' : (latestPct>=0.98 ? 'green' : (latestPct>0 ? 'red' : 'empty'));
+      
+      const monthCells = months.map(month=>{
+        const found = techData.find(r=>r.month===month);
+        if(!found || !found.pct) return `<div class="ds-month"><div class="ds-month-label">${month.substring(0,3)}</div><div class="ds-month-val empty">—</div></div>`;
+        const cls = found.pct >= 1 ? 'excellent' : (found.pct >= 0.98 ? 'green' : 'red');
         return `<div class="ds-month"><div class="ds-month-label">${month.substring(0,3)}</div><div class="ds-month-val ${cls}">${(found.pct*100).toFixed(1)}%</div></div>`;
       }).join('');
-      html+=`<div class="ds-row"${latestPct>=1?' style="background:rgba(255,209,102,0.08);"':''}>
+      
+      html += `<div class="ds-row"${latestPct>=1?' style="background:rgba(255,209,102,0.08);"':''}>
         <div class="ds-name"${latestPct>=1?' style="color:#FFD166;font-weight:800;"':''}>${tech}</div>
         <div class="ds-months">${monthCells}</div>
-        <div class="ds-ye-wrap"><div class="ds-ye-label">Current</div><div class="ds-ye ${latestCls}">${latestPct?(latestPct*100).toFixed(1)+'%':'—'}</div></div>
       </div>`;
     });
-    document.getElementById('prod-list').innerHTML=html||'<div class="loading">No production data found</div>';
-    window._tickerProd=topPerformer?`📊 Top production: ${topPerformer.tech} at ${(topPerformer.pct*100).toFixed(1)}% (${currentMonth})`:'Production data updated';
+    
+    document.getElementById('prod-list').innerHTML = html || '<div class="loading">No production data found</div>';
+    window._tickerProd = topPerformer ? `📊 Top production: ${topPerformer.tech} at ${(topPerformer.pct*100).toFixed(1)}% (${currentMonth})` : 'Production data updated';
+    
   }catch(e){console.error('Production',e);document.getElementById('prod-list').innerHTML='<div class="loading">Error loading production data</div>';}
 }
-
 // ============ CLOCK & ROTATION ============
 function clock(){ const n=new Date(); document.getElementById('top-date').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); document.getElementById('top-time').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
 clock(); setInterval(clock,10000);

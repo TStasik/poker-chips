@@ -155,7 +155,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .sales-attention-row { background: rgba(224, 85, 85, 0.12); border-left: 3px solid #e05555; }
 .special-sales-row { background: rgba(0, 138, 80, 0.05); border: 1px dashed rgba(0, 138, 80, 0.3); margin-top: 6px; }
 
-#screen-sales .left-inner { padding: 14px 20px 12px; }
+#screen-sales .left-inner { padding: 90px 20px 12px 20px; }
 #screen-sales .stat-block { margin-bottom: 4px; }
 #screen-sales .stat-value { font-size: 28px; }
 #screen-sales .stat-label { font-size: 8px; }
@@ -267,23 +267,21 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
       <div class="right-panel"><div class="panel-hdr">🚗 Driver Safety Scores — Full Team</div><div class="panel-body"><div class="ds-list" id="ds-list"><div class="loading">Loading...</div></div></div></div>
     </div>
   </div>
-
-  <!-- SCREEN 4: SALES BOARD -->
+    <!-- SCREEN 4: SALES BOARD -->
   <div class="screen" id="screen-sales">
     <div class="two-col" style="grid-template-columns:320px 1fr">
       <div class="left-panel">
-        <div class="left-inner" style="padding:14px 20px 12px;">
-          <div class="stat-divider" style="margin-bottom:10px;"></div>
-          <div class="stat-block" style="margin-bottom:4px;"><div class="stat-label" style="font-size:8px;">Team Total — Latest Month</div><div class="stat-value gold" style="font-size:28px;" id="sales-monthly-total">—</div><div class="stat-note" style="font-size:8px;" id="sales-month-name">—</div></div>
-          <div class="stat-block" style="margin-bottom:4px;"><div class="stat-label" style="font-size:8px;">Total Truck Sales — YTD</div><div class="stat-value gold" style="font-size:28px;" id="sales-ytd">—</div></div>
-          <div class="stat-block" style="margin-bottom:4px;"><div class="stat-label" style="font-size:8px;">Active This Month</div><div class="stat-value" style="font-size:28px;" id="sales-active-count">—</div><div class="stat-note" style="font-size:8px;">Technicians with sales</div></div>
-          <div class="stat-block" style="margin-bottom:4px;"><div class="stat-label" style="font-size:8px;">Needs Attention</div><div class="stat-value red" style="font-size:28px;" id="sales-cold-count">—</div><div class="stat-note" style="font-size:8px;">No sales past 2 months</div></div>
-          <div class="legend" style="margin-top:4px;">
-            <div class="legend-label" style="font-size:7px;">Sales Key</div>
-            <div class="legend-item" style="font-size:9px; margin-bottom:3px;"><div class="legend-dot" style="width:7px;height:7px;background:#f0c040;"></div><span>⚠️ No Sales This Month — Monitor</span></div>
-            <div class="legend-item" style="font-size:9px; margin-bottom:3px;"><div class="legend-dot" style="width:7px;height:7px;background:#e05555;"></div><span>🔴 2+ Months No Sales — Attention</span></div>
+        <div class="left-inner">
+          <div class="stat-divider"></div>
+          <div class="stat-block"><div class="stat-label">Team Total — Latest Month</div><div class="stat-value gold" id="sales-monthly-total">—</div><div class="stat-note" id="sales-month-name">—</div></div>
+          <div class="stat-block"><div class="stat-label">Total Truck Sales — YTD</div><div class="stat-value gold" id="sales-ytd">—</div></div>
+          <div class="stat-block"><div class="stat-label">Active This Month</div><div class="stat-value" id="sales-active-count">—</div><div class="stat-note">Technicians with sales</div></div>
+          <div class="stat-block"><div class="stat-label">Needs Attention</div><div class="stat-value red" id="sales-cold-count">—</div><div class="stat-note">No sales past 2 months</div></div>
+          <div class="legend"><div class="legend-label">Sales Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c040"></div><span>⚠️ No Sales This Month — Monitor</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>🔴 2+ Months No Sales — Attention</span></div>
           </div>
-          <div class="bottom-badge" style="margin-top:6px; padding:4px 10px;"><div class="pulse-dot" style="width:4px;height:4px;"></div><div class="badge-text" style="font-size:7px;" id="sales-updated">Loading...</div></div>
+          <div class="bottom-badge"><div class="pulse-dot"></div><div class="badge-text" id="sales-updated">Loading...</div></div>
         </div>
         <div class="panel-hdr">🏆 Top Performers</div>
         <div class="ds-podium" id="sales-podium"><div class="loading">Loading...</div></div>
@@ -296,19 +294,18 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
   <div class="screen" id="screen-production">
     <div class="two-col" style="grid-template-columns:320px 1fr">
       <div class="left-panel">
-        <div class="left-inner" style="padding:20px 24px 16px;">
-          <div class="stat-divider" style="margin-bottom:12px;"></div>
-          <div class="stat-block" style="margin-bottom:8px;"><div class="stat-label" style="font-size:9px;">Average Completion</div><div class="stat-value gold" style="font-size:34px;" id="prod-avg">—</div><div class="stat-note" style="font-size:9px;" id="prod-month-label">Loading...</div></div>
-          <div class="stat-block" style="margin-bottom:8px;"><div class="stat-label" style="font-size:9px;">Bonus Earned</div><div class="stat-value" style="font-size:34px;" id="prod-bonus-count">—</div><div class="stat-note" style="font-size:9px;">Technicians with bonus</div></div>
-          <div class="stat-block" style="margin-bottom:8px;"><div class="stat-label" style="font-size:9px;">Top Performer</div><div class="stat-value" style="font-size:26px;" id="prod-top-performer">—</div><div class="stat-note" style="font-size:9px;" id="prod-top-amount">—</div></div>
-          <div class="stat-block" style="margin-bottom:8px;"><div class="stat-label" style="font-size:9px;">Active Techs</div><div class="stat-value" style="font-size:34px;" id="prod-active-count">—</div><div class="stat-note" style="font-size:9px;">With production data</div></div>
-          <div class="legend" style="margin-top:6px;">
-            <div class="legend-label" style="font-size:9px;">Production Key</div>
-            <div class="legend-item" style="font-size:10px; margin-bottom:5px;"><div class="legend-dot" style="width:9px;height:9px;background:#FFD166;"></div><span>100%+ — Bonus (pulsing gold)</span></div>
-            <div class="legend-item" style="font-size:10px; margin-bottom:5px;"><div class="legend-dot" style="width:9px;height:9px;background:#00c46a;"></div><span>98%+ — Good</span></div>
-            <div class="legend-item" style="font-size:10px; margin-bottom:5px;"><div class="legend-dot" style="width:9px;height:9px;background:#e05555;"></div><span>Below 98% — Needs Attention</span></div>
+        <div class="left-inner">
+          <div class="stat-divider"></div>
+          <div class="stat-block"><div class="stat-label">Average Completion</div><div class="stat-value gold" id="prod-avg">—</div><div class="stat-note" id="prod-month-label">Loading...</div></div>
+          <div class="stat-block"><div class="stat-label">Bonus Earned</div><div class="stat-value" id="prod-bonus-count">—</div><div class="stat-note">Technicians with bonus</div></div>
+          <div class="stat-block"><div class="stat-label">Top Performer</div><div class="stat-value" style="font-size:26px;" id="prod-top-performer">—</div><div class="stat-note" id="prod-top-amount">—</div></div>
+          <div class="stat-block"><div class="stat-label">Active Techs</div><div class="stat-value" id="prod-active-count">—</div><div class="stat-note">With production data</div></div>
+          <div class="legend"><div class="legend-label">Production Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FFD166"></div><span>100%+ — Bonus (pulsing gold)</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c46a"></div><span>98%+ — Good</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e05555"></div><span>Below 98% — Needs Attention</span></div>
           </div>
-          <div class="bottom-badge" style="margin-top:8px; padding:6px 12px;"><div class="pulse-dot" style="width:5px;height:5px;"></div><div class="badge-text" style="font-size:8px;" id="prod-updated">Loading...</div></div>
+          <div class="bottom-badge"><div class="pulse-dot"></div><div class="badge-text" id="prod-updated">Loading...</div></div>
         </div>
         <div class="panel-hdr">🏅 Top Performers</div>
         <div class="ds-podium" id="prod-podium"><div class="loading">Loading...</div></div>
@@ -538,7 +535,6 @@ async function renderProduction(){
   try{
     const txt=await fetchTxt(PROD_URL);
     const raw=parseCSVRaw(txt);
-    // Col index: 0=Tech, 1=Month, 2=Revenue, 3=Bonus, 4=ToDo, 5=Did, 6=Pct(%), 7=Missed
     const updatedDate=(raw[0]&&raw[0][10])?raw[0][10].trim():'';
     document.getElementById('prod-updated').textContent=updatedDate?`Updated through ${updatedDate}`:'Production · Year to Date';
     const dataRows=[];
@@ -546,7 +542,7 @@ async function renderProduction(){
       const row=raw[i]; if(!row||row.length<7) continue;
       const tech=(row[0]||'').trim(), month=(row[1]||'').trim();
       if(!tech||!month) continue;
-      const pct=parseFloat(row[6])||0; // Column G = index 6 = %
+      const pct=parseFloat(row[6])||0;
       const bonus=(row[3]||'').trim();
       const todo=parseFloat(row[4])||0, did=parseFloat(row[5])||0;
       dataRows.push({tech,month,pct,bonus,todo,did});
@@ -564,13 +560,11 @@ async function renderProduction(){
     document.getElementById('prod-top-performer').textContent=topPerformer?.tech||'—';
     document.getElementById('prod-top-amount').textContent=topPerformer?(topPerformer.pct*100).toFixed(1)+'%':'—';
     document.getElementById('prod-active-count').textContent=activeTechs.length+' / '+currentData.length;
-    // Podium
     const sortedCurrent=[...activeTechs].sort((a,b)=>b.pct-a.pct);
     document.getElementById('prod-podium').innerHTML=sortedCurrent.slice(0,5).map((t,i)=>{
       const cls=t.pct>=1?'excellent':t.pct>=0.98?'green':'red';
       return `<div class="ds-pod-row${i<3?' podium':''}">${medalHtml(i)}<div class="ds-pod-name">${t.tech}</div><div class="ds-pod-score ${cls}">${(t.pct*100).toFixed(1)}%</div></div>`;
     }).join('');
-    // History list
     const allTechs=[...new Set(dataRows.map(r=>r.tech))];
     let html='';
     allTechs.forEach(tech=>{

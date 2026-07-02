@@ -267,7 +267,8 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
       <div class="right-panel"><div class="panel-hdr">🚗 Driver Safety Scores — Full Team</div><div class="panel-body"><div class="ds-list" id="ds-list"><div class="loading">Loading...</div></div></div></div>
     </div>
   </div>
-    <!-- SCREEN 4: SALES BOARD -->
+
+  <!-- SCREEN 4: SALES BOARD -->
   <div class="screen" id="screen-sales">
     <div class="two-col" style="grid-template-columns:320px 1fr">
       <div class="left-panel">
@@ -535,6 +536,7 @@ async function renderProduction(){
   try{
     const txt=await fetchTxt(PROD_URL);
     const raw=parseCSVRaw(txt);
+    // Column mapping: 0=Tech, 1=Month, 2=Revenue, 3=Bonus, 4=ToDo, 5=Did, 6=%, 7=Missed
     const updatedDate=(raw[0]&&raw[0][10])?raw[0][10].trim():'';
     document.getElementById('prod-updated').textContent=updatedDate?`Updated through ${updatedDate}`:'Production · Year to Date';
     const dataRows=[];
@@ -542,7 +544,11 @@ async function renderProduction(){
       const row=raw[i]; if(!row||row.length<7) continue;
       const tech=(row[0]||'').trim(), month=(row[1]||'').trim();
       if(!tech||!month) continue;
-      const pct=parseFloat(row[6])||0;
+      // Parse % value — handle both decimal and percentage format
+      let pct = parseFloat(row[6]) || 0;
+      if (row[6] && row[6].includes('%')) {
+        pct = pct / 100;
+      }
       const bonus=(row[3]||'').trim();
       const todo=parseFloat(row[4])||0, did=parseFloat(row[5])||0;
       dataRows.push({tech,month,pct,bonus,todo,did});

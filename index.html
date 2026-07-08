@@ -41,7 +41,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:#020d07; m
 .top-date { font-size:14px; color:rgba(255,255,255,0.85); font-weight:500; }
 .top-time { font-size:28px; font-weight:800; color:#fff; letter-spacing:1px; line-height:1.2; }
 
-.bottom-bar { background:#0d1a14; border-top:2px solid #008a50; height:44px; display:flex; align-items:center; padding:0 20px; gap:14px; flex-shrink:0; z-index:20; }
+.bottom-bar { position:absolute; bottom:0; left:0; width:1920px; background:#0d1a14; border-top:2px solid #008a50; height:44px; display:flex; align-items:center; padding:0 20px; gap:14px; z-index:20; }
 .ticker-label { font-size:11px; font-weight:800; color:#008a50; letter-spacing:2px; text-transform:uppercase; flex-shrink:0; }
 .ticker-div { width:1px; height:20px; background:#008a50; opacity:0.4; flex-shrink:0; }
 .ticker-wrap { flex:1; overflow:hidden; white-space:nowrap; }
@@ -637,12 +637,23 @@ function nextScreen(){
   if(si!==0) document.getElementById('top-week').textContent='';
   setTicker(si);
   startProgress();
+  if(si===0) schedulePokerViewSwitch();
 }
 function startProgress(){ const bar=document.getElementById('prog-bar'); bar.style.transition='none'; bar.style.width='0%'; bar.offsetHeight; bar.style.transition=`width ${SCREEN_MS}ms linear`; bar.style.width='100%'; }
 setInterval(nextScreen,SCREEN_MS); startProgress();
 
-let pi=0;
-setInterval(()=>{ if(si!==0)return; const v=['pview-prize','pview-winners']; document.getElementById(v[pi]).classList.remove('active'); pi=(pi+1)%2; document.getElementById(v[pi]).classList.add('active'); },14000);
+let pokerViewTimeout=null;
+function setPokerView(idx){
+  const v=['pview-prize','pview-winners'];
+  document.getElementById(v[0]).classList.toggle('active', idx===0);
+  document.getElementById(v[1]).classList.toggle('active', idx===1);
+}
+function schedulePokerViewSwitch(){
+  if(pokerViewTimeout) clearTimeout(pokerViewTimeout);
+  setPokerView(0);
+  pokerViewTimeout=setTimeout(()=>setPokerView(1),SCREEN_MS/2);
+}
+schedulePokerViewSwitch();
 
 async function loadAll(){ await Promise.all([renderPoker(),renderPrizes(),renderNPS(),renderDrivers(),renderSales(),renderProduction()]); setTicker(si); }
 loadAll(); setInterval(loadAll,5*60*1000);
